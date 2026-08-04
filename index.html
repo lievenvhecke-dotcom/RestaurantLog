@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RestaurantLog</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <h1>🍽 RestaurantLog</h1>
+    </header>
+
+
+    <!-- RESTAURANTS -->
+    <section id="restaurantsPage">
+
+        <div class="card">
+
+            <h2>Nieuw restaurant</h2>
+
+            <input id="naam" placeholder="Naam restaurant">
+
+            <input id="gemeente" placeholder="Gemeente">
+
+            <input id="keuken" placeholder="Type keuken">
+
+            <button onclick="opslaan()">
+                Opslaan
+            </button>
+
+        </div>
+
+
+        <h2>Mijn restaurants</h2>
+
+        <div id="lijst"></div>
+
+    </section>
+
+<!-- DETAIL RESTAURANT -->
+
+<section id="detailPage" class="hidden">
+
+    <button onclick="terugNaarLijst()">
+        ← Terug
+    </button>
+
+
+    <div class="detail-card">
+
+
+        <h1 id="detailNaam"></h1>
+
+        <p id="detailGemeente"></p>
+
+        <p id="detailKeuken"></p>
+
+
+        <h3>📅 Bezoeken</h3>
+
+<div id="bezoekenLijst"></div>
+
+<div id="nieuwBezoekForm"
+     class="detail-card hidden">
+
+
+    <h3>
+        ➕ Nieuw bezoek
+    </h3>
+
+
+    <label>
+        Datum
+    </label>
+
+    <input 
+        type="date"
+        id="bezoekDatum"
+    >
+
+
+    <label>
+        Score
+    </label>
+
+    <select id="bezoekScore">
+
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+
+    </select>
+
+
+    <label>
+        Opmerking
+    </label>
+
+    <textarea
+        id="bezoekOpmerking"
+        rows="5">
+    </textarea>
+
+
+    <button onclick="bezoekOpslaanNieuw()">
+        💾 Opslaan
+    </button>
+
+</div>
+
+<button onclick="nieuwBezoek()">
+    ➕ Nieuw bezoek
+</button>
+
+
+        <button 
+            id="favorietKnop"
+            onclick="favorietWisselen()">
+        </button>
+
+        <hr>
+
+        <button onclick="bewerken()">
+            ✏️ Bewerken
+        </button>
+
+        <button onclick="openGoogleMaps()">
+    📍      Open in Google Maps
+        </button>
+
+    </div>
+
+</section>
+
+    <!-- FAVORIETEN -->
+<section id="favorietenPage" class="hidden">
+
+    <h2>❤️ Favorieten</h2>
+
+    <div id="favorietenLijst"></div>
+
+</section>
+
+
+
+    <!-- INSTELLINGEN -->
+    <section id="instellingenPage" class="hidden">
+
+        <h2>⚙ Instellingen</h2>
+
+
+        <button onclick="backupMaken()">
+            ☁ Maak iCloud back-up
+        </button>
+
+
+        <input 
+    type="file" 
+    id="backupInput"
+    accept=".json"
+    hidden
+>
+
+<button onclick="document.getElementById('backupInput').click()">
+    ⬇ Herstel back-up
+</button>
+
+
+        <button>
+            📤 Exporteer gegevens
+        </button>
+
+
+<button onclick="allesWissen()">
+    🗑 Alles wissen (test)
+</button>
+
+    </section>
+
+</div>
+
+
+
+<!-- NAVIGATIE -->
+
+<script src="js/database.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/restaurants.js"></script>
+<script src="js/bezoeken.js"></script>
+<script src="js/backup.js"></script>
+<script src="js/app.js"></script>
+
+<nav class="bottom-nav">
+
+    <button onclick="toonPagina('restaurantsPage')">
+        🍽
+        <span>Restaurants</span>
+    </button>
+
+
+    <button onclick="toonPagina('favorietenPage')">
+        ❤️
+        <span>Favorieten</span>
+    </button>
+
+
+    <button onclick="toonPagina('instellingenPage')">
+        ⚙
+        <span>Instellingen</span>
+    </button>
+
+</nav>
+
+</body>
+</html>

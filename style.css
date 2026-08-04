@@ -1,0 +1,249 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f2f2f7;
+    margin: 0;
+}
+
+.app {
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 3px 10px #ccc;
+}
+
+input, textarea, select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: black;
+    color: white;
+    font-size: 16px;
+}
+
+.restaurant {
+    background: white;
+    margin-top: 15px;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.hidden {
+    display:none;
+}
+
+
+nav {
+    position: fixed;
+    bottom:0;
+    left:0;
+    right:0;
+
+    background:white;
+
+    display:flex;
+    justify-content:space-around;
+
+    padding:10px;
+
+    border-top:1px solid #ddd;
+}
+
+
+nav button {
+
+    background:none;
+    color:black;
+    font-size:14px;
+
+}
+
+.foto-grid {
+
+    display:grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap:10px;
+
+}
+
+
+.foto-grid img {
+
+    width:100%;
+
+    aspect-ratio:1;
+
+    object-fit:cover;
+
+    border-radius:15px;
+
+}
+
+.bottom-nav {
+
+    position: fixed;
+
+    bottom: 0;
+
+    left: 0;
+
+    right: 0;
+
+    height: 70px;
+
+    display: flex;
+
+    justify-content: space-around;
+
+    align-items: center;
+
+    background: white;
+
+    border-top: 1px solid #ddd;
+
+}
+
+
+.bottom-nav button {
+
+    background: none;
+
+    border: none;
+
+    font-size: 14px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+}
+
+
+.bottom-nav span {
+
+    font-size: 12px;
+
+}
+
+body {
+
+    padding-bottom: 90px;
+
+}
+
+.restaurant-card {
+
+    background: white;
+
+    border-radius: 18px;
+
+    padding: 15px;
+
+    margin: 12px 0;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+
+}
+
+
+.restaurant-card h3 {
+
+    margin-top: 0;
+
+}
+
+
+.score {
+
+    font-size: 20px;
+
+}
+
+.detail-card {
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    margin-top:15px;
+
+    box-shadow:
+    0 4px 15px rgba(0,0,0,0.15);
+
+}
+
+
+.detail-card h1 {
+
+    margin-bottom:5px;
+
+}
+
+
+.detail-score {
+
+    font-size:24px;
+
+    margin-bottom:15px;
+
+}
+
+
+.detail-card button {
+
+    width:100%;
+
+    padding:12px;
+
+    margin-top:10px;
+
+    border-radius:12px;
+
+    border:none;
+
+    font-size:16px;
+
+}
+
+.opmerking-tekst {
+
+    white-space: pre-line;
+
+    line-height: 1.5;
+
+}
+
+.gemeente {
+    font-size: 0.8em;
+    font-weight: normal;
+    color: #666;
+}

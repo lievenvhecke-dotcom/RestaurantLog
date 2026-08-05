@@ -46,7 +46,8 @@ function opslaan() {
 
         gemeente: document.getElementById("gemeente").value,
 
-        keuken: document.getElementById("keuken").value,
+        keuken:
+keukenWaarde(),
         
         favoriet: false
 
@@ -78,9 +79,21 @@ function opslaan() {
 }
 else{
 
-restaurantOpslaan(restaurant);
+restaurantOpslaan(
+    restaurant,
+    function(nieuwRestaurant){
 
-restaurants.push(restaurant);
+        restaurants.push(nieuwRestaurant);
+
+        toonRestaurants();
+
+        document
+.getElementById("nieuwRestaurantForm")
+.classList
+.add("hidden");
+
+    }
+);
 
 
 let bezoek = {
@@ -129,10 +142,11 @@ function openRestaurant(id){
         .innerHTML =
         "📍 " + restaurant.gemeente;
 
-
     document.getElementById("detailKeuken")
         .innerHTML =
-        "🍴 " + restaurant.keuken;
+        restaurant.keuken
+        ? "🍴 " + restaurant.keuken
+        : "";
 
 
         updateFavorietKnop();
@@ -199,18 +213,6 @@ function bewerken(){
 
     document.getElementById("keuken").value =
         huidigRestaurant.keuken;
-
-
-    document.getElementById("datum").value =
-        huidigRestaurant.datum;
-
-
-    document.getElementById("opmerking").value =
-        huidigRestaurant.opmerking;
-
-
-    document.getElementById("score").value =
-        huidigRestaurant.score;
 
 
     toonPagina(
@@ -360,5 +362,55 @@ document.getElementById("datum").value =
         url,
         "_blank"
     );
+
+}
+
+function nieuwRestaurant(){
+
+    document
+    .getElementById("nieuwRestaurantForm")
+    .classList
+    .remove("hidden");
+
+}
+
+function keukenGewijzigd(){
+
+    let keuze =
+        document.getElementById("keukenSelect").value;
+
+
+    let veld =
+        document.getElementById("andereKeuken");
+
+
+    if(keuze === "Andere"){
+
+        veld.classList.remove("hidden");
+
+    }
+    else{
+
+        veld.classList.add("hidden");
+        veld.value = "";
+
+    }
+
+}
+
+function keukenWaarde(){
+
+    let keuze =
+        document.getElementById("keukenSelect").value;
+
+
+    if(keuze === "Andere"){
+
+        return document.getElementById("andereKeuken").value;
+
+    }
+
+
+    return keuze;
 
 }

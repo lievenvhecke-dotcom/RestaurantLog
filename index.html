@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RestaurantLog</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 
 <body>
@@ -19,21 +20,84 @@
     <!-- RESTAURANTS -->
     <section id="restaurantsPage">
 
-        <div class="card">
+        <button onclick="nieuwRestaurant()">
+    ➕ Nieuw restaurant
+</button>
 
-            <h2>Nieuw restaurant</h2>
 
-            <input id="naam" placeholder="Naam restaurant">
+<div id="nieuwRestaurantForm"
+     class="card hidden">
 
-            <input id="gemeente" placeholder="Gemeente">
+    <h2>Nieuw restaurant</h2>
 
-            <input id="keuken" placeholder="Type keuken">
+    <input id="naam" placeholder="Naam restaurant">
 
-            <button onclick="opslaan()">
-                Opslaan
-            </button>
+    <input id="gemeente" placeholder="Gemeente">
 
-        </div>
+    <label>
+    Type keuken
+</label>
+
+<select id="keukenSelect"
+        onchange="keukenGewijzigd()">
+
+    <option value="">
+        Kies keuken...
+    </option>
+
+    <option value="Belgisch">
+        Belgisch
+    </option>
+
+    <option value="Café">
+        Café
+    </option>
+
+    <option value="Italiaans">
+        Italiaans
+    </option>
+
+    <option value="Grieks">
+        Grieks
+    </option>
+
+    <option value="Spaans">
+        Spaans
+    </option>
+
+    <option value="Aziatisch">
+        Aziatisch
+    </option>
+
+    <option value="Japans">
+        Japans
+    </option>
+
+    <option value="Chinees">
+        Chinees
+    </option>
+
+    <option value="Thais">
+        Thais
+    </option>
+
+    <option value="Andere">
+        Andere...
+    </option>
+
+</select>
+
+
+<input id="andereKeuken"
+       placeholder="Andere keuken"
+       class="hidden">
+
+
+    <button onclick="opslaan()">
+        💾 Opslaan
+    </button>
+
+</div>
 
 
         <h2>Mijn restaurants</h2>
@@ -58,15 +122,24 @@
 
         <p id="detailGemeente"></p>
 
-        <p id="detailKeuken"></p>
+        <p id="detailKeuken"
+   class="detail-keuken"></p>
 
+    <button 
+            id="favorietKnop"
+            onclick="favorietWisselen()">
+        </button>
 
-        <h3>📅 Bezoeken</h3>
+        <button onclick="openGoogleMaps()">
+    📍      Open in Google Maps
+        </button>
 
-<div id="bezoekenLijst"></div>
+        <button onclick="nieuwBezoek()">
+    ➕      Nieuw bezoek
+        </button>
 
 <div id="nieuwBezoekForm"
-     class="detail-card hidden">
+     class="hidden">
 
 
     <h3>
@@ -82,7 +155,6 @@
         type="date"
         id="bezoekDatum"
     >
-
 
     <label>
         Score
@@ -115,25 +187,10 @@
 
 </div>
 
-<button onclick="nieuwBezoek()">
-    ➕ Nieuw bezoek
-</button>
+<hr>
 
+        <div id="bezoekenLijst"></div>
 
-        <button 
-            id="favorietKnop"
-            onclick="favorietWisselen()">
-        </button>
-
-        <hr>
-
-        <button onclick="bewerken()">
-            ✏️ Bewerken
-        </button>
-
-        <button onclick="openGoogleMaps()">
-    📍      Open in Google Maps
-        </button>
 
     </div>
 

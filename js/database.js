@@ -90,28 +90,25 @@ if(!db.objectStoreNames.contains("bezoeken")){
 }
 
 
-function restaurantOpslaan(restaurant){
+function restaurantOpslaan(restaurant, callback){
 
     let transaction =
-        db.transaction(
-            ["restaurants"],
-            "readwrite"
-        );
-
+        db.transaction(["restaurants"], "readwrite");
 
     let store =
-        transaction.objectStore(
-            "restaurants"
-        );
-
+        transaction.objectStore("restaurants");
 
     let request = store.add(restaurant);
 
-request.onsuccess = function(event){
+    request.onsuccess = function(event){
 
-    restaurant.id = event.target.result;
+        restaurant.id = event.target.result;
 
-};
+        if(callback){
+            callback(restaurant);
+        }
+
+    };
 
 }
 

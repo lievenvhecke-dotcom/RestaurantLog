@@ -1,3 +1,18 @@
+function datumFormaat(datum){
+
+    let d = new Date(datum);
+
+    return d.toLocaleDateString(
+        "nl-BE",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
 function toonBezoeken(){
 
     let lijst =
@@ -10,35 +25,45 @@ function toonBezoeken(){
 
 
     bezoekenOphalen(
-        huidigRestaurant.id,
-        function(bezoeken){
+    huidigRestaurant.id,
+    function(bezoeken){
+
+        bezoeken.sort(
+            (a,b) => b.datum.localeCompare(a.datum)
+        );
 
 
-            bezoeken.forEach(b => {
+        bezoeken.forEach(b => {
+
+ lijst.innerHTML += `
+
+<div class="bezoek-card">
 
 
-                lijst.innerHTML += `
+    <div class="bezoek-header">
 
-<div class="restaurant-card">
+        <span class="bezoek-datum">
+            ${datumFormaat(b.datum)}
+        </span>
 
-    <div onclick="openBezoek(${b.id})">
 
-        <h4>
-            📅 ${b.datum}
+        <span class="bezoek-score">
             ${"⭐".repeat(Number(b.score))}
-        </h4>
+        </span>
 
 
-        <p class="opmerking-tekst">
-            ${b.opmerking}
-        </p>
+        <button class="verwijder-bezoek"
+                onclick="bezoekVerwijderen(${b.id})">
+            🗑
+        </button>
 
     </div>
 
 
-    <button onclick="bezoekVerwijderen(${b.id})">
-        🗑
-    </button>
+    <div class="opmerking-tekst">
+        ${b.opmerking || ""}
+    </div>
+
 
 </div>
 

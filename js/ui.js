@@ -8,11 +8,15 @@ function toonPagina(pagina){
         .classList.remove("hidden");
 
 
-    if(pagina === "favorietenPage"){
+if(pagina === "favorietenPage"){
+    toonFavorieten();
+}
 
-        toonFavorieten();
+if(pagina == "kaartPage"){
 
-    }
+    toonKaart();
+
+}
 
 }
 

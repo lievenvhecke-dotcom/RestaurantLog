@@ -46,79 +46,83 @@ function opslaan() {
 
         gemeente: document.getElementById("gemeente").value,
 
-        keuken:
-keukenWaarde(),
-        
+        keuken: keukenWaarde(),
+
         favoriet: false
 
     };
 
 
-   if(bewerkModus){
+    if (bewerkModus) {
 
-    restaurant.id =
-        huidigRestaurant.id;
+        restaurant.id =
+            huidigRestaurant.id;
 
-    restaurantAanpassen(
-        restaurant
-    );
+        // Bestaande locatie behouden
+        restaurant.lat =
+            huidigRestaurant.lat;
 
+        restaurant.lng =
+            huidigRestaurant.lng;
 
-    let index =
-        restaurants.findIndex(
-            r => r.id === restaurant.id
+        restaurantAanpassen(
+            restaurant
         );
 
 
-    restaurants[index] =
-        restaurant;
+        let index =
+            restaurants.findIndex(
+                r => r.id === restaurant.id
+            );
 
 
-    bewerkModus = false;
+        restaurants[index] =
+            restaurant;
 
-}
-else{
 
-restaurantOpslaan(
-    restaurant,
-    function(nieuwRestaurant){
+        huidigRestaurant =
+            restaurant;
 
-        restaurants.push(nieuwRestaurant);
 
-        toonRestaurants();
-
-        document
-.getElementById("nieuwRestaurantForm")
-.classList
-.add("hidden");
+        bewerkModus = false;
 
     }
-);
 
+    else {
 
-let bezoek = {
+        restaurantOpslaan(
+            restaurant,
+            function(nieuwRestaurant) {
 
-    restaurantId: restaurant.id,
+                restaurants.push(
+                    nieuwRestaurant
+                );
 
-    datum: restaurant.datum,
+                toonRestaurants();
 
-    score: restaurant.score,
+                document
+                    .getElementById(
+                        "nieuwRestaurantForm"
+                    )
+                    .classList
+                    .add("hidden");
 
-    opmerking: restaurant.opmerking
+            }
+        );
 
-};
-
-
-bezoekOpslaan(bezoek);
-
-}
+    }
 
 
     toonRestaurants();
 
 
-    document.querySelectorAll("input, textarea")
-        .forEach(x => x.value="");
+    document
+        .querySelectorAll(
+            "input, textarea"
+        )
+        .forEach(
+            x => x.value = ""
+        );
 
 }
 
@@ -132,6 +136,17 @@ function openRestaurant(id){
 
 
     huidigRestaurant = restaurant;
+
+    huidigBezoek = null;
+bezoekBewerkModus = false;
+
+document.getElementById("bezoekDatum").value = "";
+document.getElementById("bezoekScore").value = "5";
+document.getElementById("bezoekOpmerking").value = "";
+
+document
+    .getElementById("nieuwBezoekForm")
+    .classList.add("hidden");
 
 
     document.getElementById("detailNaam")
@@ -167,31 +182,37 @@ function verwijderen(){
 
     let bevestiging =
         confirm(
-            "Restaurant verwijderen?"
+            "Restaurant verwijderen?\n\n" +
+            "Het restaurant én alle bijhorende bezoeken " +
+            "worden verwijderd."
         );
 
 
-    if(bevestiging){
-
-        restaurantVerwijderen(
-            huidigRestaurant.id
-        );
-
-
-        restaurants =
-            restaurants.filter(
-                r => r.id !== huidigRestaurant.id
-            );
-
-
-        toonRestaurants();
-
-
-        toonPagina(
-            "restaurantsPage"
-        );
-
+    if(!bevestiging){
+        return;
     }
+
+
+    restaurantVerwijderen(
+        huidigRestaurant.id
+    );
+
+
+    restaurants =
+        restaurants.filter(
+            r => r.id !== huidigRestaurant.id
+        );
+
+
+    huidigRestaurant = null;
+
+
+    toonRestaurants();
+
+
+    toonPagina(
+        "restaurantsPage"
+    );
 
 }
 

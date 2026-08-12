@@ -42,9 +42,10 @@ function toonBezoeken(){
 
     <div class="bezoek-header">
 
-        <span class="bezoek-datum">
-            ${datumFormaat(b.datum)}
-        </span>
+<span class="bezoek-datum"
+      onclick="openBezoek(${b.id})">
+    ${datumFormaat(b.datum)}
+</span>
 
 
         <span class="bezoek-score">
@@ -80,13 +81,13 @@ function toonBezoeken(){
 
 function nieuwBezoek(){
 
-    document
-    .getElementById(
-        "nieuwBezoekForm"
-    )
-    .classList
-    .remove("hidden");
+    bezoekBewerkModus = false;
+    huidigBezoek = null;
 
+    document
+        .getElementById("nieuwBezoekForm")
+        .classList
+        .remove("hidden");
 
     document.getElementById(
         "bezoekDatum"
@@ -95,6 +96,13 @@ function nieuwBezoek(){
         .toISOString()
         .split("T")[0];
 
+    document.getElementById(
+        "bezoekScore"
+    ).value = "5";
+
+    document.getElementById(
+        "bezoekOpmerking"
+    ).value = "";
 }
 
 function bezoekOpslaanNieuw(){
@@ -185,9 +193,35 @@ function openBezoek(id){
                     b => b.id === id
                 );
 
+            if(!huidigBezoek){
+                return;
+            }
+
+            document.getElementById(
+                "bezoekDatum"
+            ).value =
+                huidigBezoek.datum;
+
+            document.getElementById(
+                "bezoekScore"
+            ).value =
+                huidigBezoek.score;
+
+            document.getElementById(
+                "bezoekOpmerking"
+            ).value =
+                huidigBezoek.opmerking || "";
+
+            bezoekBewerkModus = true;
+
+            document
+                .getElementById(
+                    "nieuwBezoekForm"
+                )
+                .classList
+                .remove("hidden");
         }
     );
-
 }
 
 function bezoekBewerken(){

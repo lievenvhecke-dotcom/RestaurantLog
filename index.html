@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RestaurantLog</title>
     <link rel="stylesheet" href="style.css">
+<link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
     <link rel="manifest" href="manifest.json">
 </head>
 
@@ -134,6 +138,10 @@
     📍      Open in Google Maps
         </button>
 
+        <button onclick="locatieInstellen()">
+    🗺️ Locatie instellen
+        </button>
+
         <button onclick="nieuwBezoek()">
     ➕      Nieuw bezoek
         </button>
@@ -190,7 +198,12 @@
 <hr>
 
         <div id="bezoekenLijst"></div>
-
+<button
+    class="verwijder-restaurant"
+    onclick="verwijderen()"
+>
+    🗑️ Restaurant verwijderen
+</button>
 
     </div>
 
@@ -205,6 +218,50 @@
 
 </section>
 
+<section id="kaartPage" class="hidden">
+
+    <div id="map"></div>
+
+</section>
+
+<section id="ideeenPage" class="hidden">
+
+    <div class="ideeen-header">
+
+        <h2>💡 Ideeën</h2>
+
+        <p>
+            Noteer hier snel iets dat je later
+            aan RestaurantLog wilt verbeteren.
+        </p>
+
+    </div>
+
+
+    <div class="idee-nieuw">
+
+        <textarea
+            id="ideeTekst"
+            rows="3"
+            placeholder="Wat wil je aanpassen of toevoegen?"
+        ></textarea>
+
+
+        <button onclick="ideeOpslaanViaForm()">
+            💾 Idee opslaan
+        </button>
+
+    </div>
+
+
+    <h3>
+        Mijn ideeën
+    </h3>
+
+
+    <div id="ideeenLijst"></div>
+
+</section>
 
 
     <!-- INSTELLINGEN -->
@@ -252,6 +309,11 @@
 <script src="js/restaurants.js"></script>
 <script src="js/bezoeken.js"></script>
 <script src="js/backup.js"></script>
+<script src="js/ideeen.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="js/kaart.js"></script>
 <script src="js/app.js"></script>
 
 <nav class="bottom-nav">
@@ -265,6 +327,18 @@
     <button onclick="toonPagina('favorietenPage')">
         ❤️
         <span>Favorieten</span>
+    </button>
+
+
+    <button onclick="toonPagina('kaartPage')">
+        🗺
+        <span>Kaart</span>
+    </button>
+
+
+    <button onclick="toonPagina('ideeenPage')">
+        💡
+        <span>Ideeën</span>
     </button>
 
 

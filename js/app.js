@@ -17,4 +17,8 @@ wanneerDatabaseKlaar(function(){
 
     });
 
+
+    // Ideeën opnieuw laden bij het openen
+    toonIdeeen();
+
 });

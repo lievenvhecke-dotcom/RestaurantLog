@@ -332,3 +332,93 @@ body {
     font-size:16px;
 
 }
+
+#map{
+
+    height:calc(100vh - 200px);
+
+    width:100%;
+
+    border-radius:20px;
+
+}
+
+/* =====================================================
+   IDEEËN
+   ===================================================== */
+
+.ideeen-header p {
+    margin-top: -5px;
+    color: #777;
+}
+
+
+.idee-nieuw {
+    margin-bottom: 25px;
+}
+
+
+.idee-nieuw textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+
+.idee-card {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    background: white;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    margin-bottom: 10px;
+
+    box-shadow:
+        0 1px 4px rgba(0,0,0,0.08);
+}
+
+
+.idee-inhoud {
+    flex: 1;
+}
+
+
+.idee-tekst {
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+
+.idee-datum {
+    font-size: 12px;
+    color: #888;
+    margin-top: 6px;
+}
+
+
+.idee-verwijder {
+    width: auto;
+    margin-left: 10px;
+    padding: 5px 8px;
+
+    background: transparent;
+
+    border: none;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+
+.geen-ideeen {
+    color: #888;
+    text-align: center;
+    margin-top: 30px;
+}

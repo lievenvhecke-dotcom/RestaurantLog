@@ -7,58 +7,72 @@ function openDatabase(){
 
     let request = indexedDB.open(
         "RestaurantLogDB",
-        4
+        6
     );
 
 
-    request.onupgradeneeded = function(event){
+ request.onupgradeneeded = function(event){
 
-        db = event.target.result;
+    db = event.target.result;
 
 
-        if(!db.objectStoreNames.contains("restaurants")){
+    if(!db.objectStoreNames.contains("restaurants")){
 
-            let store = db.createObjectStore(
-                "restaurants",
-                {
-                    keyPath:"id",
-                    autoIncrement:true
-                }
-            );
-
-            store.createIndex(
-                "naam",
-                "naam",
-                {
-                    unique:false
-                }
-            );
-
-        }
-
-if(!db.objectStoreNames.contains("bezoeken")){
-
-    let bezoekStore =
-        db.createObjectStore(
-            "bezoeken",
+        let store = db.createObjectStore(
+            "restaurants",
             {
                 keyPath:"id",
                 autoIncrement:true
             }
         );
 
+        store.createIndex(
+            "naam",
+            "naam",
+            {
+                unique:false
+            }
+        );
 
-    bezoekStore.createIndex(
-        "restaurantId",
-        "restaurantId",
-        {
-            unique:false
-        }
-    );
+    }
 
-}
 
-    };
+    if(!db.objectStoreNames.contains("bezoeken")){
+
+        let bezoekStore =
+            db.createObjectStore(
+                "bezoeken",
+                {
+                    keyPath:"id",
+                    autoIncrement:true
+                }
+            );
+
+
+        bezoekStore.createIndex(
+            "restaurantId",
+            "restaurantId",
+            {
+                unique:false
+            }
+        );
+
+    }
+
+
+    if(!db.objectStoreNames.contains("ideeen")){
+
+        db.createObjectStore(
+            "ideeen",
+            {
+                keyPath:"id",
+                autoIncrement:true
+            }
+        );
+
+    }
+
+};
 
 
     request.onsuccess = function(event){
@@ -160,18 +174,65 @@ function restaurantVerwijderen(id){
 
     let transaction =
         db.transaction(
-            ["restaurants"],
+            [
+                "restaurants",
+                "bezoeken"
+            ],
             "readwrite"
         );
 
 
-    let store =
+    let restaurantsStore =
         transaction.objectStore(
             "restaurants"
         );
 
 
-    store.delete(id);
+    let bezoekenStore =
+        transaction.objectStore(
+            "bezoeken"
+        );
+
+
+    // Restaurant verwijderen
+
+    restaurantsStore.delete(id);
+
+
+    // Alle bezoeken van dit restaurant zoeken
+
+    let index =
+        bezoekenStore.index(
+            "restaurantId"
+        );
+
+
+    let request =
+        index.openCursor(
+            IDBKeyRange.only(id)
+        );
+
+
+    request.onsuccess = function(event){
+
+        let cursor =
+            event.target.result;
+
+
+        if(cursor){
+
+            // Bezoek verwijderen
+
+            cursor.delete();
+
+
+            // Volgend bezoek
+
+            cursor.continue();
+
+        }
+
+    };
 
 }
 
@@ -403,5 +464,90 @@ function allesWissen(){
         location.reload();
 
     };
+
+}
+
+function ideeOpslaan(idee, callback){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    let request =
+        store.add(idee);
+
+
+    request.onsuccess = function(){
+
+        idee.id =
+            request.result;
+
+
+        if(callback){
+
+            callback(idee);
+
+        }
+
+    };
+
+}
+
+
+function ideeenOphalen(callback){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess = function(){
+
+        callback(
+            request.result
+        );
+
+    };
+
+}
+
+
+function ideeVerwijderen(id){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    store.delete(id);
 
 }

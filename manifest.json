@@ -1,20 +1,20 @@
 {
-  "name": "HoReCaLog",
-  "short_name": "HoReCaLog",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+    "name": "HorecaLog",
+    "short_name": "HorecaLog",
+    "start_url": "./",
+    "display": "standalone",
+    "background_color": "#f2f2f7",
+    "theme_color": "#e67e22",
+    "icons": [
+        {
+            "src": "icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
 }

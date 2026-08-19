@@ -48,9 +48,13 @@ function toonBezoeken(){
 </span>
 
 
-        <span class="bezoek-score">
-            ${"⭐".repeat(Number(b.score))}
-        </span>
+<span class="bezoek-score">
+    ${
+    Number(b.score) === 0
+        ? "☆"
+        : "⭐".repeat(Number(b.score))
+    }
+</span>
 
 
         <button class="verwijder-bezoek"
@@ -97,8 +101,8 @@ function nieuwBezoek(){
         .split("T")[0];
 
     document.getElementById(
-        "bezoekScore"
-    ).value = "5";
+    "bezoekScore"
+    ).value = "0";
 
     document.getElementById(
         "bezoekOpmerking"

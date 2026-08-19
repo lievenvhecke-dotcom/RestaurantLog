@@ -1,40 +1,103 @@
 function toonRestaurants(){
 
-    let lijst = document.getElementById("lijst");
+    let lijst =
+        document.getElementById("lijst");
 
-    lijst.innerHTML="";
+
+    lijst.innerHTML = "";
 
 
+    // Zoekterm ophalen
+    let zoekveld =
+        document.getElementById("zoekRestaurant");
+
+
+    let zoekterm =
+        zoekveld
+        ? zoekveld.value
+            .toLowerCase()
+            .trim()
+        : "";
+
+
+    // Filteren op naam of gemeente
+    let gefilterdeRestaurants =
+        restaurants.filter(
+            function(r){
+
+                let naam =
+                    (r.naam || "")
+                    .toLowerCase();
+
+
+                let gemeente =
+                    (r.gemeente || "")
+                    .toLowerCase();
+
+
+                return (
+                    naam.includes(zoekterm) ||
+                    gemeente.includes(zoekterm)
+                );
+
+            }
+        );
+
+
+    // Alfabetisch sorteren
     let gesorteerdeRestaurants =
-    [...restaurants].sort(
-        (a, b) =>
-            a.naam.localeCompare(
-                b.naam
-            )
+        [...gefilterdeRestaurants].sort(
+            (a, b) =>
+                a.naam.localeCompare(
+                    b.naam
+                )
+        );
+
+
+    // Geen resultaten
+    if(
+        gesorteerdeRestaurants.length === 0
+    ){
+
+        lijst.innerHTML =
+            "<p class='geen-resultaten'>" +
+            "Geen horecazaken gevonden." +
+            "</p>";
+
+        return;
+
+    }
+
+
+    // Restaurants tonen
+    gesorteerdeRestaurants.forEach(
+        function(r){
+
+            lijst.innerHTML += `
+
+                <div
+                    class="restaurant-card"
+                    onclick="openRestaurant(${r.id})"
+                >
+
+                    <h3>
+
+                        ${r.favoriet ? "❤️ " : ""}
+
+                        ${r.naam}
+
+                        <span class="gemeente">
+                            ${r.gemeente}
+                        </span>
+
+                    </h3>
+
+                </div>
+
+            `;
+
+        }
     );
-
-
-    gesorteerdeRestaurants.forEach(r => {
-
-    lijst.innerHTML += `
-
-    <div class="restaurant-card"
-     onclick="openRestaurant(${r.id})">
-
-
-    <h3>
-        ${r.favoriet ? "❤️ " : ""}
-        ${r.naam}
-        <span class="gemeente">
-            ${r.gemeente}
-        </span>
-    </h3>
-
-</div>
-
-    `;
-
-});
 
 }
 
@@ -141,7 +204,7 @@ function openRestaurant(id){
 bezoekBewerkModus = false;
 
 document.getElementById("bezoekDatum").value = "";
-document.getElementById("bezoekScore").value = "5";
+document.getElementById("bezoekScore").value = "0";
 document.getElementById("bezoekOpmerking").value = "";
 
 document
@@ -182,9 +245,9 @@ function verwijderen(){
 
     let bevestiging =
         confirm(
-            "Restaurant verwijderen?\n\n" +
-            "Het restaurant én alle bijhorende bezoeken " +
-            "worden verwijderd."
+            "Horecazaak verwijderen?\n\n" +
+"De horecazaak én alle bijhorende bezoeken " +
+"worden verwijderd."
         );
 
 
@@ -310,7 +373,7 @@ function toonFavorieten(){
     if(favorieten.length === 0){
 
         lijst.innerHTML =
-            "<p>Nog geen favoriete restaurants.</p>";
+            "<p>Nog geen favoriete horecazaken.</p>";
 
         return;
 

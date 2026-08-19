@@ -1,22 +1,53 @@
 function toonPagina(pagina){
 
     document.querySelectorAll("section")
-        .forEach(x => x.classList.add("hidden"));
+        .forEach(
+            x => x.classList.add("hidden")
+        );
 
 
     document.getElementById(pagina)
         .classList.remove("hidden");
 
 
-if(pagina === "favorietenPage"){
-    toonFavorieten();
-}
+    // Actieve navigatieknop markeren
 
-if(pagina == "kaartPage"){
+    document
+        .querySelectorAll(".bottom-nav button")
+        .forEach(
+            knop => knop.classList.remove("actief")
+        );
 
-    toonKaart();
 
-}
+    let actieveKnop =
+        document.querySelector(
+            `.bottom-nav button[onclick="toonPagina('${pagina}')"]`
+        );
+
+
+    if(actieveKnop){
+
+        actieveKnop.classList.add("actief");
+
+    }
+
+
+    // Favorieten laden
+
+    if(pagina === "favorietenPage"){
+
+        toonFavorieten();
+
+    }
+
+
+    // Kaart laden
+
+    if(pagina === "kaartPage"){
+
+        toonKaart();
+
+    }
 
 }
 

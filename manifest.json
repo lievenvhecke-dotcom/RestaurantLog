@@ -1,6 +1,6 @@
 {
-  "name": "RestaurantLog",
-  "short_name": "RestaurantLog",
+  "name": "HoReCaLog",
+  "short_name": "HoReCaLog",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RestaurantLog</title>
+    <title>HoReCaLog</title>
     <link rel="stylesheet" href="style.css">
 <link
     rel="stylesheet"
@@ -17,24 +17,30 @@
 <div class="app">
 
     <header>
-        <h1>🍽 RestaurantLog</h1>
+        <h1>
+    <span class="app-logo">🍽</span>
+    HorecaLog
+        </h1>
     </header>
 
 
     <!-- RESTAURANTS -->
     <section id="restaurantsPage">
 
-        <button onclick="nieuwRestaurant()">
-    ➕ Nieuw restaurant
+        <button
+    class="primair"
+    onclick="nieuwRestaurant()"
+>
+    ➕ Nieuwe horecazaak
 </button>
 
 
 <div id="nieuwRestaurantForm"
      class="card hidden">
 
-    <h2>Nieuw restaurant</h2>
+    <h2>Nieuwe horecazaak</h2>
 
-    <input id="naam" placeholder="Naam restaurant">
+    <input id="naam" placeholder="Naam horecazaak">
 
     <input id="gemeente" placeholder="Gemeente">
 
@@ -97,16 +103,26 @@
        class="hidden">
 
 
-    <button onclick="opslaan()">
-        💾 Opslaan
-    </button>
+<button
+    class="primair"
+    onclick="opslaan()"
+>
+    💾 Opslaan
+</button>
 
 </div>
 
 
-        <h2>Mijn restaurants</h2>
+     <h2>Mijn horecazaken</h2>
 
-        <div id="lijst"></div>
+<input
+    type="search"
+    id="zoekRestaurant"
+    placeholder="🔍 Zoek horecazaak of gemeente..."
+    oninput="toonRestaurants()"
+>
+
+<div id="lijst"></div>
 
     </section>
 
@@ -142,9 +158,12 @@
     🗺️ Locatie instellen
         </button>
 
-        <button onclick="nieuwBezoek()">
-    ➕      Nieuw bezoek
-        </button>
+<button
+    class="primair"
+    onclick="nieuwBezoek()"
+>
+    ➕ Nieuw bezoek
+</button>
 
 <div id="nieuwBezoekForm"
      class="hidden">
@@ -170,13 +189,14 @@
 
     <select id="bezoekScore">
 
-        <option value="1">⭐</option>
-        <option value="2">⭐⭐</option>
-        <option value="3">⭐⭐⭐</option>
-        <option value="4">⭐⭐⭐⭐</option>
-        <option value="5">⭐⭐⭐⭐⭐</option>
+    <option value="0">☆</option>
+    <option value="1">⭐</option>
+    <option value="2">⭐⭐</option>
+    <option value="3">⭐⭐⭐</option>
+    <option value="4">⭐⭐⭐⭐</option>
+    <option value="5">⭐⭐⭐⭐⭐</option>
 
-    </select>
+</select>
 
 
     <label>
@@ -202,7 +222,7 @@
     class="verwijder-restaurant"
     onclick="verwijderen()"
 >
-    🗑️ Restaurant verwijderen
+    🗑️ Horecazaak verwijderen
 </button>
 
     </div>
@@ -232,7 +252,7 @@
 
         <p>
             Noteer hier snel iets dat je later
-            aan RestaurantLog wilt verbeteren.
+            aan HorecaLog wilt verbeteren.
         </p>
 
     </div>
@@ -271,7 +291,7 @@
 
 
         <button onclick="backupMaken()">
-            ☁ Maak iCloud back-up
+            ☁ Maak back-up
         </button>
 
 
@@ -320,7 +340,7 @@
 
     <button onclick="toonPagina('restaurantsPage')">
         🍽
-        <span>Restaurants</span>
+        <span>Horeca</span>
     </button>
 
 

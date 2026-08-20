@@ -230,6 +230,7 @@ document
         updateFavorietKnop();
 
         toonBezoeken();
+        toonRestaurantFotos();
 
 
     toonPagina("detailPage");
@@ -496,5 +497,201 @@ function keukenWaarde(){
 
 
     return keuze;
+
+}
+
+function restaurantFotosToevoegen(event){
+
+    if(!huidigRestaurant){
+        return;
+    }
+
+
+    let bestanden =
+        event.target.files;
+
+
+    Array.from(bestanden).forEach(
+        function(bestand){
+
+            let reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e){
+
+                    let foto = {
+
+                        restaurantId:
+                            huidigRestaurant.id,
+
+                        data:
+                            e.target.result,
+
+                        datum:
+                            new Date().toISOString()
+
+                    };
+
+
+                    fotoRestaurantOpslaan(
+                        foto,
+                        function(){
+
+                            toonRestaurantFotos();
+
+                        }
+                    );
+
+                };
+
+
+            reader.readAsDataURL(
+                bestand
+            );
+
+        }
+    );
+
+
+    // Input leegmaken zodat
+    // dezelfde foto opnieuw gekozen kan worden
+
+    event.target.value = "";
+
+}
+
+
+function toonRestaurantFotos(){
+
+    if(!huidigRestaurant){
+        return;
+    }
+
+
+    let container =
+        document.getElementById(
+            "restaurantFotos"
+        );
+
+
+    container.innerHTML = "";
+
+
+    fotosRestaurantOphalen(
+        huidigRestaurant.id,
+        function(fotos){
+
+            fotos.forEach(
+                function(foto){
+
+                    container.innerHTML += `
+
+                        <div
+                            class="foto-item"
+                            onclick="toonGroteFoto('${foto.data}')"
+                        >
+
+                            <img
+                                src="${foto.data}"
+                            >
+
+                            <button
+                                class="foto-verwijder"
+                                onclick="event.stopPropagation(); restaurantFotoVerwijderen(${foto.id})"
+                            >
+                                🗑
+                            </button>
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+function restaurantFotoVerwijderen(id){
+
+    let bevestiging =
+        confirm(
+            "Deze foto verwijderen?"
+        );
+
+
+    if(!bevestiging){
+        return;
+    }
+
+
+    fotoRestaurantVerwijderen(
+        id
+    );
+
+
+    setTimeout(
+        function(){
+
+            toonRestaurantFotos();
+
+        },
+        100
+    );
+
+}
+
+
+function toonGroteFoto(data){
+
+    let venster =
+        window.open(
+            ""
+        );
+
+
+    venster.document.write(
+        `
+        <html>
+
+        <head>
+
+            <title>Foto</title>
+
+            <style>
+
+                body{
+                    margin:0;
+                    background:black;
+                    display:flex;
+                    justify-content:center;
+                    align-items:center;
+                    height:100vh;
+                }
+
+                img{
+                    max-width:100%;
+                    max-height:100%;
+                    object-fit:contain;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <img src="${data}">
+
+        </body>
+
+        </html>
+        `
+    );
 
 }

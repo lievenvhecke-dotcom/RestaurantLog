@@ -285,6 +285,10 @@ function openBezoek(id){
 
             bezoekBewerkModus = true;
 
+            document
+    .getElementById("bezoekFotoKnop")
+    .classList
+    .remove("hidden");
 
             document
                 .getElementById(

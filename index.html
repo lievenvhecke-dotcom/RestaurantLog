@@ -146,6 +146,20 @@
         <p id="detailKeuken"
    class="detail-keuken"></p>
 
+<h3>📷 Foto's van de zaak</h3>
+
+<input
+    type="file"
+    id="restaurantFotoInput"
+    accept="image/*"
+    multiple
+    onchange="restaurantFotosToevoegen(event)"
+>
+
+<div id="restaurantFotos"
+     class="foto-grid">
+</div>
+
     <button 
             id="favorietKnop"
             onclick="favorietWisselen()">

@@ -1391,3 +1391,100 @@ function gegevensHerstellen(
         };
 
 }
+
+/* =====================================================
+   ALLE RESTAURANTFOTO'S OPHALEN
+   ===================================================== */
+
+function alleRestaurantFotosOphalen(callback){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij ophalen restaurantfoto's:",
+                event.target.error
+            );
+
+
+            callback([]);
+
+        };
+
+}
+
+
+/* =====================================================
+   ALLE BEZOEKFOTO'S OPHALEN
+   ===================================================== */
+
+function alleBezoekFotosOphalen(callback){
+
+    let transaction =
+        db.transaction(
+            ["fotosBezoek"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosBezoek"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij ophalen bezoekfoto's:",
+                event.target.error
+            );
+
+
+            callback([]);
+
+        };
+
+}

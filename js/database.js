@@ -289,6 +289,7 @@ function gegevensHerstellen(backup, callback){
         db.transaction(
             [
                 "restaurants",
+                "bezoeken"
             ],
             "readwrite"
         );
@@ -299,19 +300,65 @@ function gegevensHerstellen(backup, callback){
             "restaurants"
         );
 
+
+    let bezoekenStore =
+        transaction.objectStore(
+            "bezoeken"
+        );
+
+
+    // Bestaande gegevens wissen
+
     restaurantsStore.clear();
 
+    bezoekenStore.clear();
 
-    backup.restaurants.forEach(function(r){
 
-        restaurantsStore.put(r);
+    // Horecazaken herstellen
 
-    });
+    if(
+        backup.restaurants &&
+        Array.isArray(backup.restaurants)
+    ){
+
+        backup.restaurants.forEach(
+            function(restaurant){
+
+                restaurantsStore.put(
+                    restaurant
+                );
+
+            }
+        );
+
+    }
+
+
+    // Bezoeken herstellen
+
+    if(
+        backup.bezoeken &&
+        Array.isArray(backup.bezoeken)
+    ){
+
+        backup.bezoeken.forEach(
+            function(bezoek){
+
+                bezoekenStore.put(
+                    bezoek
+                );
+
+            }
+        );
+
+    }
 
 
     transaction.oncomplete = function(){
 
-        console.log("Herstel voltooid");
+        console.log(
+            "Herstel voltooid"
+        );
 
 
         if(callback){
@@ -325,9 +372,14 @@ function gegevensHerstellen(backup, callback){
 
     transaction.onerror = function(event){
 
-        console.log(
+        console.error(
             "Herstel fout:",
             event.target.error
+        );
+
+
+        alert(
+            "Er is een fout opgetreden bij het herstellen van de back-up."
         );
 
     };

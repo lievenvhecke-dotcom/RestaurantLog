@@ -148,12 +148,17 @@
 
 <h3>📷 Foto's van de zaak</h3>
 
+<label for="restaurantFotoInput" class="foto-toevoegen">
+    📷 Foto toevoegen
+</label>
+
 <input
     type="file"
     id="restaurantFotoInput"
     accept="image/*"
     multiple
     onchange="restaurantFotosToevoegen(event)"
+    hidden
 >
 
 <div id="restaurantFotos"

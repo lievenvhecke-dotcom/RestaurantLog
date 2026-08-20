@@ -3,180 +3,232 @@ let dbReady = false;
 let dbCallbacks = [];
 
 
+/* =====================================================
+   DATABASE OPENEN
+   ===================================================== */
+
 function openDatabase(){
 
-    let request = indexedDB.open(
-        "RestaurantLogDB",
-        8
-    );
-
-
-    request.onupgradeneeded = function(event){
-
-        db = event.target.result;
-
-
-        // =========================================
-        // RESTAURANTS
-        // =========================================
-
-        if(!db.objectStoreNames.contains("restaurants")){
-
-            let store =
-                db.createObjectStore(
-                    "restaurants",
-                    {
-                        keyPath:"id",
-                        autoIncrement:true
-                    }
-                );
-
-            store.createIndex(
-                "naam",
-                "naam",
-                {
-                    unique:false
-                }
-            );
-
-        }
-
-
-        // =========================================
-        // BEZOEKEN
-        // =========================================
-
-        if(!db.objectStoreNames.contains("bezoeken")){
-
-            let bezoekStore =
-                db.createObjectStore(
-                    "bezoeken",
-                    {
-                        keyPath:"id",
-                        autoIncrement:true
-                    }
-                );
-
-
-            bezoekStore.createIndex(
-                "restaurantId",
-                "restaurantId",
-                {
-                    unique:false
-                }
-            );
-
-        }
-
-
-        // =========================================
-        // IDEEËN
-        // =========================================
-
-        if(!db.objectStoreNames.contains("ideeen")){
-
-            db.createObjectStore(
-                "ideeen",
-                {
-                    keyPath:"id",
-                    autoIncrement:true
-                }
-            );
-
-        }
-
-
-        // =========================================
-        // FOTO'S RESTAURANT
-        // =========================================
-
-        if(!db.objectStoreNames.contains("fotosRestaurant")){
-
-            let fotoRestaurantStore =
-                db.createObjectStore(
-                    "fotosRestaurant",
-                    {
-                        keyPath:"id",
-                        autoIncrement:true
-                    }
-                );
-
-
-            fotoRestaurantStore.createIndex(
-                "restaurantId",
-                "restaurantId",
-                {
-                    unique:false
-                }
-            );
-
-        }
-
-
-        // =========================================
-        // FOTO'S BEZOEK
-        // =========================================
-
-        if(!db.objectStoreNames.contains("fotosBezoek")){
-
-            let fotoBezoekStore =
-                db.createObjectStore(
-                    "fotosBezoek",
-                    {
-                        keyPath:"id",
-                        autoIncrement:true
-                    }
-                );
-
-
-            fotoBezoekStore.createIndex(
-                "bezoekId",
-                "bezoekId",
-                {
-                    unique:false
-                }
-            );
-
-        }
-
-    };
-
-
-    request.onsuccess = function(event){
-
-        db = event.target.result;
-
-        dbReady = true;
-
-        console.log(
-            "Database geopend"
+    let request =
+        indexedDB.open(
+            "RestaurantLogDB",
+            8
         );
 
 
-        dbCallbacks.forEach(
-            callback => callback()
-        );
+    request.onupgradeneeded =
+        function(event){
 
-    };
+            db =
+                event.target.result;
 
 
-    request.onerror = function(event){
+            /* =================================================
+               RESTAURANTS
+               ================================================= */
 
-        console.error(
-            "Database fout:",
-            event.target.error
-        );
+            if(
+                !db.objectStoreNames.contains(
+                    "restaurants"
+                )
+            ){
 
-    };
+                let store =
+                    db.createObjectStore(
+                        "restaurants",
+                        {
+                            keyPath: "id",
+                            autoIncrement: true
+                        }
+                    );
+
+
+                store.createIndex(
+                    "naam",
+                    "naam",
+                    {
+                        unique: false
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               BEZOEKEN
+               ================================================= */
+
+            if(
+                !db.objectStoreNames.contains(
+                    "bezoeken"
+                )
+            ){
+
+                let bezoekStore =
+                    db.createObjectStore(
+                        "bezoeken",
+                        {
+                            keyPath: "id",
+                            autoIncrement: true
+                        }
+                    );
+
+
+                bezoekStore.createIndex(
+                    "restaurantId",
+                    "restaurantId",
+                    {
+                        unique: false
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               IDEEËN
+               ================================================= */
+
+            if(
+                !db.objectStoreNames.contains(
+                    "ideeen"
+                )
+            ){
+
+                db.createObjectStore(
+                    "ideeen",
+                    {
+                        keyPath: "id",
+                        autoIncrement: true
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               FOTO'S RESTAURANT
+               ================================================= */
+
+            if(
+                !db.objectStoreNames.contains(
+                    "fotosRestaurant"
+                )
+            ){
+
+                let fotoRestaurantStore =
+                    db.createObjectStore(
+                        "fotosRestaurant",
+                        {
+                            keyPath: "id",
+                            autoIncrement: true
+                        }
+                    );
+
+
+                fotoRestaurantStore.createIndex(
+                    "restaurantId",
+                    "restaurantId",
+                    {
+                        unique: false
+                    }
+                );
+
+            }
+
+
+            /* =================================================
+               FOTO'S BEZOEK
+               ================================================= */
+
+            if(
+                !db.objectStoreNames.contains(
+                    "fotosBezoek"
+                )
+            ){
+
+                let fotoBezoekStore =
+                    db.createObjectStore(
+                        "fotosBezoek",
+                        {
+                            keyPath: "id",
+                            autoIncrement: true
+                        }
+                    );
+
+
+                fotoBezoekStore.createIndex(
+                    "bezoekId",
+                    "bezoekId",
+                    {
+                        unique: false
+                    }
+                );
+
+            }
+
+        };
+
+
+    request.onsuccess =
+        function(event){
+
+            db =
+                event.target.result;
+
+
+            dbReady = true;
+
+
+            console.log(
+                "Database geopend"
+            );
+
+
+            dbCallbacks.forEach(
+                function(callback){
+
+                    callback();
+
+                }
+            );
+
+
+            dbCallbacks = [];
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Database fout:",
+                event.target.error
+            );
+
+        };
+
+
+    request.onblocked =
+        function(){
+
+            console.warn(
+                "Database upgrade geblokkeerd."
+            );
+
+        };
 
 }
 
 
-// =========================================
-// DATABASE KLAAR
-// =========================================
+/* =====================================================
+   DATABASE KLAAR
+   ===================================================== */
 
-function wanneerDatabaseKlaar(callback){
+function wanneerDatabaseKlaar(
+    callback
+){
 
     if(dbReady){
 
@@ -185,18 +237,23 @@ function wanneerDatabaseKlaar(callback){
     }
     else{
 
-        dbCallbacks.push(callback);
+        dbCallbacks.push(
+            callback
+        );
 
     }
 
 }
 
 
-// =========================================
-// RESTAURANTS
-// =========================================
+/* =====================================================
+   RESTAURANTS OPSLAAN
+   ===================================================== */
 
-function restaurantOpslaan(restaurant, callback){
+function restaurantOpslaan(
+    restaurant,
+    callback
+){
 
     let transaction =
         db.transaction(
@@ -212,25 +269,49 @@ function restaurantOpslaan(restaurant, callback){
 
 
     let request =
-        store.add(restaurant);
+        store.add(
+            restaurant
+        );
 
 
-    request.onsuccess = function(event){
+    request.onsuccess =
+        function(event){
 
-        restaurant.id =
-            event.target.result;
+            restaurant.id =
+                event.target.result;
 
 
-        if(callback){
-            callback(restaurant);
-        }
+            if(callback){
 
-    };
+                callback(
+                    restaurant
+                );
+
+            }
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Restaurant opslaan mislukt:",
+                event.target.error
+            );
+
+        };
 
 }
 
 
-function restaurantsOphalen(callback){
+/* =====================================================
+   RESTAURANTS OPHALEN
+   ===================================================== */
+
+function restaurantsOphalen(
+    callback
+){
 
     let transaction =
         db.transaction(
@@ -249,48 +330,40 @@ function restaurantsOphalen(callback){
         store.getAll();
 
 
-    request.onsuccess = function(){
+    request.onsuccess =
+        function(){
 
-        callback(
-            request.result
-        );
+            callback(
+                request.result
+            );
 
-    };
-
-}
-
-
-function alleRestaurantsOphalen(callback){
-
-    let transaction =
-        db.transaction(
-            ["restaurants"],
-            "readonly"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "restaurants"
-        );
-
-
-    let request =
-        store.getAll();
-
-
-    request.onsuccess = function(){
-
-        callback(
-            request.result
-        );
-
-    };
+        };
 
 }
 
 
-function restaurantAanpassen(restaurant){
+/* =====================================================
+   ALLE RESTAURANTS OPHALEN
+   ===================================================== */
+
+function alleRestaurantsOphalen(
+    callback
+){
+
+    restaurantsOphalen(
+        callback
+    );
+
+}
+
+
+/* =====================================================
+   RESTAURANT AANPASSEN
+   ===================================================== */
+
+function restaurantAanpassen(
+    restaurant
+){
 
     let transaction =
         db.transaction(
@@ -312,11 +385,13 @@ function restaurantAanpassen(restaurant){
 }
 
 
-// =========================================
-// RESTAURANT VERWIJDEREN
-// =========================================
+/* =====================================================
+   RESTAURANT VERWIJDEREN
+   ===================================================== */
 
-function restaurantVerwijderen(id){
+function restaurantVerwijderen(
+    id
+){
 
     let transaction =
         db.transaction(
@@ -354,12 +429,14 @@ function restaurantVerwijderen(id){
         );
 
 
-    // Restaurant verwijderen
+    /* Restaurant verwijderen */
 
-    restaurantsStore.delete(id);
+    restaurantsStore.delete(
+        id
+    );
 
 
-    // Restaurantfoto's verwijderen
+    /* Restaurantfoto's verwijderen */
 
     let restaurantFotoIndex =
         fotosRestaurantStore.index(
@@ -391,7 +468,7 @@ function restaurantVerwijderen(id){
         };
 
 
-    // Bezoeken zoeken
+    /* Bezoeken zoeken */
 
     let bezoekIndex =
         bezoekenStore.index(
@@ -412,55 +489,106 @@ function restaurantVerwijderen(id){
                 event.target.result;
 
 
-            if(cursor){
+            if(!cursor){
 
-                let bezoek =
-                    cursor.value;
+                return;
 
-
-                let bezoekId =
-                    bezoek.id;
+            }
 
 
-                // Foto's van dit bezoek verwijderen
-
-                let fotoIndex =
-                    fotosBezoekStore.index(
-                        "bezoekId"
-                    );
+            let bezoek =
+                cursor.value;
 
 
-                let fotoRequest =
-                    fotoIndex.openCursor(
-                        IDBKeyRange.only(
-                            bezoekId
-                        )
-                    );
+            let bezoekId =
+                bezoek.id;
 
 
-                fotoRequest.onsuccess =
-                    function(event){
+            /* Foto's van bezoek verwijderen */
 
-                        let fotoCursor =
-                            event.target.result;
-
-
-                        if(fotoCursor){
-
-                            fotoCursor.delete();
-
-                            fotoCursor.continue();
-
-                        }
-
-                    };
+            let fotoIndex =
+                fotosBezoekStore.index(
+                    "bezoekId"
+                );
 
 
-                // Bezoek verwijderen
+            let fotoRequest =
+                fotoIndex.openCursor(
+                    IDBKeyRange.only(
+                        bezoekId
+                    )
+                );
 
-                cursor.delete();
 
-                cursor.continue();
+            fotoRequest.onsuccess =
+                function(event){
+
+                    let fotoCursor =
+                        event.target.result;
+
+
+                    if(fotoCursor){
+
+                        fotoCursor.delete();
+
+                        fotoCursor.continue();
+
+                    }
+
+                };
+
+
+            /* Bezoek verwijderen */
+
+            cursor.delete();
+
+            cursor.continue();
+
+        };
+
+}
+
+
+/* =====================================================
+   BEZOEK OPSLAAN
+   ===================================================== */
+
+function bezoekOpslaan(
+    bezoek,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["bezoeken"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "bezoeken"
+        );
+
+
+    let request =
+        store.add(
+            bezoek
+        );
+
+
+    request.onsuccess =
+        function(event){
+
+            bezoek.id =
+                event.target.result;
+
+
+            if(callback){
+
+                callback(
+                    bezoek
+                );
 
             }
 
@@ -469,41 +597,9 @@ function restaurantVerwijderen(id){
 }
 
 
-// =========================================
-// BEZOEKEN
-// =========================================
-
-function bezoekOpslaan(bezoek, callback){
-
-    let transaction =
-        db.transaction(
-            ["bezoeken"],
-            "readwrite"
-        );
-
-    let store =
-        transaction.objectStore(
-            "bezoeken"
-        );
-
-    let request =
-        store.add(bezoek);
-
-
-    request.onsuccess = function(event){
-
-        bezoek.id =
-            event.target.result;
-
-
-        if(callback){
-            callback(bezoek);
-        }
-
-    };
-
-}
-
+/* =====================================================
+   BEZOEKEN VAN RESTAURANT OPHALEN
+   ===================================================== */
 
 function bezoekenOphalen(
     restaurantId,
@@ -535,18 +631,25 @@ function bezoekenOphalen(
         );
 
 
-    request.onsuccess = function(){
+    request.onsuccess =
+        function(){
 
-        callback(
-            request.result
-        );
+            callback(
+                request.result
+            );
 
-    };
+        };
 
 }
 
 
-function alleBezoekenOphalen(callback){
+/* =====================================================
+   ALLE BEZOEKEN OPHALEN
+   ===================================================== */
+
+function alleBezoekenOphalen(
+    callback
+){
 
     let transaction =
         db.transaction(
@@ -565,18 +668,25 @@ function alleBezoekenOphalen(callback){
         store.getAll();
 
 
-    request.onsuccess = function(){
+    request.onsuccess =
+        function(){
 
-        callback(
-            request.result
-        );
+            callback(
+                request.result
+            );
 
-    };
+        };
 
 }
 
 
-function bezoekAanpassen(bezoek){
+/* =====================================================
+   BEZOEK AANPASSEN
+   ===================================================== */
+
+function bezoekAanpassen(
+    bezoek
+){
 
     let transaction =
         db.transaction(
@@ -598,20 +708,425 @@ function bezoekAanpassen(bezoek){
 }
 
 
-// =========================================
-// ALLES WISSEN
-// =========================================
+/* =====================================================
+   IDEE OPSLAAN
+   ===================================================== */
+
+function ideeOpslaan(
+    idee,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    let request =
+        store.add(
+            idee
+        );
+
+
+    request.onsuccess =
+        function(){
+
+            idee.id =
+                request.result;
+
+
+            if(callback){
+
+                callback(
+                    idee
+                );
+
+            }
+
+        };
+
+}
+
+
+/* =====================================================
+   IDEEËN OPHALEN
+   ===================================================== */
+
+function ideeenOphalen(
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   IDEE VERWIJDEREN
+   ===================================================== */
+
+function ideeVerwijderen(
+    id
+){
+
+    let transaction =
+        db.transaction(
+            ["ideeen"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "ideeen"
+        );
+
+
+    store.delete(
+        id
+    );
+
+}
+
+
+/* =====================================================
+   RESTAURANTFOTO OPSLAAN
+   ===================================================== */
+
+function fotoRestaurantOpslaan(
+    foto,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+
+    let request =
+        store.add(
+            foto
+        );
+
+
+    request.onsuccess =
+        function(){
+
+            foto.id =
+                request.result;
+
+
+            if(callback){
+
+                callback(
+                    foto
+                );
+
+            }
+
+        };
+
+}
+
+
+/* =====================================================
+   RESTAURANTFOTO'S OPHALEN
+   ===================================================== */
+
+function fotosRestaurantOphalen(
+    restaurantId,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+
+    let index =
+        store.index(
+            "restaurantId"
+        );
+
+
+    let request =
+        index.getAll(
+            restaurantId
+        );
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   ALLE RESTAURANTFOTO'S OPHALEN
+   ===================================================== */
+
+function alleRestaurantFotosOphalen(
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   RESTAURANTFOTO VERWIJDEREN
+   ===================================================== */
+
+function fotoRestaurantVerwijderen(
+    id
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+
+    store.delete(
+        id
+    );
+
+}
+
+
+/* =====================================================
+   BEZOEKFOTO OPSLAAN
+   ===================================================== */
+
+function fotoBezoekOpslaan(
+    foto,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosBezoek"],
+            "readwrite"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosBezoek"
+        );
+
+
+    let request =
+        store.add(
+            foto
+        );
+
+
+    request.onsuccess =
+        function(){
+
+            foto.id =
+                request.result;
+
+
+            if(callback){
+
+                callback(
+                    foto
+                );
+
+            }
+
+        };
+
+}
+
+
+/* =====================================================
+   BEZOEKFOTO'S OPHALEN
+   ===================================================== */
+
+function fotosBezoekOphalen(
+    bezoekId,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosBezoek"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosBezoek"
+        );
+
+
+    let index =
+        store.index(
+            "bezoekId"
+        );
+
+
+    let request =
+        index.getAll(
+            bezoekId
+        );
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   ALLE BEZOEKFOTO'S OPHALEN
+   ===================================================== */
+
+function alleBezoekFotosOphalen(
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosBezoek"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosBezoek"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            callback(
+                request.result
+            );
+
+        };
+
+}
+
+
+/* =====================================================
+   ALLES WISSEN
+   ===================================================== */
 
 function allesWissen(){
 
     let bevestiging =
         confirm(
-            "Ben je zeker dat je ALLE restaurants en bezoeken wilt verwijderen?"
+            "Ben je zeker dat je ALLE restaurants, bezoeken, ideeën en foto's wilt verwijderen?"
         );
 
 
     if(!bevestiging){
+
         return;
+
     }
 
 
@@ -665,267 +1180,15 @@ function allesWissen(){
 
         };
 
-}
 
+    transaction.onerror =
+        function(event){
 
-// =========================================
-// IDEEËN
-// =========================================
-
-function ideeOpslaan(
-    idee,
-    callback
-){
-
-    let transaction =
-        db.transaction(
-            ["ideeen"],
-            "readwrite"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "ideeen"
-        );
-
-
-    let request =
-        store.add(idee);
-
-
-    request.onsuccess =
-        function(){
-
-            idee.id =
-                request.result;
-
-
-            if(callback){
-                callback(idee);
-            }
-
-        };
-
-}
-
-
-function ideeenOphalen(callback){
-
-    let transaction =
-        db.transaction(
-            ["ideeen"],
-            "readonly"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "ideeen"
-        );
-
-
-    let request =
-        store.getAll();
-
-
-    request.onsuccess =
-        function(){
-
-            callback(
-                request.result
+            console.error(
+                "Fout bij alles wissen:",
+                event.target.error
             );
 
         };
-
-}
-
-
-function ideeVerwijderen(id){
-
-    let transaction =
-        db.transaction(
-            ["ideeen"],
-            "readwrite"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "ideeen"
-        );
-
-
-    store.delete(id);
-
-}
-
-
-// =========================================
-// FOTO'S RESTAURANT
-// =========================================
-
-function fotoRestaurantOpslaan(
-    foto,
-    callback
-){
-
-    let transaction =
-        db.transaction(
-            ["fotosRestaurant"],
-            "readwrite"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "fotosRestaurant"
-        );
-
-
-    let request =
-        store.add(foto);
-
-
-    request.onsuccess =
-        function(){
-
-            foto.id =
-                request.result;
-
-
-            if(callback){
-                callback(foto);
-            }
-
-        };
-
-}
-
-
-function fotosRestaurantOphalen(
-    restaurantId,
-    callback
-){
-
-    let transaction =
-        db.transaction(
-            ["fotosRestaurant"],
-            "readonly"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "fotosRestaurant"
-        );
-
-
-    let index =
-        store.index(
-            "restaurantId"
-        );
-
-
-    let request =
-        index.getAll(
-            restaurantId
-        );
-
-
-    request.onsuccess =
-        function(){
-
-            callback(
-                request.result
-            );
-
-        };
-
-}
-
-
-function fotoRestaurantVerwijderen(id){
-
-    let transaction =
-        db.transaction(
-            ["fotosRestaurant"],
-            "readwrite"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "fotosRestaurant"
-        );
-
-
-    store.delete(id);
-
-}
-
-function fotoBezoekOpslaan(foto, callback){
-
-    let transaction =
-        db.transaction(
-            ["fotosBezoek"],
-            "readwrite"
-        );
-
-    let store =
-        transaction.objectStore(
-            "fotosBezoek"
-        );
-
-    let request =
-        store.add(foto);
-
-    request.onsuccess = function(){
-
-        foto.id =
-            request.result;
-
-        if(callback){
-            callback(foto);
-        }
-
-    };
-
-}
-
-
-function fotosBezoekOphalen(
-    bezoekId,
-    callback
-){
-
-    let transaction =
-        db.transaction(
-            ["fotosBezoek"],
-            "readonly"
-        );
-
-    let store =
-        transaction.objectStore(
-            "fotosBezoek"
-        );
-
-    let index =
-        store.index(
-            "bezoekId"
-        );
-
-    let request =
-        index.getAll(
-            bezoekId
-        );
-
-    request.onsuccess = function(){
-
-        callback(
-            request.result
-        );
-
-    };
 
 }

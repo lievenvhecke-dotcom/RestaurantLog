@@ -81,9 +81,7 @@ function backupHerstellen(event){
 
 
     if(!bestand){
-
         return;
-
     }
 
 
@@ -94,29 +92,44 @@ function backupHerstellen(event){
     reader.onload =
         function(e){
 
-            console.log(
-                "Backupbestand gelezen"
-            );
-
-
             try{
 
-                let backup =
-                    JSON.parse(
-                        e.target.result
-                    );
+                // Tekst uit bestand ophalen
+                let tekst =
+                    e.target.result;
+
+
+                // Eventuele BOM / verborgen tekens
+                // aan het begin verwijderen
+                tekst =
+                    tekst
+                    .replace(/^\uFEFF/, "")
+                    .trim();
 
 
                 console.log(
-                    "Backup inhoud:",
+                    "Backuptekst gelezen:",
+                    tekst.substring(0, 100)
+                );
+
+
+                // JSON lezen
+                let backup =
+                    JSON.parse(tekst);
+
+
+                console.log(
+                    "Backup succesvol gelezen:",
                     backup
                 );
 
 
-                // Controleren of dit een geldige backup is
+                // ================================
+                // CONTROLE BACKUP
+                // ================================
 
                 if(
-                    !backup.restaurants ||
+                    !backup ||
                     !Array.isArray(
                         backup.restaurants
                     )
@@ -136,11 +149,28 @@ function backupHerstellen(event){
 
 
                 let aantalBezoeken =
-                    backup.bezoeken &&
-                    Array.isArray(backup.bezoeken)
+                    Array.isArray(
+                        backup.bezoeken
+                    )
                     ? backup.bezoeken.length
                     : 0;
 
+
+                console.log(
+                    "Restaurants:",
+                    aantalRestaurants
+                );
+
+
+                console.log(
+                    "Bezoeken:",
+                    aantalBezoeken
+                );
+
+
+                // ================================
+                // BEVESTIGING
+                // ================================
 
                 let bevestiging =
                     confirm(
@@ -160,16 +190,13 @@ function backupHerstellen(event){
 
 
                 if(!bevestiging){
-
                     return;
-
                 }
 
 
-                console.log(
-                    "Start herstel..."
-                );
-
+                // ================================
+                // DATABASE HERSTELLEN
+                // ================================
 
                 gegevensHerstellen(
                     backup,
@@ -177,7 +204,7 @@ function backupHerstellen(event){
                     function(){
 
                         console.log(
-                            "gegevensHerstellen klaar"
+                            "Backup succesvol hersteld"
                         );
 
 
@@ -193,8 +220,10 @@ function backupHerstellen(event){
 
                                 alert(
                                     "Back-up hersteld ✅\n\n" +
+
                                     aantalRestaurants +
                                     " horecazaken en " +
+
                                     aantalBezoeken +
                                     " bezoeken teruggezet."
                                 );
@@ -205,17 +234,18 @@ function backupHerstellen(event){
                     }
                 );
 
+
             }
             catch(error){
 
                 console.error(
-                    "FOUT BIJ BACKUP HERSTELLEN:",
+                    "FOUT BIJ BACKUP:",
                     error
                 );
 
 
                 alert(
-                    "Fout bij herstellen:\n\n" +
+                    "Back-up kon niet worden gelezen.\n\n" +
                     error.name +
                     "\n" +
                     error.message
@@ -237,7 +267,8 @@ function backupHerstellen(event){
 
 
     reader.readAsText(
-        bestand
+        bestand,
+        "UTF-8"
     );
 
 }

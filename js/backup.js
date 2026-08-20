@@ -4,20 +4,53 @@
 
 function backupMaken(){
 
+    console.log("BACKUP: gestart");
+
+
     alleRestaurantsOphalen(
         function(restaurants){
+
+            console.log(
+                "BACKUP: restaurants:",
+                restaurants.length
+            );
+
 
             alleBezoekenOphalen(
                 function(bezoeken){
 
+                    console.log(
+                        "BACKUP: bezoeken:",
+                        bezoeken.length
+                    );
+
+
                     ideeenOphalen(
                         function(ideeen){
+
+                            console.log(
+                                "BACKUP: ideeën:",
+                                ideeen.length
+                            );
+
 
                             alleRestaurantFotosOphalen(
                                 function(fotosRestaurant){
 
+                                    console.log(
+                                        "BACKUP: restaurantfoto's:",
+                                        fotosRestaurant.length
+                                    );
+
+
                                     alleBezoekFotosOphalen(
                                         function(fotosBezoek){
+
+                                            console.log(
+                                                "BACKUP: bezoekfoto's:",
+                                                fotosBezoek.length
+                                            );
+
 
                                             let backup = {
 
@@ -42,6 +75,12 @@ function backupMaken(){
                                                     fotosBezoek
 
                                             };
+
+
+                                            console.log(
+                                                "BACKUP: object aangemaakt",
+                                                backup
+                                            );
 
 
                                             let bestand =
@@ -72,7 +111,8 @@ function backupMaken(){
                                                 );
 
 
-                                            link.href = url;
+                                            link.href =
+                                                url;
 
 
                                             link.download =
@@ -108,16 +148,26 @@ function backupMaken(){
                                             );
 
 
+                                            console.log(
+                                                "BACKUP: download gestart"
+                                            );
+
+
                                             alert(
                                                 "Back-up gemaakt ✅\n\n" +
+
                                                 restaurants.length +
                                                 " horecazaken\n" +
+
                                                 bezoeken.length +
                                                 " bezoeken\n" +
+
                                                 ideeen.length +
                                                 " ideeën\n" +
+
                                                 fotosRestaurant.length +
                                                 " restaurantfoto's\n" +
+
                                                 fotosBezoek.length +
                                                 " bezoekfoto's"
                                             );

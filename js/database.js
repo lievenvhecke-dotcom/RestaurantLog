@@ -1192,3 +1192,202 @@ function allesWissen(){
         };
 
 }
+
+/* =====================================================
+   BACKUP HERSTELLEN
+   ===================================================== */
+
+function gegevensHerstellen(
+    backup,
+    callback
+){
+
+    if(!backup){
+        return;
+    }
+
+
+    let restaurants =
+        Array.isArray(backup.restaurants)
+            ? backup.restaurants
+            : [];
+
+
+    let bezoeken =
+        Array.isArray(backup.bezoeken)
+            ? backup.bezoeken
+            : [];
+
+
+    let ideeen =
+        Array.isArray(backup.ideeen)
+            ? backup.ideeen
+            : [];
+
+
+    let fotosRestaurant =
+        Array.isArray(backup.fotosRestaurant)
+            ? backup.fotosRestaurant
+            : [];
+
+
+    let fotosBezoek =
+        Array.isArray(backup.fotosBezoek)
+            ? backup.fotosBezoek
+            : [];
+
+
+    let transaction =
+        db.transaction(
+            [
+                "restaurants",
+                "bezoeken",
+                "ideeen",
+                "fotosRestaurant",
+                "fotosBezoek"
+            ],
+            "readwrite"
+        );
+
+
+    /* =================================================
+       BESTAANDE GEGEVENS WISSEN
+       ================================================= */
+
+    transaction.objectStore(
+        "restaurants"
+    ).clear();
+
+
+    transaction.objectStore(
+        "bezoeken"
+    ).clear();
+
+
+    transaction.objectStore(
+        "ideeen"
+    ).clear();
+
+
+    transaction.objectStore(
+        "fotosRestaurant"
+    ).clear();
+
+
+    transaction.objectStore(
+        "fotosBezoek"
+    ).clear();
+
+
+    /* =================================================
+       RESTAURANTS TERUGZETTEN
+       ================================================= */
+
+    restaurants.forEach(
+        function(restaurant){
+
+            transaction.objectStore(
+                "restaurants"
+            ).put(restaurant);
+
+        }
+    );
+
+
+    /* =================================================
+       BEZOEKEN TERUGZETTEN
+       ================================================= */
+
+    bezoeken.forEach(
+        function(bezoek){
+
+            transaction.objectStore(
+                "bezoeken"
+            ).put(bezoek);
+
+        }
+    );
+
+
+    /* =================================================
+       IDEEËN TERUGZETTEN
+       ================================================= */
+
+    ideeen.forEach(
+        function(idee){
+
+            transaction.objectStore(
+                "ideeen"
+            ).put(idee);
+
+        }
+    );
+
+
+    /* =================================================
+       RESTAURANTFOTO'S TERUGZETTEN
+       ================================================= */
+
+    fotosRestaurant.forEach(
+        function(foto){
+
+            transaction.objectStore(
+                "fotosRestaurant"
+            ).put(foto);
+
+        }
+    );
+
+
+    /* =================================================
+       BEZOEKFOTO'S TERUGZETTEN
+       ================================================= */
+
+    fotosBezoek.forEach(
+        function(foto){
+
+            transaction.objectStore(
+                "fotosBezoek"
+            ).put(foto);
+
+        }
+    );
+
+
+    /* =================================================
+       TRANSACTIE KLAAR
+       ================================================= */
+
+    transaction.oncomplete =
+        function(){
+
+            console.log(
+                "Backup succesvol teruggezet."
+            );
+
+
+            if(callback){
+
+                callback();
+
+            }
+
+        };
+
+
+    transaction.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij herstellen backup:",
+                event.target.error
+            );
+
+
+            alert(
+                "Er is een fout opgetreden bij het herstellen van de backup."
+            );
+
+        };
+
+}

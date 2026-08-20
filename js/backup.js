@@ -6,63 +6,125 @@ function backupMaken(){
             alleBezoekenOphalen(
                 function(bezoeken){
 
-                    let backup = {
+                    ideeenOphalen(
+                        function(ideeen){
 
-                        versie: 1,
+                            alleRestaurantFotosOphalen(
+                                function(fotosRestaurant){
 
-                        datum:
-                            new Date().toISOString(),
+                                    alleBezoekFotosOphalen(
+                                        function(fotosBezoek){
 
-                        restaurants:
-                            restaurants,
+                                            let backup = {
 
-                        bezoeken:
-                            bezoeken
+                                                versie: 2,
 
-                    };
+                                                datum:
+                                                    new Date().toISOString(),
 
+                                                restaurants:
+                                                    restaurants,
 
-                    let bestand =
-                        new Blob(
-                            [
-                                JSON.stringify(
-                                    backup,
-                                    null,
-                                    2
-                                )
-                            ],
-                            {
-                                type:
-                                    "application/json"
-                            }
-                        );
+                                                bezoeken:
+                                                    bezoeken,
 
+                                                ideeen:
+                                                    ideeen,
 
-                    let link =
-                        document.createElement(
-                            "a"
-                        );
+                                                fotosRestaurant:
+                                                    fotosRestaurant,
+
+                                                fotosBezoek:
+                                                    fotosBezoek
+
+                                            };
 
 
-                    link.href =
-                        URL.createObjectURL(
-                            bestand
-                        );
+                                            let bestand =
+                                                new Blob(
+                                                    [
+                                                        JSON.stringify(
+                                                            backup,
+                                                            null,
+                                                            2
+                                                        )
+                                                    ],
+                                                    {
+                                                        type:
+                                                            "application/json"
+                                                    }
+                                                );
 
 
-                    link.download =
-                        "HorecaLog_backup_" +
-                        new Date()
-                            .toISOString()
-                            .split("T")[0] +
-                        ".json";
+                                            let url =
+                                                URL.createObjectURL(
+                                                    bestand
+                                                );
 
 
-                    link.click();
+                                            let link =
+                                                document.createElement(
+                                                    "a"
+                                                );
 
 
-                    URL.revokeObjectURL(
-                        link.href
+                                            link.href = url;
+
+
+                                            link.download =
+                                                "HorecaLog_backup_" +
+                                                new Date()
+                                                    .toISOString()
+                                                    .split("T")[0] +
+                                                ".json";
+
+
+                                            document.body.appendChild(
+                                                link
+                                            );
+
+
+                                            link.click();
+
+
+                                            document.body.removeChild(
+                                                link
+                                            );
+
+
+                                            setTimeout(
+                                                function(){
+
+                                                    URL.revokeObjectURL(
+                                                        url
+                                                    );
+
+                                                },
+                                                1000
+                                            );
+
+
+                                            alert(
+                                                "Back-up gemaakt ✅\n\n" +
+                                                restaurants.length +
+                                                " horecazaken\n" +
+                                                bezoeken.length +
+                                                " bezoeken\n" +
+                                                ideeen.length +
+                                                " ideeën\n" +
+                                                fotosRestaurant.length +
+                                                " restaurantfoto's\n" +
+                                                fotosBezoek.length +
+                                                " bezoekfoto's"
+                                            );
+
+                                        }
+                                    );
+
+                                }
+                            );
+
+                        }
                     );
 
                 }
@@ -74,6 +136,10 @@ function backupMaken(){
 }
 
 
+/* =====================================================
+   BACKUP HERSTELLEN
+   ===================================================== */
+
 function backupHerstellen(event){
 
     let bestand =
@@ -81,7 +147,9 @@ function backupHerstellen(event){
 
 
     if(!bestand){
+
         return;
+
     }
 
 
@@ -94,39 +162,25 @@ function backupHerstellen(event){
 
             try{
 
-                // Tekst uit bestand ophalen
                 let tekst =
                     e.target.result;
 
 
-                // Eventuele BOM / verborgen tekens
-                // aan het begin verwijderen
                 tekst =
                     tekst
                     .replace(/^\uFEFF/, "")
                     .trim();
 
 
-                console.log(
-                    "Backuptekst gelezen:",
-                    tekst.substring(0, 100)
-                );
-
-
-                // JSON lezen
                 let backup =
                     JSON.parse(tekst);
 
 
                 console.log(
-                    "Backup succesvol gelezen:",
+                    "Backup gelezen:",
                     backup
                 );
 
-
-                // ================================
-                // CONTROLE BACKUP
-                // ================================
 
                 if(
                     !backup ||
@@ -144,88 +198,95 @@ function backupHerstellen(event){
                 }
 
 
-                let aantalRestaurants =
-                    backup.restaurants.length;
+                let restaurants =
+                    backup.restaurants;
 
 
-                let aantalBezoeken =
+                let bezoeken =
                     Array.isArray(
                         backup.bezoeken
                     )
-                    ? backup.bezoeken.length
-                    : 0;
+                    ? backup.bezoeken
+                    : [];
 
 
-                console.log(
-                    "Restaurants:",
-                    aantalRestaurants
-                );
+                let ideeen =
+                    Array.isArray(
+                        backup.ideeen
+                    )
+                    ? backup.ideeen
+                    : [];
 
 
-                console.log(
-                    "Bezoeken:",
-                    aantalBezoeken
-                );
+                let fotosRestaurant =
+                    Array.isArray(
+                        backup.fotosRestaurant
+                    )
+                    ? backup.fotosRestaurant
+                    : [];
 
 
-                // ================================
-                // BEVESTIGING
-                // ================================
+                let fotosBezoek =
+                    Array.isArray(
+                        backup.fotosBezoek
+                    )
+                    ? backup.fotosBezoek
+                    : [];
+
 
                 let bevestiging =
                     confirm(
 
                         "Bestaande gegevens vervangen?\n\n" +
 
-                        aantalRestaurants +
+                        restaurants.length +
                         " horecazaken\n" +
 
-                        aantalBezoeken +
-                        " bezoeken\n\n" +
+                        bezoeken.length +
+                        " bezoeken\n" +
 
-                        "Deze gegevens worden vervangen door " +
-                        "de gegevens uit de back-up."
+                        ideeen.length +
+                        " ideeën\n\n" +
+
+                        "De huidige gegevens op dit toestel " +
+                        "worden vervangen door deze backup."
 
                     );
 
 
                 if(!bevestiging){
+
                     return;
+
                 }
 
 
-                // ================================
-                // DATABASE HERSTELLEN
-                // ================================
-
                 gegevensHerstellen(
                     backup,
-
                     function(){
-
-                        console.log(
-                            "Backup succesvol hersteld"
-                        );
-
 
                         restaurantsOphalen(
                             function(data){
 
-                                restaurants =
-                                    data;
+                                restaurants = data;
 
 
                                 toonRestaurants();
 
 
                                 alert(
+
                                     "Back-up hersteld ✅\n\n" +
 
-                                    aantalRestaurants +
-                                    " horecazaken en " +
+                                    restaurants.length +
+                                    " horecazaken\n" +
 
-                                    aantalBezoeken +
-                                    " bezoeken teruggezet."
+                                    bezoeken.length +
+                                    " bezoeken\n" +
+
+                                    ideeen.length +
+                                    " ideeën"
+
                                 );
 
                             }
@@ -271,7 +332,262 @@ function backupHerstellen(event){
         "UTF-8"
     );
 
+
+    // Input resetten zodat hetzelfde
+    // bestand opnieuw gekozen kan worden
+
+    event.target.value = "";
+
 }
+
+
+/* =====================================================
+   DATABASE HERSTELLEN
+   ===================================================== */
+
+function gegevensHerstellen(
+    backup,
+    callback
+){
+
+    let transaction;
+
+
+    try{
+
+        transaction =
+            db.transaction(
+                [
+                    "restaurants",
+                    "bezoeken",
+                    "ideeen",
+                    "fotosRestaurant",
+                    "fotosBezoek"
+                ],
+                "readwrite"
+            );
+
+
+        let restaurantsStore =
+            transaction.objectStore(
+                "restaurants"
+            );
+
+
+        let bezoekenStore =
+            transaction.objectStore(
+                "bezoeken"
+            );
+
+
+        let ideeenStore =
+            transaction.objectStore(
+                "ideeen"
+            );
+
+
+        let fotosRestaurantStore =
+            transaction.objectStore(
+                "fotosRestaurant"
+            );
+
+
+        let fotosBezoekStore =
+            transaction.objectStore(
+                "fotosBezoek"
+            );
+
+
+        // =========================================
+        // BESTAANDE GEGEVENS WISSEN
+        // =========================================
+
+        restaurantsStore.clear();
+
+        bezoekenStore.clear();
+
+        ideeenStore.clear();
+
+        fotosRestaurantStore.clear();
+
+        fotosBezoekStore.clear();
+
+
+        // =========================================
+        // RESTAURANTS
+        // =========================================
+
+        if(
+            Array.isArray(
+                backup.restaurants
+            )
+        ){
+
+            backup.restaurants.forEach(
+                function(restaurant){
+
+                    restaurantsStore.put(
+                        restaurant
+                    );
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // BEZOEKEN
+        // =========================================
+
+        if(
+            Array.isArray(
+                backup.bezoeken
+            )
+        ){
+
+            backup.bezoeken.forEach(
+                function(bezoek){
+
+                    bezoekenStore.put(
+                        bezoek
+                    );
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // IDEEËN
+        // =========================================
+
+        if(
+            Array.isArray(
+                backup.ideeen
+            )
+        ){
+
+            backup.ideeen.forEach(
+                function(idee){
+
+                    ideeenStore.put(
+                        idee
+                    );
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // RESTAURANTFOTO'S
+        // =========================================
+
+        if(
+            Array.isArray(
+                backup.fotosRestaurant
+            )
+        ){
+
+            backup.fotosRestaurant.forEach(
+                function(foto){
+
+                    fotosRestaurantStore.put(
+                        foto
+                    );
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // BEZOEKFOTO'S
+        // =========================================
+
+        if(
+            Array.isArray(
+                backup.fotosBezoek
+            )
+        ){
+
+            backup.fotosBezoek.forEach(
+                function(foto){
+
+                    fotosBezoekStore.put(
+                        foto
+                    );
+
+                }
+            );
+
+        }
+
+
+        // =========================================
+        // SUCCES
+        // =========================================
+
+        transaction.oncomplete =
+            function(){
+
+                console.log(
+                    "Database succesvol hersteld."
+                );
+
+
+                if(callback){
+
+                    callback();
+
+                }
+
+            };
+
+
+        transaction.onerror =
+            function(event){
+
+                console.error(
+                    "Fout bij herstellen:",
+                    event.target.error
+                );
+
+
+                alert(
+                    "Fout bij herstellen van de backup:\n\n" +
+                    event.target.error
+                );
+
+            };
+
+
+    }
+    catch(error){
+
+        console.error(
+            "Herstellen mislukt:",
+            error
+        );
+
+
+        alert(
+            "Herstellen mislukt:\n\n" +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   BACKUP INPUT
+   ===================================================== */
 
 let backupInput =
     document.getElementById(
@@ -285,31 +601,5 @@ if(backupInput){
         "change",
         backupHerstellen
     );
-
-}
-
-function alleBezoekenOphalen(callback){
-
-    let transaction =
-        db.transaction(
-            ["bezoeken"],
-            "readonly"
-        );
-
-    let store =
-        transaction.objectStore(
-            "bezoeken"
-        );
-
-    let request =
-        store.getAll();
-
-    request.onsuccess = function(){
-
-        callback(
-            request.result
-        );
-
-    };
 
 }

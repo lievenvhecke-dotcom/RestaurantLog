@@ -188,6 +188,7 @@
 <div id="nieuwBezoekForm"
      class="hidden">
 
+     
 
     <h3>
         ➕ Nieuw bezoek
@@ -219,19 +220,41 @@
 </select>
 
 
-    <label>
-        Opmerking
+<label>
+    Opmerking
+</label>
+
+<textarea
+    id="bezoekOpmerking"
+    rows="5">
+</textarea>
+
+
+<div id="bezoekFotoKnop"
+     class="hidden">
+
+    <label
+        for="fotoBezoekInput"
+        class="foto-toevoegen"
+    >
+        📷 Foto toevoegen
     </label>
 
-    <textarea
-        id="bezoekOpmerking"
-        rows="5">
-    </textarea>
+    <input
+        type="file"
+        id="fotoBezoekInput"
+        accept="image/*"
+        multiple
+        onchange="bezoekFotosToevoegen(event)"
+        hidden
+    >
+
+</div>
 
 
-    <button onclick="bezoekOpslaanNieuw()">
-        💾 Opslaan
-    </button>
+<button onclick="bezoekOpslaanNieuw()">
+    💾 Opslaan
+</button>
 
 </div>
 

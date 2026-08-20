@@ -1,3 +1,7 @@
+/* =====================================================
+   BACKUP MAKEN
+   ===================================================== */
+
 function backupMaken(){
 
     alleRestaurantsOphalen(
@@ -147,9 +151,7 @@ function backupHerstellen(event){
 
 
     if(!bestand){
-
         return;
-
     }
 
 
@@ -160,19 +162,24 @@ function backupHerstellen(event){
     reader.onload =
         function(e){
 
+            let backup;
+
+
             try{
 
                 let tekst =
                     e.target.result;
 
 
+                // BOM verwijderen
                 tekst =
                     tekst
                     .replace(/^\uFEFF/, "")
                     .trim();
 
 
-                let backup =
+                // JSON lezen
+                backup =
                     JSON.parse(tekst);
 
 
@@ -182,143 +189,221 @@ function backupHerstellen(event){
                 );
 
 
-                if(
-                    !backup ||
-                    !Array.isArray(
-                        backup.restaurants
-                    )
-                ){
-
-                    alert(
-                        "Dit is geen geldige HorecaLog-backup."
-                    );
-
-                    return;
-
-                }
-
-
-                let restaurants =
-                    backup.restaurants;
-
-
-                let bezoeken =
-                    Array.isArray(
-                        backup.bezoeken
-                    )
-                    ? backup.bezoeken
-                    : [];
-
-
-                let ideeen =
-                    Array.isArray(
-                        backup.ideeen
-                    )
-                    ? backup.ideeen
-                    : [];
-
-
-                let fotosRestaurant =
-                    Array.isArray(
-                        backup.fotosRestaurant
-                    )
-                    ? backup.fotosRestaurant
-                    : [];
-
-
-                let fotosBezoek =
-                    Array.isArray(
-                        backup.fotosBezoek
-                    )
-                    ? backup.fotosBezoek
-                    : [];
-
-
-                let bevestiging =
-                    confirm(
-
-                        "Bestaande gegevens vervangen?\n\n" +
-
-                        restaurants.length +
-                        " horecazaken\n" +
-
-                        bezoeken.length +
-                        " bezoeken\n" +
-
-                        ideeen.length +
-                        " ideeën\n\n" +
-
-                        "De huidige gegevens op dit toestel " +
-                        "worden vervangen door deze backup."
-
-                    );
-
-
-                if(!bevestiging){
-
-                    return;
-
-                }
-
-
-                gegevensHerstellen(
-                    backup,
-                    function(){
-
-                        restaurantsOphalen(
-                            function(data){
-
-                                restaurants = data;
-
-
-                                toonRestaurants();
-
-
-                                alert(
-
-                                    "Back-up hersteld ✅\n\n" +
-
-                                    restaurants.length +
-                                    " horecazaken\n" +
-
-                                    bezoeken.length +
-                                    " bezoeken\n" +
-
-                                    ideeen.length +
-                                    " ideeën"
-
-                                );
-
-                            }
-                        );
-
-                    }
-                );
-
-
             }
             catch(error){
 
                 console.error(
-                    "FOUT BIJ BACKUP:",
+                    "JSON-fout:",
                     error
                 );
 
 
                 alert(
-                    "Back-up kon niet worden gelezen.\n\n" +
+                    "Dit backupbestand kon niet worden gelezen.\n\n" +
                     error.name +
                     "\n" +
                     error.message
                 );
 
+
+                return;
+
             }
+
+
+            /* =========================================
+               BACKUP CONTROLEREN
+               ========================================= */
+
+            if(
+                !backup ||
+                !Array.isArray(
+                    backup.restaurants
+                )
+            ){
+
+                alert(
+                    "Dit is geen geldige HorecaLog-backup."
+                );
+
+                return;
+
+            }
+
+
+            let restaurants =
+                backup.restaurants;
+
+
+            let bezoeken =
+                Array.isArray(
+                    backup.bezoeken
+                )
+                ? backup.bezoeken
+                : [];
+
+
+            let ideeen =
+                Array.isArray(
+                    backup.ideeen
+                )
+                ? backup.ideeen
+                : [];
+
+
+            let fotosRestaurant =
+                Array.isArray(
+                    backup.fotosRestaurant
+                )
+                ? backup.fotosRestaurant
+                : [];
+
+
+            let fotosBezoek =
+                Array.isArray(
+                    backup.fotosBezoek
+                )
+                ? backup.fotosBezoek
+                : [];
+
+
+            /* =========================================
+               BEVESTIGING
+               ========================================= */
+
+            let bevestiging =
+                confirm(
+
+                    "Bestaande gegevens vervangen?\n\n" +
+
+                    restaurants.length +
+                    " horecazaken\n" +
+
+                    bezoeken.length +
+                    " bezoeken\n" +
+
+                    ideeen.length +
+                    " ideeën\n" +
+
+                    fotosRestaurant.length +
+                    " restaurantfoto's\n" +
+
+                    fotosBezoek.length +
+                    " bezoekfoto's\n\n" +
+
+                    "De huidige gegevens op dit toestel " +
+                    "worden vervangen door deze backup."
+
+                );
+
+
+            if(!bevestiging){
+                return;
+            }
+
+
+            /* =========================================
+               DATABASE HERSTELLEN
+               ========================================= */
+
+            gegevensHerstellen(
+                backup,
+
+                function(){
+
+                    console.log(
+                        "Backup succesvol hersteld."
+                    );
+
+
+                    /*
+                     * Database opnieuw uitlezen.
+                     * Zo werken we met de werkelijk
+                     * teruggezette gegevens.
+                     */
+
+                    restaurantsOphalen(
+                        function(data){
+
+                            restaurants =
+                                data;
+
+
+                            /*
+                             * Eventuele open detailpagina
+                             * verlaten.
+                             */
+
+                            huidigRestaurant =
+                                null;
+
+
+                            huidigBezoek =
+                                null;
+
+
+                            bezoekBewerkModus =
+                                false;
+
+
+                            bewerkModus =
+                                false;
+
+
+                            /*
+                             * Lijst opnieuw tonen
+                             */
+
+                            toonPagina(
+                                "restaurantsPage"
+                            );
+
+
+                            toonRestaurants();
+
+
+                            /*
+                             * Succesmelding
+                             */
+
+                            alert(
+
+                                "Back-up hersteld ✅\n\n" +
+
+                                restaurants.length +
+                                " horecazaken\n" +
+
+                                bezoeken.length +
+                                " bezoeken\n" +
+
+                                ideeen.length +
+                                " ideeën\n" +
+
+                                fotosRestaurant.length +
+                                " restaurantfoto's\n" +
+
+                                fotosBezoek.length +
+                                " bezoekfoto's"
+
+                            );
+
+                        }
+                    );
+
+                }
+            );
 
         };
 
 
     reader.onerror =
         function(){
+
+            console.error(
+                "FileReader fout:",
+                reader.error
+            );
+
 
             alert(
                 "Het backupbestand kon niet worden gelezen."
@@ -333,8 +418,10 @@ function backupHerstellen(event){
     );
 
 
-    // Input resetten zodat hetzelfde
-    // bestand opnieuw gekozen kan worden
+    /*
+     * Input leegmaken zodat hetzelfde bestand
+     * opnieuw geselecteerd kan worden.
+     */
 
     event.target.value = "";
 
@@ -398,9 +485,9 @@ function gegevensHerstellen(
             );
 
 
-        // =========================================
-        // BESTAANDE GEGEVENS WISSEN
-        // =========================================
+        /* =========================================
+           BESTAANDE GEGEVENS WISSEN
+           ========================================= */
 
         restaurantsStore.clear();
 
@@ -413,9 +500,9 @@ function gegevensHerstellen(
         fotosBezoekStore.clear();
 
 
-        // =========================================
-        // RESTAURANTS
-        // =========================================
+        /* =========================================
+           RESTAURANTS
+           ========================================= */
 
         if(
             Array.isArray(
@@ -436,9 +523,9 @@ function gegevensHerstellen(
         }
 
 
-        // =========================================
-        // BEZOEKEN
-        // =========================================
+        /* =========================================
+           BEZOEKEN
+           ========================================= */
 
         if(
             Array.isArray(
@@ -459,9 +546,9 @@ function gegevensHerstellen(
         }
 
 
-        // =========================================
-        // IDEEËN
-        // =========================================
+        /* =========================================
+           IDEEËN
+           ========================================= */
 
         if(
             Array.isArray(
@@ -482,9 +569,9 @@ function gegevensHerstellen(
         }
 
 
-        // =========================================
-        // RESTAURANTFOTO'S
-        // =========================================
+        /* =========================================
+           RESTAURANTFOTO'S
+           ========================================= */
 
         if(
             Array.isArray(
@@ -505,9 +592,9 @@ function gegevensHerstellen(
         }
 
 
-        // =========================================
-        // BEZOEKFOTO'S
-        // =========================================
+        /* =========================================
+           BEZOEKFOTO'S
+           ========================================= */
 
         if(
             Array.isArray(
@@ -528,9 +615,9 @@ function gegevensHerstellen(
         }
 
 
-        // =========================================
-        // SUCCES
-        // =========================================
+        /* =========================================
+           TRANSACTIE SUCCESVOL
+           ========================================= */
 
         transaction.oncomplete =
             function(){
@@ -549,22 +636,41 @@ function gegevensHerstellen(
             };
 
 
+        /* =========================================
+           TRANSACTIE FOUT
+           ========================================= */
+
         transaction.onerror =
             function(event){
 
                 console.error(
-                    "Fout bij herstellen:",
+                    "Database restore fout:",
                     event.target.error
                 );
 
 
                 alert(
-                    "Fout bij herstellen van de backup:\n\n" +
+                    "De backup kon niet in de database worden gezet.\n\n" +
                     event.target.error
                 );
 
             };
 
+
+        transaction.onabort =
+            function(event){
+
+                console.error(
+                    "Database restore afgebroken:",
+                    event.target.error
+                );
+
+
+                alert(
+                    "Het herstellen van de backup is afgebroken."
+                );
+
+            };
 
     }
     catch(error){
@@ -577,6 +683,8 @@ function gegevensHerstellen(
 
         alert(
             "Herstellen mislukt:\n\n" +
+            error.name +
+            "\n" +
             error.message
         );
 

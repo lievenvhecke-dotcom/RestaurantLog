@@ -94,6 +94,11 @@ function backupHerstellen(event){
     reader.onload =
         function(e){
 
+            console.log(
+                "Backupbestand gelezen"
+            );
+
+
             try{
 
                 let backup =
@@ -131,7 +136,8 @@ function backupHerstellen(event){
 
 
                 let aantalBezoeken =
-                    backup.bezoeken
+                    backup.bezoeken &&
+                    Array.isArray(backup.bezoeken)
                     ? backup.bezoeken.length
                     : 0;
 
@@ -160,10 +166,20 @@ function backupHerstellen(event){
                 }
 
 
+                console.log(
+                    "Start herstel..."
+                );
+
+
                 gegevensHerstellen(
                     backup,
 
                     function(){
+
+                        console.log(
+                            "gegevensHerstellen klaar"
+                        );
+
 
                         restaurantsOphalen(
                             function(data){
@@ -193,16 +209,29 @@ function backupHerstellen(event){
             catch(error){
 
                 console.error(
-                    "Fout bij backup:",
+                    "FOUT BIJ BACKUP HERSTELLEN:",
                     error
                 );
 
 
                 alert(
-                    "De back-up kon niet worden gelezen."
+                    "Fout bij herstellen:\n\n" +
+                    error.name +
+                    "\n" +
+                    error.message
                 );
 
             }
+
+        };
+
+
+    reader.onerror =
+        function(){
+
+            alert(
+                "Het backupbestand kon niet worden gelezen."
+            );
 
         };
 
@@ -212,7 +241,6 @@ function backupHerstellen(event){
     );
 
 }
-
 
 let backupInput =
     document.getElementById(

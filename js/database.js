@@ -746,3 +746,87 @@ function ideeVerwijderen(id){
     store.delete(id);
 
 }
+
+function fotoRestaurantOpslaan(foto, callback){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readwrite"
+        );
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+    let request =
+        store.add(foto);
+
+    request.onsuccess = function(){
+
+        foto.id =
+            request.result;
+
+        if(callback){
+            callback(foto);
+        }
+
+    };
+
+}
+
+
+function fotosRestaurantOphalen(
+    restaurantId,
+    callback
+){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readonly"
+        );
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+    let index =
+        store.index(
+            "restaurantId"
+        );
+
+    let request =
+        index.getAll(
+            restaurantId
+        );
+
+    request.onsuccess = function(){
+
+        callback(
+            request.result
+        );
+
+    };
+
+}
+
+
+function fotoRestaurantVerwijderen(id){
+
+    let transaction =
+        db.transaction(
+            ["fotosRestaurant"],
+            "readwrite"
+        );
+
+    let store =
+        transaction.objectStore(
+            "fotosRestaurant"
+        );
+
+    store.delete(id);
+
+}

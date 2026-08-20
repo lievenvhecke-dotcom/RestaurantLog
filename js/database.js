@@ -285,7 +285,9 @@ function alleRestaurantsOphalen(callback){
 
 function gegevensHerstellen(backup, callback){
 
-    let transaction =
+    // Stap 1: alles wissen
+
+    let wisTransaction =
         db.transaction(
             [
                 "restaurants",
@@ -295,94 +297,192 @@ function gegevensHerstellen(backup, callback){
         );
 
 
-    let restaurantsStore =
-        transaction.objectStore(
-            "restaurants"
-        );
+    wisTransaction
+        .objectStore("restaurants")
+        .clear();
 
 
-    let bezoekenStore =
-        transaction.objectStore(
-            "bezoeken"
-        );
+    wisTransaction
+        .objectStore("bezoeken")
+        .clear();
 
 
-    // Bestaande gegevens wissen
+    wisTransaction.oncomplete =
+        function(){
 
-    restaurantsStore.clear();
+            console.log(
+                "Oude gegevens gewist"
+            );
 
-    bezoekenStore.clear();
+
+            // Stap 2: restaurants en bezoeken opnieuw toevoegen
+
+            let herstelTransaction =
+                db.transaction(
+                    [
+                        "restaurants",
+                        "bezoeken"
+                    ],
+                    "readwrite"
+                );
 
 
-    // Horecazaken herstellen
+            let restaurantsStore =
+                herstelTransaction.objectStore(
+                    "restaurants"
+                );
 
-    if(
-        backup.restaurants &&
-        Array.isArray(backup.restaurants)
-    ){
 
-        backup.restaurants.forEach(
-            function(restaurant){
+            let bezoekenStore =
+                herstelTransaction.objectStore(
+                    "bezoeken"
+                );
 
-                restaurantsStore.put(
-                    restaurant
+
+            // Restaurants herstellen
+
+            if(
+                Array.isArray(
+                    backup.restaurants
+                )
+            ){
+
+                backup.restaurants.forEach(
+                    function(restaurant){
+
+                        restaurantsStore.put(
+                            restaurant
+                        );
+
+                    }
                 );
 
             }
-        );
-
-    }
 
 
-    // Bezoeken herstellen
+            // Bezoeken herstellen
 
-    if(
-        backup.bezoeken &&
-        Array.isArray(backup.bezoeken)
-    ){
+            if(
+                Array.isArray(
+                    backup.bezoeken
+                )
+            ){
 
-        backup.bezoeken.forEach(
-            function(bezoek){
+                backup.bezoeken.forEach(
+                    function(bezoek){
 
-                bezoekenStore.put(
-                    bezoek
+                        console.log(
+                            "Bezoek herstellen:",
+                            bezoek
+                        );
+
+                        bezoekenStore.put(
+                            bezoek
+                        );
+
+                    }
                 );
 
             }
-        );
-
-    }
 
 
-    transaction.oncomplete = function(){
+            herstelTransaction.oncomplete =
+                function(){
 
-        console.log(
-            "Herstel voltooid"
-        );
-
-
-        if(callback){
-
-            callback();
-
-        }
-
-    };
+                    console.log(
+                        "Herstel voltooid"
+                    );
 
 
-    transaction.onerror = function(event){
+                    // Controle uitvoeren
 
-        console.error(
-            "Herstel fout:",
-            event.target.error
-        );
+                    let controleTransaction =
+                        db.transaction(
+                            [
+                                "restaurants",
+                                "bezoeken"
+                            ],
+                            "readonly"
+                        );
 
 
-        alert(
-            "Er is een fout opgetreden bij het herstellen van de back-up."
-        );
+                    let restaurantsRequest =
+                        controleTransaction
+                            .objectStore("restaurants")
+                            .getAll();
 
-    };
+
+                    let bezoekenRequest =
+                        controleTransaction
+                            .objectStore("bezoeken")
+                            .getAll();
+
+
+                    controleTransaction.oncomplete =
+                        function(){
+
+                            console.log(
+                                "Controle na herstel"
+                            );
+
+                            console.log(
+                                "Restaurants in database:",
+                                restaurantsRequest.result
+                            );
+
+                            console.log(
+                                "Bezoeken in database:",
+                                bezoekenRequest.result
+                            );
+
+                            console.log(
+                                "Aantal herstelde restaurants:",
+                                restaurantsRequest.result.length
+                            );
+
+                            console.log(
+                                "Aantal herstelde bezoeken:",
+                                bezoekenRequest.result.length
+                            );
+
+
+                            if(callback){
+
+                                callback();
+
+                            }
+
+                        };
+
+                };
+
+
+            herstelTransaction.onerror =
+                function(event){
+
+                    console.error(
+                        "Fout tijdens herstel:",
+                        event.target.error
+                    );
+
+                    alert(
+                        "Fout bij het herstellen van de gegevens."
+                    );
+
+                };
+
+        };
+
+
+    wisTransaction.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij wissen:",
+                event.target.error
+            );
+
+        };
 
 }
 

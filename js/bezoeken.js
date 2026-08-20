@@ -77,24 +77,6 @@ function toonBezoeken(){
     </div>
 
 
-    <label
-        for="fotoBezoekInput_${b.id}"
-        class="foto-toevoegen"
-    >
-        📷 Foto toevoegen
-    </label>
-
-
-    <input
-        type="file"
-        id="fotoBezoekInput_${b.id}"
-        accept="image/*"
-        multiple
-        onchange="bezoekFotoInput(${b.id}, event)"
-        hidden
-    >
-
-
     <div
         id="fotoBezoek_${b.id}"
         class="foto-grid"
@@ -124,6 +106,12 @@ function nieuwBezoek(){
 
     bezoekBewerkModus = false;
     huidigBezoek = null;
+
+
+    document
+        .getElementById("bezoekFotoKnop")
+        .classList
+        .add("hidden");
 
 
     document

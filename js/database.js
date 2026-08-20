@@ -7,7 +7,7 @@ function openDatabase(){
 
     let request = indexedDB.open(
         "RestaurantLogDB",
-        6
+        7
     );
 
 
@@ -73,6 +73,49 @@ function openDatabase(){
     }
 
 };
+
+if(!db.objectStoreNames.contains("fotosRestaurant")){
+
+    let fotoRestaurantStore =
+        db.createObjectStore(
+            "fotosRestaurant",
+            {
+                keyPath:"id",
+                autoIncrement:true
+            }
+        );
+
+    fotoRestaurantStore.createIndex(
+        "restaurantId",
+        "restaurantId",
+        {
+            unique:false
+        }
+    );
+
+}
+
+
+if(!db.objectStoreNames.contains("fotosBezoek")){
+
+    let fotoBezoekStore =
+        db.createObjectStore(
+            "fotosBezoek",
+            {
+                keyPath:"id",
+                autoIncrement:true
+            }
+        );
+
+    fotoBezoekStore.createIndex(
+        "bezoekId",
+        "bezoekId",
+        {
+            unique:false
+        }
+    );
+
+}
 
 
     request.onsuccess = function(event){

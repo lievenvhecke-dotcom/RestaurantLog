@@ -414,6 +414,23 @@ function openBezoek(id){
                 huidigBezoek.id
             );
 
+            let diagnoseKnop =
+    document.getElementById("diagnoseFotoKnop");
+
+if (diagnoseKnop) {
+    diagnoseKnop.remove();
+}
+
+let knop = document.createElement("button");
+
+knop.id = "diagnoseFotoKnop";
+knop.innerHTML = "🔧 Controleer foto's";
+knop.onclick = controleerFotoKoppeling;
+
+document
+    .getElementById("nieuwBezoekForm")
+    .appendChild(knop);
+
             // Foto's van dit specifieke bezoek
             // opnieuw rechtstreeks uit IndexedDB halen
             toonBezoekFotos(
@@ -1127,4 +1144,55 @@ function controleerAlleFotosVanBezoek(){
 
         };
 
+}
+
+function controleerFotoKoppeling() {
+
+    if (!huidigBezoek) {
+        alert("Open eerst het probleembezoek.");
+        return;
+    }
+
+    alleBezoekFotosOphalen(function(fotos) {
+
+        let tekst =
+            "CONTROLE FOTO'S\n\n" +
+            "Huidig bezoek ID: " +
+            huidigBezoek.id +
+            "\n\n" +
+            "Totaal aantal foto's in database: " +
+            fotos.length +
+            "\n\n";
+
+        let gekoppeld = fotos.filter(function(foto) {
+            return foto.bezoekId === huidigBezoek.id;
+        });
+
+        let mogelijk = fotos.filter(function(foto) {
+            return String(foto.bezoekId) === String(huidigBezoek.id);
+        });
+
+        tekst +=
+            "Exact gekoppeld: " +
+            gekoppeld.length +
+            "\n" +
+            "Gelijk als tekst/nummer: " +
+            mogelijk.length +
+            "\n\n";
+
+        tekst += "Foto's:\n\n";
+
+        fotos.forEach(function(foto) {
+
+            tekst +=
+                "ID: " + foto.id +
+                "\nbezoekId: " + foto.bezoekId +
+                "\ntype: " + typeof foto.bezoekId +
+                "\n\n";
+
+        });
+
+        alert(tekst);
+
+    });
 }

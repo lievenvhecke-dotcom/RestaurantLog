@@ -1033,3 +1033,110 @@ function bezoekFotoVerwijderen(
         };
 
 }
+
+function controleerAlleFotosVanBezoek(){
+
+    if(!huidigBezoek){
+
+        alert("Open eerst het probleembezoek.");
+
+        return;
+
+    }
+
+
+    let transaction =
+        db.transaction(
+            ["fotosBezoek"],
+            "readonly"
+        );
+
+
+    let store =
+        transaction.objectStore(
+            "fotosBezoek"
+        );
+
+
+    let request =
+        store.getAll();
+
+
+    request.onsuccess =
+        function(){
+
+            let alleFotos =
+                request.result;
+
+
+            let fotos =
+                alleFotos.filter(
+                    function(foto){
+
+                        return String(
+                            foto.bezoekId
+                        ) === String(
+                            huidigBezoek.id
+                        );
+
+                    }
+                );
+
+
+            let tekst =
+                "BEZOEKCONTROLE\n\n" +
+
+                "Bezoek ID: " +
+                huidigBezoek.id +
+                "\n" +
+
+                "Type bezoek ID: " +
+                typeof huidigBezoek.id +
+                "\n\n" +
+
+                "Aantal gevonden foto's: " +
+                fotos.length +
+                "\n\n";
+
+
+            fotos.forEach(
+                function(foto, index){
+
+                    tekst +=
+                        "Foto " +
+                        (index + 1) +
+                        "\n" +
+
+                        "Foto ID: " +
+                        foto.id +
+                        "\n" +
+
+                        "bezoekId: " +
+                        foto.bezoekId +
+                        "\n" +
+
+                        "Type bezoekId: " +
+                        typeof foto.bezoekId +
+                        "\n\n";
+
+                }
+            );
+
+
+            console.log(
+                "ALLE FOTO'S:",
+                alleFotos
+            );
+
+
+            console.log(
+                "GEVONDEN FOTO'S:",
+                fotos
+            );
+
+
+            alert(tekst);
+
+        };
+
+}

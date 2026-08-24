@@ -597,6 +597,124 @@ function verborgenWisselen(){
 }
 
 /* =====================================================
+   VERBORGEN HORECAZAKEN TONEN
+===================================================== */
+
+function toonVerborgenRestaurants(){
+
+    let lijst =
+        document.getElementById("lijst");
+
+
+    lijst.innerHTML = "";
+
+
+    let verborgenRestaurants =
+        restaurants.filter(
+            function(r){
+
+                return r.verborgen === true;
+
+            }
+        );
+
+
+    // Geen verborgen zaken
+    if(
+        verborgenRestaurants.length === 0
+    ){
+
+        lijst.innerHTML = `
+
+            <p class="geen-resultaten">
+                Geen verborgen horecazaken.
+            </p>
+
+            <button
+                onclick="toonRestaurants()"
+            >
+                ← Terug naar alle horecazaken
+            </button>
+
+        `;
+
+        return;
+
+    }
+
+
+    // Titel
+    lijst.innerHTML = `
+
+        <div class="verborgen-header">
+
+            <h2>
+                👁️ Verborgen horecazaken
+            </h2>
+
+            <p>
+                Deze zaken staan niet in je gewone lijst,
+                maar blijven wel beschikbaar op de kaart.
+            </p>
+
+        </div>
+
+    `;
+
+
+    // Alfabetisch sorteren
+    verborgenRestaurants.sort(
+        function(a, b){
+
+            return a.naam.localeCompare(
+                b.naam
+            );
+
+        }
+    );
+
+
+    verborgenRestaurants.forEach(
+        function(r){
+
+            lijst.innerHTML += `
+
+                <div
+                    class="restaurant-card"
+                    onclick="openRestaurant(${r.id})"
+                >
+
+                    <h3>
+
+                        👁️ ${r.naam}
+
+                        <span class="gemeente">
+                            ${r.gemeente}
+                        </span>
+
+                    </h3>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    lijst.innerHTML += `
+
+        <button
+            onclick="toonRestaurants()"
+        >
+            ← Terug naar alle horecazaken
+        </button>
+
+    `;
+
+}
+
+/* =====================================================
    FAVORIETEN TONEN
 ===================================================== */
 

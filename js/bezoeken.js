@@ -14,7 +14,6 @@ function datumFormaat(datum){
     let d =
         new Date(datum);
 
-
     return d.toLocaleDateString(
         "nl-BE",
         {
@@ -38,26 +37,21 @@ function toonBezoeken(){
             "bezoekenLijst"
         );
 
-
     if(!lijst){
         return;
     }
 
-
     lijst.innerHTML = "";
-
 
     if(!huidigRestaurant){
         return;
     }
-
 
     bezoekenOphalen(
         huidigRestaurant.id,
         function(bezoeken){
 
             // Nieuwste bezoek eerst
-
             bezoeken.sort(
                 function(a, b){
 
@@ -75,7 +69,6 @@ function toonBezoeken(){
                     "<p class='geen-resultaten'>" +
                     "Nog geen bezoeken geregistreerd." +
                     "</p>";
-
 
                 return;
 
@@ -148,8 +141,7 @@ function toonBezoeken(){
 `;
 
 
-                    // Foto's laden
-
+                    // Foto's van dit bezoek laden
                     toonBezoekFotos(
                         b.id
                     );
@@ -171,7 +163,6 @@ function nieuwBezoek(){
 
     bezoekBewerkModus =
         false;
-
 
     huidigBezoek =
         null;
@@ -303,14 +294,11 @@ function bezoekOpslaanNieuw(){
         restaurantId:
             huidigRestaurant.id,
 
-
         datum:
             datum,
 
-
         score:
             score,
-
 
         opmerking:
             opmerking
@@ -363,6 +351,7 @@ function openBezoek(id){
         return;
     }
 
+
     bezoekenOphalen(
         huidigRestaurant.id,
         function(bezoeken){
@@ -370,69 +359,74 @@ function openBezoek(id){
             let bezoek =
                 bezoeken.find(
                     function(b){
+
                         return Number(b.id) === Number(id);
+
                     }
                 );
 
+
             if(!bezoek){
+
                 console.error(
                     "Bezoek niet gevonden:",
                     id
                 );
+
                 return;
+
             }
 
-            // Dit is het volledige bezoek zoals het
-            // rechtstreeks uit IndexedDB komt
-            huidigBezoek = bezoek;
 
-            console.log(
-                "Bezoek geopend:",
-                huidigBezoek
-            );
+            huidigBezoek =
+                bezoek;
 
-            // Velden invullen
-            document.getElementById("bezoekDatum").value =
+
+            document
+                .getElementById(
+                    "bezoekDatum"
+                )
+                .value =
                 huidigBezoek.datum || "";
 
-            document.getElementById("bezoekScore").value =
+
+            document
+                .getElementById(
+                    "bezoekScore"
+                )
+                .value =
                 huidigBezoek.score || "0";
 
-            document.getElementById("bezoekOpmerking").value =
+
+            document
+                .getElementById(
+                    "bezoekOpmerking"
+                )
+                .value =
                 huidigBezoek.opmerking || "";
 
-            bezoekBewerkModus = true;
 
-            // Formulier tonen
+            bezoekBewerkModus =
+                true;
+
+
             document
-                .getElementById("nieuwBezoekForm")
+                .getElementById(
+                    "nieuwBezoekForm"
+                )
                 .classList
-                .remove("hidden");
+                .remove(
+                    "hidden"
+                );
+
 
             // Fotoknop tonen
             toonFotoToevoegenKnop(
                 huidigBezoek.id
             );
 
-            let diagnoseKnop =
-    document.getElementById("diagnoseFotoKnop");
 
-if (diagnoseKnop) {
-    diagnoseKnop.remove();
-}
-
-let knop = document.createElement("button");
-
-knop.id = "diagnoseFotoKnop";
-knop.innerHTML = "🔧 Controleer foto's";
-knop.onclick = controleerFotoKoppeling;
-
-document
-    .getElementById("nieuwBezoekForm")
-    .appendChild(knop);
-
-            // Foto's van dit specifieke bezoek
-            // opnieuw rechtstreeks uit IndexedDB halen
+            // Foto's van dit specifieke bezoek laden
             toonBezoekFotos(
                 huidigBezoek.id
             );
@@ -442,6 +436,10 @@ document
 
 }
 
+
+/* =====================================================
+   BEZOEK BEWERKEN
+   ===================================================== */
 
 function bezoekBewerken(){
 
@@ -501,8 +499,7 @@ function bezoekBewerken(){
 
 function toonFotoToevoegenKnop(bezoekId){
 
-    // Eerst alle bestaande
-    // fotoknoppen verwijderen
+    // Eerst alle bestaande fotoknoppen verwijderen
 
     document
         .querySelectorAll(
@@ -590,7 +587,7 @@ function bezoekVerwijderen(id){
         );
 
 
-    // Eerst alle foto's van dit bezoek zoeken
+    // Alle foto's van dit bezoek zoeken
 
     let index =
         fotosStore.index(
@@ -634,7 +631,7 @@ function bezoekVerwijderen(id){
 
             if(
                 huidigBezoek &&
-                huidigBezoek.id === id
+                Number(huidigBezoek.id) === Number(id)
             ){
 
                 huidigBezoek =
@@ -771,7 +768,6 @@ function bezoekFotosOpslaan(
 
 
         // Foto's opnieuw laden
-        // nadat alles opgeslagen is
 
         toonBezoekFotos(
             bezoekId
@@ -806,10 +802,8 @@ function bezoekFotosOpslaan(
                 bezoekId:
                     bezoekId,
 
-
                 data:
                     e.target.result,
-
 
                 datum:
                     new Date()
@@ -823,7 +817,7 @@ function bezoekFotosOpslaan(
                 function(){
 
                     // Pas na succesvolle opslag
-                    // de volgende foto verwerken
+                    // volgende foto verwerken
 
                     bezoekFotosOpslaan(
                         bezoekId,
@@ -846,7 +840,7 @@ function bezoekFotosOpslaan(
 
 
             // Toch verdergaan
-            // met de volgende foto
+            // met volgende foto
 
             bezoekFotosOpslaan(
                 bezoekId,
@@ -875,48 +869,41 @@ function toonBezoekFotos(bezoekId){
             "fotoBezoek_" + bezoekId
         );
 
+
     if(!container){
-        console.warn(
-            "Foto-container niet gevonden voor bezoek:",
-            bezoekId
-        );
         return;
     }
 
+
     container.innerHTML = "";
+
 
     fotosBezoekOphalen(
         bezoekId,
         function(fotos){
 
-            console.log(
-                "Foto's geladen voor bezoek",
-                bezoekId,
-                ":",
-                fotos.length
-            );
-
-            if(fotos.length === 0){
-
-                return;
-
-            }
-
             fotos.forEach(
                 function(foto){
 
                     let fotoItem =
-                        document.createElement("div");
+                        document.createElement(
+                            "div"
+                        );
+
 
                     fotoItem.className =
                         "foto-item";
 
 
                     let afbeelding =
-                        document.createElement("img");
+                        document.createElement(
+                            "img"
+                        );
+
 
                     afbeelding.src =
                         foto.data;
+
 
                     afbeelding.alt =
                         "Foto van bezoek";
@@ -933,13 +920,18 @@ function toonBezoekFotos(bezoekId){
 
 
                     let verwijderKnop =
-                        document.createElement("button");
+                        document.createElement(
+                            "button"
+                        );
+
 
                     verwijderKnop.className =
                         "foto-verwijder";
 
+
                     verwijderKnop.innerHTML =
                         "🗑";
+
 
                     verwijderKnop.title =
                         "Foto verwijderen";
@@ -949,6 +941,7 @@ function toonBezoekFotos(bezoekId){
                         function(event){
 
                             event.stopPropagation();
+
 
                             bezoekFotoVerwijderen(
                                 foto.id,
@@ -961,6 +954,7 @@ function toonBezoekFotos(bezoekId){
                     fotoItem.appendChild(
                         afbeelding
                     );
+
 
                     fotoItem.appendChild(
                         verwijderKnop
@@ -1037,162 +1031,4 @@ function bezoekFotoVerwijderen(
 
         };
 
-}
-
-function controleerAlleFotosVanBezoek(){
-
-    if(!huidigBezoek){
-
-        alert("Open eerst het probleembezoek.");
-
-        return;
-
-    }
-
-
-    let transaction =
-        db.transaction(
-            ["fotosBezoek"],
-            "readonly"
-        );
-
-
-    let store =
-        transaction.objectStore(
-            "fotosBezoek"
-        );
-
-
-    let request =
-        store.getAll();
-
-
-    request.onsuccess =
-        function(){
-
-            let alleFotos =
-                request.result;
-
-
-            let fotos =
-                alleFotos.filter(
-                    function(foto){
-
-                        return String(
-                            foto.bezoekId
-                        ) === String(
-                            huidigBezoek.id
-                        );
-
-                    }
-                );
-
-
-            let tekst =
-                "BEZOEKCONTROLE\n\n" +
-
-                "Bezoek ID: " +
-                huidigBezoek.id +
-                "\n" +
-
-                "Type bezoek ID: " +
-                typeof huidigBezoek.id +
-                "\n\n" +
-
-                "Aantal gevonden foto's: " +
-                fotos.length +
-                "\n\n";
-
-
-            fotos.forEach(
-                function(foto, index){
-
-                    tekst +=
-                        "Foto " +
-                        (index + 1) +
-                        "\n" +
-
-                        "Foto ID: " +
-                        foto.id +
-                        "\n" +
-
-                        "bezoekId: " +
-                        foto.bezoekId +
-                        "\n" +
-
-                        "Type bezoekId: " +
-                        typeof foto.bezoekId +
-                        "\n\n";
-
-                }
-            );
-
-
-            console.log(
-                "ALLE FOTO'S:",
-                alleFotos
-            );
-
-
-            console.log(
-                "GEVONDEN FOTO'S:",
-                fotos
-            );
-
-
-            alert(tekst);
-
-        };
-
-}
-
-function controleerFotoKoppeling() {
-
-    if (!huidigBezoek) {
-        alert("Open eerst het probleembezoek.");
-        return;
-    }
-
-    alleBezoekFotosOphalen(function(fotos) {
-
-        let tekst =
-            "CONTROLE FOTO'S\n\n" +
-            "Huidig bezoek ID: " +
-            huidigBezoek.id +
-            "\n\n" +
-            "Totaal aantal foto's in database: " +
-            fotos.length +
-            "\n\n";
-
-        let gekoppeld = fotos.filter(function(foto) {
-            return foto.bezoekId === huidigBezoek.id;
-        });
-
-        let mogelijk = fotos.filter(function(foto) {
-            return String(foto.bezoekId) === String(huidigBezoek.id);
-        });
-
-        tekst +=
-            "Exact gekoppeld: " +
-            gekoppeld.length +
-            "\n" +
-            "Gelijk als tekst/nummer: " +
-            mogelijk.length +
-            "\n\n";
-
-        tekst += "Foto's:\n\n";
-
-        fotos.forEach(function(foto) {
-
-            tekst +=
-                "ID: " + foto.id +
-                "\nbezoekId: " + foto.bezoekId +
-                "\ntype: " + typeof foto.bezoekId +
-                "\n\n";
-
-        });
-
-        alert(tekst);
-
-    });
 }

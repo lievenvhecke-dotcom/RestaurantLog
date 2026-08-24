@@ -22,3 +22,11 @@ wanneerDatabaseKlaar(function(){
     toonIdeeen();
 
 });
+
+setTimeout(function(){
+
+    alert(
+        "HorecaLog " + APP_VERSIE
+    );
+
+}, 1000);

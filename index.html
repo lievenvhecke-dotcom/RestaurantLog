@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HoReCaLog v10</title>
-    <link rel="stylesheet" href="style.css?v=12">
+    <link rel="stylesheet" href="style.css?v=10">
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -170,20 +170,24 @@
             onclick="favorietWisselen()">
         </button>
 
-        <button onclick="openGoogleMaps()">
+    <button
+            id="verbergenKnop"
+            onclick="verborgenWisselen()">
+    </button>
+
+    <button onclick="openGoogleMaps()">
     📍      Open in Google Maps
-        </button>
+    </button>
 
-        <button onclick="locatieInstellen()">
-    🗺️ Locatie instellen
-        </button>
+    <button onclick="locatieInstellen()">
+            🗺️ Locatie instellen
+    </button>
 
-<button
-    class="primair"
-    onclick="nieuwBezoek()"
->
-    ➕ Nieuw bezoek
-</button>
+    <button
+        class="primair"
+        onclick="nieuwBezoek()">
+            ➕ Nieuw bezoek
+    </button>
 
 <div id="nieuwBezoekForm"
      class="hidden">
@@ -261,7 +265,7 @@
 <hr>
 
         <div id="bezoekenLijst"></div>
- 
+    
 <button
     class="verwijder-restaurant"
     onclick="verwijderen()"
@@ -368,17 +372,17 @@
 
 <!-- NAVIGATIE -->
 
-<script src="js/database.js?v=12"></script>
-<script src="js/ui.js?v=12"></script>
-<script src="js/restaurants.js?v=12"></script>
-<script src="js/bezoeken.js?v=14"></script>
-<script src="js/backup.js?v=12"></script>
-<script src="js/ideeen.js?v=12"></script>
+<script src="js/database.js?v=10"></script>
+<script src="js/ui.js?v=10"></script>
+<script src="js/restaurants.js?v=10"></script>
+<script src="js/bezoeken.js?v=10"></script>
+<script src="js/backup.js?v=10"></script>
+<script src="js/ideeen.js?v=10"></script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-<script src="js/kaart.js?v=12"></script>
-<script src="js/app.js?v=12"></script>
+<script src="js/kaart.js?v=10"></script>
+<script src="js/app.js?v=10"></script>
 
 <nav class="bottom-nav">
 

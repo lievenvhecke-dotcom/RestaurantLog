@@ -939,3 +939,80 @@ button:active {
 
     cursor: pointer;
 }
+
+/* =====================================================
+   MEER OPTIES RESTAURANT
+   ===================================================== */
+
+.meer-opties{
+
+    margin-top: 30px;
+
+    border-top:
+        1px solid #ddd;
+
+    padding-top: 15px;
+
+}
+
+
+.meer-opties summary{
+
+    cursor: pointer;
+
+    list-style: none;
+
+    text-align: center;
+
+    font-weight: bold;
+
+    padding: 12px;
+
+    border-radius: 10px;
+
+    background: #f3f3f3;
+
+}
+
+
+.meer-opties summary::-webkit-details-marker{
+
+    display: none;
+
+}
+
+
+.meer-opties summary::after{
+
+    content: "⌄";
+
+    float: right;
+
+}
+
+
+.meer-opties[open] summary::after{
+
+    content: "⌃";
+
+}
+
+
+.meer-opties-inhoud{
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    padding-top: 12px;
+
+}
+
+
+.meer-opties-inhoud button{
+
+    width: 100%;
+
+}

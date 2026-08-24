@@ -363,7 +363,6 @@ function openBezoek(id){
         return;
     }
 
-
     bezoekenOphalen(
         huidigRestaurant.id,
         function(bezoeken){
@@ -371,64 +370,53 @@ function openBezoek(id){
             let bezoek =
                 bezoeken.find(
                     function(b){
-
-                        return b.id === id;
-
+                        return Number(b.id) === Number(id);
                     }
                 );
 
-
             if(!bezoek){
+                console.error(
+                    "Bezoek niet gevonden:",
+                    id
+                );
                 return;
             }
 
+            // Dit is het volledige bezoek zoals het
+            // rechtstreeks uit IndexedDB komt
+            huidigBezoek = bezoek;
 
-            huidigBezoek =
-                bezoek;
+            console.log(
+                "Bezoek geopend:",
+                huidigBezoek
+            );
 
+            // Velden invullen
+            document.getElementById("bezoekDatum").value =
+                huidigBezoek.datum || "";
 
-            document
-                .getElementById(
-                    "bezoekDatum"
-                )
-                .value =
-                huidigBezoek.datum;
+            document.getElementById("bezoekScore").value =
+                huidigBezoek.score || "0";
 
-
-            document
-                .getElementById(
-                    "bezoekScore"
-                )
-                .value =
-                huidigBezoek.score;
-
-
-            document
-                .getElementById(
-                    "bezoekOpmerking"
-                )
-                .value =
+            document.getElementById("bezoekOpmerking").value =
                 huidigBezoek.opmerking || "";
 
+            bezoekBewerkModus = true;
 
-            bezoekBewerkModus =
-                true;
-
-
+            // Formulier tonen
             document
-                .getElementById(
-                    "nieuwBezoekForm"
-                )
+                .getElementById("nieuwBezoekForm")
                 .classList
-                .remove(
-                    "hidden"
-                );
+                .remove("hidden");
 
-
-            // Enkel bij het geselecteerde
-            // bezoek de fotoknop tonen
-
+            // Fotoknop tonen
             toonFotoToevoegenKnop(
+                huidigBezoek.id
+            );
+
+            // Foto's van dit specifieke bezoek
+            // opnieuw rechtstreeks uit IndexedDB halen
+            toonBezoekFotos(
                 huidigBezoek.id
             );
 
@@ -870,41 +858,48 @@ function toonBezoekFotos(bezoekId){
             "fotoBezoek_" + bezoekId
         );
 
-
     if(!container){
+        console.warn(
+            "Foto-container niet gevonden voor bezoek:",
+            bezoekId
+        );
         return;
     }
 
-
     container.innerHTML = "";
-
 
     fotosBezoekOphalen(
         bezoekId,
         function(fotos){
 
+            console.log(
+                "Foto's geladen voor bezoek",
+                bezoekId,
+                ":",
+                fotos.length
+            );
+
+            if(fotos.length === 0){
+
+                return;
+
+            }
+
             fotos.forEach(
                 function(foto){
 
                     let fotoItem =
-                        document.createElement(
-                            "div"
-                        );
-
+                        document.createElement("div");
 
                     fotoItem.className =
                         "foto-item";
 
 
                     let afbeelding =
-                        document.createElement(
-                            "img"
-                        );
-
+                        document.createElement("img");
 
                     afbeelding.src =
                         foto.data;
-
 
                     afbeelding.alt =
                         "Foto van bezoek";
@@ -921,18 +916,13 @@ function toonBezoekFotos(bezoekId){
 
 
                     let verwijderKnop =
-                        document.createElement(
-                            "button"
-                        );
-
+                        document.createElement("button");
 
                     verwijderKnop.className =
                         "foto-verwijder";
 
-
                     verwijderKnop.innerHTML =
                         "🗑";
-
 
                     verwijderKnop.title =
                         "Foto verwijderen";
@@ -942,7 +932,6 @@ function toonBezoekFotos(bezoekId){
                         function(event){
 
                             event.stopPropagation();
-
 
                             bezoekFotoVerwijderen(
                                 foto.id,
@@ -955,7 +944,6 @@ function toonBezoekFotos(bezoekId){
                     fotoItem.appendChild(
                         afbeelding
                     );
-
 
                     fotoItem.appendChild(
                         verwijderKnop

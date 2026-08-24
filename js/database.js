@@ -850,10 +850,32 @@ function fotoRestaurantOpslaan(
 
 
     request.onsuccess =
-        function(){
+        function(event){
 
             foto.id =
-                request.result;
+                event.target.result;
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij opslaan restaurantfoto:",
+                event.target.error
+            );
+
+        };
+
+
+    transaction.oncomplete =
+        function(){
+
+            console.log(
+                "Restaurantfoto definitief opgeslagen:",
+                foto.id
+            );
 
 
             if(callback){
@@ -863,6 +885,22 @@ function fotoRestaurantOpslaan(
                 );
 
             }
+
+        };
+
+
+    transaction.onerror =
+        function(event){
+
+            console.error(
+                "Databasefout bij opslaan restaurantfoto:",
+                event.target.error
+            );
+
+
+            alert(
+                "De foto kon niet worden opgeslagen."
+            );
 
         };
 
@@ -1009,10 +1047,32 @@ function fotoBezoekOpslaan(
 
 
     request.onsuccess =
-        function(){
+        function(event){
 
             foto.id =
-                request.result;
+                event.target.result;
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij opslaan bezoekfoto:",
+                event.target.error
+            );
+
+        };
+
+
+    transaction.oncomplete =
+        function(){
+
+            console.log(
+                "Bezoekfoto definitief opgeslagen:",
+                foto.id
+            );
 
 
             if(callback){
@@ -1022,6 +1082,22 @@ function fotoBezoekOpslaan(
                 );
 
             }
+
+        };
+
+
+    transaction.onerror =
+        function(event){
+
+            console.error(
+                "Databasefout bij opslaan bezoekfoto:",
+                event.target.error
+            );
+
+
+            alert(
+                "De foto kon niet worden opgeslagen."
+            );
 
         };
 

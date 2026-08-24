@@ -1126,36 +1126,31 @@ function fotosBezoekOphalen(
         );
 
 
+    let index =
+        store.index(
+            "bezoekId"
+        );
+
+
     let request =
-        store.getAll();
+        index.getAll(
+            bezoekId
+        );
 
 
     request.onsuccess =
         function(){
 
-            let fotos =
-                request.result.filter(
-                    function(foto){
-
-                        return (
-                            String(foto.bezoekId) ===
-                            String(bezoekId)
-                        );
-
-                    }
-                );
-
-
             console.log(
                 "Foto's bezoek",
                 bezoekId,
                 ":",
-                fotos.length
+                request.result.length
             );
 
 
             callback(
-                fotos
+                request.result
             );
 
         };

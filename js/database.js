@@ -1126,24 +1126,51 @@ function fotosBezoekOphalen(
         );
 
 
-    let index =
-        store.index(
-            "bezoekId"
-        );
-
-
     let request =
-        index.getAll(
-            bezoekId
-        );
+        store.getAll();
 
 
     request.onsuccess =
         function(){
 
-            callback(
-                request.result
+            let fotos =
+                request.result.filter(
+                    function(foto){
+
+                        return (
+                            String(foto.bezoekId) ===
+                            String(bezoekId)
+                        );
+
+                    }
+                );
+
+
+            console.log(
+                "Foto's bezoek",
+                bezoekId,
+                ":",
+                fotos.length
             );
+
+
+            callback(
+                fotos
+            );
+
+        };
+
+
+    request.onerror =
+        function(event){
+
+            console.error(
+                "Fout bij ophalen bezoekfoto's:",
+                event.target.error
+            );
+
+
+            callback([]);
 
         };
 

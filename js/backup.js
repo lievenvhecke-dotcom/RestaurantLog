@@ -154,22 +154,33 @@ function backupMaken(){
 
 
                                             alert(
-                                                "Back-up gemaakt ✅\n\n" +
+
+                                                t("backupGemaakt") +
 
                                                 restaurants.length +
-                                                " horecazaken\n" +
+                                                " " +
+                                                t("horecazaken") +
+                                                "\n" +
 
                                                 bezoeken.length +
-                                                " bezoeken\n" +
+                                                " " +
+                                                t("bezoeken") +
+                                                "\n" +
 
                                                 ideeen.length +
-                                                " ideeën\n" +
+                                                " " +
+                                                t("ideeen") +
+                                                "\n" +
 
                                                 fotosRestaurant.length +
-                                                " restaurantfoto's\n" +
+                                                " " +
+                                                t("restaurantFotos") +
+                                                "\n" +
 
                                                 fotosBezoek.length +
-                                                " bezoekfoto's"
+                                                " " +
+                                                t("bezoekFotos")
+
                                             );
 
                                         }
@@ -222,6 +233,7 @@ function backupHerstellen(event){
 
 
                 // BOM verwijderen
+
                 tekst =
                     tekst
                     .replace(/^\uFEFF/, "")
@@ -229,6 +241,7 @@ function backupHerstellen(event){
 
 
                 // JSON lezen
+
                 backup =
                     JSON.parse(tekst);
 
@@ -249,7 +262,8 @@ function backupHerstellen(event){
 
 
                 alert(
-                    "Dit backupbestand kon niet worden gelezen.\n\n" +
+                    t("backupLezenFout") +
+                    "\n\n" +
                     error.name +
                     "\n" +
                     error.message
@@ -273,7 +287,7 @@ function backupHerstellen(event){
             ){
 
                 alert(
-                    "Dit is geen geldige HorecaLog-backup."
+                    t("ongeldigeBackup")
                 );
 
                 return;
@@ -324,25 +338,34 @@ function backupHerstellen(event){
             let bevestiging =
                 confirm(
 
-                    "Bestaande gegevens vervangen?\n\n" +
+                    t("gegevensVervangen") +
 
                     restaurants.length +
-                    " horecazaken\n" +
+                    " " +
+                    t("horecazaken") +
+                    "\n" +
 
                     bezoeken.length +
-                    " bezoeken\n" +
+                    " " +
+                    t("bezoeken") +
+                    "\n" +
 
                     ideeen.length +
-                    " ideeën\n" +
+                    " " +
+                    t("ideeen") +
+                    "\n" +
 
                     fotosRestaurant.length +
-                    " restaurantfoto's\n" +
+                    " " +
+                    t("restaurantFotos") +
+                    "\n" +
 
                     fotosBezoek.length +
-                    " bezoekfoto's\n\n" +
+                    " " +
+                    t("bezoekFotos") +
+                    "\n\n" +
 
-                    "De huidige gegevens op dit toestel " +
-                    "worden vervangen door deze backup."
+                    t("backupVervangenUitleg")
 
                 );
 
@@ -368,8 +391,6 @@ function backupHerstellen(event){
 
                     /*
                      * Database opnieuw uitlezen.
-                     * Zo werken we met de werkelijk
-                     * teruggezette gegevens.
                      */
 
                     restaurantsOphalen(
@@ -418,22 +439,31 @@ function backupHerstellen(event){
 
                             alert(
 
-                                "Back-up hersteld ✅\n\n" +
+                                t("backupHersteld") +
 
                                 restaurants.length +
-                                " horecazaken\n" +
+                                " " +
+                                t("horecazaken") +
+                                "\n" +
 
                                 bezoeken.length +
-                                " bezoeken\n" +
+                                " " +
+                                t("bezoeken") +
+                                "\n" +
 
                                 ideeen.length +
-                                " ideeën\n" +
+                                " " +
+                                t("ideeen") +
+                                "\n" +
 
                                 fotosRestaurant.length +
-                                " restaurantfoto's\n" +
+                                " " +
+                                t("restaurantFotos") +
+                                "\n" +
 
                                 fotosBezoek.length +
-                                " bezoekfoto's"
+                                " " +
+                                t("bezoekFotos")
 
                             );
 
@@ -456,7 +486,7 @@ function backupHerstellen(event){
 
 
             alert(
-                "Het backupbestand kon niet worden gelezen."
+                t("backupHerstellenFout")
             );
 
         };
@@ -700,7 +730,7 @@ function gegevensHerstellen(
 
 
                 alert(
-                    "De backup kon niet in de database worden gezet.\n\n" +
+                    t("databaseBackupFout") +
                     event.target.error
                 );
 
@@ -717,7 +747,7 @@ function gegevensHerstellen(
 
 
                 alert(
-                    "Het herstellen van de backup is afgebroken."
+                    t("backupAfgebroken")
                 );
 
             };
@@ -732,7 +762,7 @@ function gegevensHerstellen(
 
 
         alert(
-            "Herstellen mislukt:\n\n" +
+            t("herstellenMislukt") +
             error.name +
             "\n" +
             error.message

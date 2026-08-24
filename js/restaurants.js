@@ -4,16 +4,17 @@
 
 
 function toonRestaurants(){
-   
-   let verborgenKnop =
+
+    let verborgenKnop =
         document.getElementById(
             "verborgenRestaurantsKnop"
         );
 
     if(verborgenKnop){
         verborgenKnop.style.display = "";
+
     }
-   
+    
     let lijst =
         document.getElementById("lijst");
 
@@ -610,6 +611,15 @@ function verborgenWisselen(){
 ===================================================== */
 
 function toonVerborgenRestaurants(){
+
+    let verborgenKnop =
+        document.getElementById(
+            "verborgenRestaurantsKnop"
+        );
+
+    if(verborgenKnop){
+        verborgenKnop.style.display = "none";
+    }
 
     let lijst =
         document.getElementById("lijst");

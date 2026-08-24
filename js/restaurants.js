@@ -1,3 +1,8 @@
+/* =====================================================
+   RESTAURANTS
+===================================================== */
+
+
 function toonRestaurants(){
 
     let lijst =
@@ -21,9 +26,15 @@ function toonRestaurants(){
 
 
     // Filteren op naam of gemeente
+    // Verborgen horecazaken worden niet getoond
     let gefilterdeRestaurants =
         restaurants.filter(
             function(r){
+
+                if(r.verborgen === true){
+                    return false;
+                }
+
 
                 let naam =
                     (r.naam || "")
@@ -101,25 +112,42 @@ function toonRestaurants(){
 
 }
 
-function opslaan() {
+
+/* =====================================================
+   RESTAURANT OPSLAAN
+===================================================== */
+
+function opslaan(){
 
     let restaurant = {
 
-        naam: document.getElementById("naam").value,
+        naam:
+            document.getElementById("naam").value,
 
-        gemeente: document.getElementById("gemeente").value,
+        gemeente:
+            document.getElementById("gemeente").value,
 
-        keuken: keukenWaarde(),
+        keuken:
+            keukenWaarde(),
 
-        favoriet: false
+        favoriet:
+            false,
+
+        verborgen:
+            false
 
     };
 
 
-    if (bewerkModus) {
+    /* =================================================
+       BESTAAND RESTAURANT AANPASSEN
+    ================================================= */
+
+    if(bewerkModus){
 
         restaurant.id =
             huidigRestaurant.id;
+
 
         // Bestaande locatie behouden
         restaurant.lat =
@@ -127,6 +155,17 @@ function opslaan() {
 
         restaurant.lng =
             huidigRestaurant.lng;
+
+
+        // Bestaande favoriet behouden
+        restaurant.favoriet =
+            huidigRestaurant.favoriet || false;
+
+
+        // Bestaande verborgen-status behouden
+        restaurant.verborgen =
+            huidigRestaurant.verborgen || false;
+
 
         restaurantAanpassen(
             restaurant
@@ -139,29 +178,36 @@ function opslaan() {
             );
 
 
-        restaurants[index] =
-            restaurant;
+        if(index !== -1){
+
+            restaurants[index] =
+                restaurant;
+
+        }
 
 
         huidigRestaurant =
             restaurant;
 
 
-        bewerkModus = false;
+        bewerkModus =
+            false;
 
     }
 
-    else {
+    else{
 
         restaurantOpslaan(
             restaurant,
-            function(nieuwRestaurant) {
+            function(nieuwRestaurant){
 
                 restaurants.push(
                     nieuwRestaurant
                 );
 
+
                 toonRestaurants();
+
 
                 document
                     .getElementById(
@@ -189,8 +235,12 @@ function opslaan() {
 
 }
 
-function openRestaurant(id){
 
+/* =====================================================
+   RESTAURANT OPENEN
+===================================================== */
+
+function openRestaurant(id){
 
     let restaurant =
         restaurants.find(
@@ -198,44 +248,100 @@ function openRestaurant(id){
         );
 
 
-    huidigRestaurant = restaurant;
-
-    huidigBezoek = null;
-bezoekBewerkModus = false;
-
-document.getElementById("bezoekDatum").value = "";
-document.getElementById("bezoekScore").value = "0";
-document.getElementById("bezoekOpmerking").value = "";
-
-document
-    .getElementById("nieuwBezoekForm")
-    .classList.add("hidden");
+    if(!restaurant){
+        return;
+    }
 
 
-    document.getElementById("detailNaam")
-        .innerHTML = restaurant.naam;
+    huidigRestaurant =
+        restaurant;
 
 
-    document.getElementById("detailGemeente")
+    huidigBezoek =
+        null;
+
+    bezoekBewerkModus =
+        false;
+
+
+    document
+        .getElementById(
+            "bezoekDatum"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "bezoekScore"
+        )
+        .value =
+        "0";
+
+
+    document
+        .getElementById(
+            "bezoekOpmerking"
+        )
+        .value =
+        "";
+
+
+    document
+        .getElementById(
+            "nieuwBezoekForm"
+        )
+        .classList
+        .add("hidden");
+
+
+    document
+        .getElementById(
+            "detailNaam"
+        )
+        .innerHTML =
+        restaurant.naam;
+
+
+    document
+        .getElementById(
+            "detailGemeente"
+        )
         .innerHTML =
         "📍 " + restaurant.gemeente;
 
-    document.getElementById("detailKeuken")
+
+    document
+        .getElementById(
+            "detailKeuken"
+        )
         .innerHTML =
         restaurant.keuken
         ? "🍴 " + restaurant.keuken
         : "";
 
 
-        updateFavorietKnop();
+    updateFavorietKnop();
 
-        toonBezoeken();
-        toonRestaurantFotos();
+    updateVerbergenKnop();
 
 
-    toonPagina("detailPage");
+    toonBezoeken();
+
+    toonRestaurantFotos();
+
+
+    toonPagina(
+        "detailPage"
+    );
 
 }
+
+
+/* =====================================================
+   RESTAURANT VERWIJDEREN
+===================================================== */
 
 function verwijderen(){
 
@@ -247,8 +353,8 @@ function verwijderen(){
     let bevestiging =
         confirm(
             "Horecazaak verwijderen?\n\n" +
-"De horecazaak én alle bijhorende bezoeken " +
-"worden verwijderd."
+            "De horecazaak én alle bijhorende bezoeken " +
+            "worden verwijderd."
         );
 
 
@@ -264,11 +370,14 @@ function verwijderen(){
 
     restaurants =
         restaurants.filter(
-            r => r.id !== huidigRestaurant.id
+            r =>
+                r.id !==
+                huidigRestaurant.id
         );
 
 
-    huidigRestaurant = null;
+    huidigRestaurant =
+        null;
 
 
     toonRestaurants();
@@ -280,23 +389,43 @@ function verwijderen(){
 
 }
 
+
+/* =====================================================
+   RESTAURANT BEWERKEN
+===================================================== */
+
 function bewerken(){
 
     if(!huidigRestaurant){
         return;
     }
 
-    bewerkModus = true;
 
-    document.getElementById("naam").value =
+    bewerkModus =
+        true;
+
+
+    document
+        .getElementById(
+            "naam"
+        )
+        .value =
         huidigRestaurant.naam;
 
 
-    document.getElementById("gemeente").value =
+    document
+        .getElementById(
+            "gemeente"
+        )
+        .value =
         huidigRestaurant.gemeente;
 
 
-    document.getElementById("keuken").value =
+    document
+        .getElementById(
+            "keuken"
+        )
+        .value =
         huidigRestaurant.keuken;
 
 
@@ -306,6 +435,11 @@ function bewerken(){
 
 }
 
+
+/* =====================================================
+   FAVORIET KNOP BIJWERKEN
+===================================================== */
+
 function updateFavorietKnop(){
 
     let knop =
@@ -314,7 +448,15 @@ function updateFavorietKnop(){
         );
 
 
-    if(huidigRestaurant.favoriet){
+    if(!knop){
+        return;
+    }
+
+
+    if(
+        huidigRestaurant &&
+        huidigRestaurant.favoriet
+    ){
 
         knop.innerHTML =
             "❤️ Favoriet geselecteerd";
@@ -329,7 +471,17 @@ function updateFavorietKnop(){
 
 }
 
+
+/* =====================================================
+   FAVORIET WISSELEN
+===================================================== */
+
 function favorietWisselen(){
+
+    if(!huidigRestaurant){
+        return;
+    }
+
 
     huidigRestaurant.favoriet =
         !huidigRestaurant.favoriet;
@@ -342,17 +494,109 @@ function favorietWisselen(){
 
     let index =
         restaurants.findIndex(
-            r => r.id === huidigRestaurant.id
+            r =>
+                r.id ===
+                huidigRestaurant.id
         );
 
 
-    restaurants[index] =
-        huidigRestaurant;
+    if(index !== -1){
+
+        restaurants[index] =
+            huidigRestaurant;
+
+    }
 
 
     updateFavorietKnop();
 
 }
+
+
+/* =====================================================
+   VERBERGEN KNOP BIJWERKEN
+===================================================== */
+
+function updateVerbergenKnop(){
+
+    let knop =
+        document.getElementById(
+            "verbergenKnop"
+        );
+
+
+    if(
+        !knop ||
+        !huidigRestaurant
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        huidigRestaurant.verborgen === true
+    ){
+
+        knop.innerHTML =
+            "👁️ Opnieuw tonen in lijst";
+
+    }
+    else{
+
+        knop.innerHTML =
+            "👁️ Verbergen uit lijst";
+
+    }
+
+}
+
+
+/* =====================================================
+   HORECAZAAK VERBERGEN / OPNIEUW TONEN
+===================================================== */
+
+function verborgenWisselen(){
+
+    if(!huidigRestaurant){
+        return;
+    }
+
+
+    huidigRestaurant.verborgen =
+        huidigRestaurant.verborgen !== true;
+
+
+    restaurantAanpassen(
+        huidigRestaurant
+    );
+
+
+    let index =
+        restaurants.findIndex(
+            r =>
+                r.id ===
+                huidigRestaurant.id
+        );
+
+
+    if(index !== -1){
+
+        restaurants[index] =
+            huidigRestaurant;
+
+    }
+
+
+    updateVerbergenKnop();
+
+}
+
+
+/* =====================================================
+   FAVORIETEN TONEN
+===================================================== */
 
 function toonFavorieten(){
 
@@ -367,7 +611,9 @@ function toonFavorieten(){
 
     let favorieten =
         restaurants.filter(
-            r => r.favoriet === true
+            r =>
+                r.favoriet === true &&
+                r.verborgen !== true
         );
 
 
@@ -381,46 +627,52 @@ function toonFavorieten(){
     }
 
 
-    favorieten.forEach(r => {
+    favorieten.forEach(
+        function(r){
+
+            lijst.innerHTML += `
+
+                <div
+                    class="restaurant"
+                    onclick="openRestaurant(${r.id})"
+                >
+
+                    <h3>
+                        ❤️ ${r.naam}
+                    </h3>
 
 
-        lijst.innerHTML += `
-
-        <div class="restaurant"
-             onclick="openRestaurant(${r.id})">
-
-
-            <h3>
-                ❤️ ${r.naam}
-            </h3>
+                    <b>
+                        ${"⭐".repeat(
+                            Number(r.score || 0)
+                        )}
+                    </b>
 
 
-            <b>
-                ${"⭐".repeat(Number(r.score))}
-            </b>
+                    <p>
+                        📍 ${r.gemeente}
+                    </p>
 
 
-            <p>
-                📍 ${r.gemeente}
-            </p>
+                    <p>
+                        🍴 ${r.keuken || ""}
+                    </p>
 
+                </div>
 
-            <p>
-                🍴 ${r.keuken}
-            </p>
+            `;
 
-
-        </div>
-
-        `;
-
-
-    });
+        }
+    );
 
 }
 
 
-    function openGoogleMaps(){
+/* =====================================================
+   GOOGLE MAPS
+===================================================== */
+
+function openGoogleMaps(){
 
     if(!huidigRestaurant){
         return;
@@ -448,48 +700,88 @@ function toonFavorieten(){
 
 }
 
+
+/* =====================================================
+   NIEUW RESTAURANT
+===================================================== */
+
 function nieuwRestaurant(){
 
     document
-    .getElementById("nieuwRestaurantForm")
-    .classList
-    .remove("hidden");
+        .getElementById(
+            "nieuwRestaurantForm"
+        )
+        .classList
+        .remove("hidden");
 
 }
+
+
+/* =====================================================
+   KEUKEN GEWIJZIGD
+===================================================== */
 
 function keukenGewijzigd(){
 
     let keuze =
-        document.getElementById("keukenSelect").value;
+        document
+            .getElementById(
+                "keukenSelect"
+            )
+            .value;
 
 
     let veld =
-        document.getElementById("andereKeuken");
+        document.getElementById(
+            "andereKeuken"
+        );
 
 
-    if(keuze === "Andere"){
+    if(
+        keuze === "Andere"
+    ){
 
-        veld.classList.remove("hidden");
+        veld
+            .classList
+            .remove("hidden");
 
     }
     else{
 
-        veld.classList.add("hidden");
+        veld
+            .classList
+            .add("hidden");
+
         veld.value = "";
 
     }
 
 }
 
+
+/* =====================================================
+   KEUKENWAARDE
+===================================================== */
+
 function keukenWaarde(){
 
     let keuze =
-        document.getElementById("keukenSelect").value;
+        document
+            .getElementById(
+                "keukenSelect"
+            )
+            .value;
 
 
-    if(keuze === "Andere"){
+    if(
+        keuze === "Andere"
+    ){
 
-        return document.getElementById("andereKeuken").value;
+        return document
+            .getElementById(
+                "andereKeuken"
+            )
+            .value;
 
     }
 
@@ -498,7 +790,14 @@ function keukenWaarde(){
 
 }
 
-function restaurantFotosToevoegen(event){
+
+/* =====================================================
+   RESTAURANTFOTO'S TOEVOEGEN
+===================================================== */
+
+function restaurantFotosToevoegen(
+    event
+){
 
     if(!huidigRestaurant){
         return;
@@ -509,7 +808,9 @@ function restaurantFotosToevoegen(event){
         event.target.files;
 
 
-    Array.from(bestanden).forEach(
+    Array.from(
+        bestanden
+    ).forEach(
         function(bestand){
 
             let reader =
@@ -528,7 +829,8 @@ function restaurantFotosToevoegen(event){
                             e.target.result,
 
                         datum:
-                            new Date().toISOString()
+                            new Date()
+                                .toISOString()
 
                     };
 
@@ -560,6 +862,10 @@ function restaurantFotosToevoegen(event){
 
 }
 
+
+/* =====================================================
+   RESTAURANTFOTO'S TONEN
+===================================================== */
 
 function toonRestaurantFotos(){
 
@@ -615,7 +921,13 @@ function toonRestaurantFotos(){
 }
 
 
-function restaurantFotoVerwijderen(id){
+/* =====================================================
+   RESTAURANTFOTO VERWIJDEREN
+===================================================== */
+
+function restaurantFotoVerwijderen(
+    id
+){
 
     let bevestiging =
         confirm(
@@ -645,7 +957,13 @@ function restaurantFotoVerwijderen(id){
 }
 
 
-function toonGroteFoto(data){
+/* =====================================================
+   GROTE FOTO TONEN
+===================================================== */
+
+function toonGroteFoto(
+    data
+){
 
     let modal =
         document.getElementById(
@@ -663,12 +981,16 @@ function toonGroteFoto(data){
         data;
 
 
-    modal.classList.remove(
-        "hidden"
-    );
+    modal
+        .classList
+        .remove("hidden");
 
 }
 
+
+/* =====================================================
+   GROTE FOTO SLUITEN
+===================================================== */
 
 function sluitGroteFoto(){
 
@@ -684,11 +1006,12 @@ function sluitGroteFoto(){
         );
 
 
-    modal.classList.add(
-        "hidden"
-    );
+    modal
+        .classList
+        .add("hidden");
 
 
-    groteFoto.src = "";
+    groteFoto.src =
+        "";
 
 }

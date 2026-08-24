@@ -1033,3 +1033,98 @@ function bezoekFotoVerwijderen(
         };
 
 }
+
+/* =====================================================
+   TIJDELIJKE FOTO-DIAGNOSE
+   ===================================================== */
+
+function diagnoseBezoekFotos(){
+
+    if(!huidigRestaurant){
+
+        alert("Geen restaurant geopend.");
+
+        return;
+
+    }
+
+
+    if(!huidigBezoek){
+
+        alert(
+            "Open eerst het bezoek waarvan de foto's ontbreken."
+        );
+
+        return;
+
+    }
+
+
+    fotosBezoekOphalen(
+        huidigBezoek.id,
+        function(fotos){
+
+            let tekst =
+                "FOTO-DIAGNOSE\n\n" +
+
+                "Restaurant: " +
+                huidigRestaurant.naam +
+                "\n\n" +
+
+                "Bezoek ID: " +
+                huidigBezoek.id +
+                "\n\n" +
+
+                "Aantal foto's gevonden: " +
+                fotos.length +
+                "\n\n";
+
+
+            if(fotos.length === 0){
+
+                tekst +=
+                    "Geen foto's gevonden voor dit bezoek.\n\n";
+
+            }
+            else{
+
+                fotos.forEach(
+                    function(foto, index){
+
+                        tekst +=
+                            "Foto " +
+                            (index + 1) +
+                            "\n" +
+
+                            "Foto ID: " +
+                            foto.id +
+                            "\n" +
+
+                            "bezoekId: " +
+                            foto.bezoekId +
+                            "\n" +
+
+                            "Datum: " +
+                            foto.datum +
+                            "\n\n";
+
+                    }
+                );
+
+            }
+
+
+            console.log(
+                "FOTO-DIAGNOSE:",
+                fotos
+            );
+
+
+            alert(
+                tekst
+            );
+
+        }
+    );
+
+}

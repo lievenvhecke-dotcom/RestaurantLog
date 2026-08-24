@@ -266,6 +266,13 @@ function openRestaurant(id){
     huidigRestaurant =
         restaurant;
 
+            // Meer opties altijd standaard dicht
+    let meerOpties =
+        document.querySelector(".meer-opties");
+
+    if(meerOpties){
+        meerOpties.removeAttribute("open");
+    }
 
     huidigBezoek =
         null;

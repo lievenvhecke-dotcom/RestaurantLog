@@ -126,6 +126,7 @@
 <div id="lijst"></div>
 
 <button
+    id="verborgenRestaurantsKnop"
     onclick="toonVerborgenRestaurants()"
     class="verborgen-knop" >
         👁️ Verborgen horecazaken
@@ -170,24 +171,6 @@
 <div id="restaurantFotos"
      class="foto-grid">
 </div>
-
-    <button 
-            id="favorietKnop"
-            onclick="favorietWisselen()">
-        </button>
-
-    <button
-            id="verbergenKnop"
-            onclick="verborgenWisselen()">
-    </button>
-
-    <button onclick="openGoogleMaps()">
-    📍      Open in Google Maps
-    </button>
-
-    <button onclick="locatieInstellen()">
-            🗺️ Locatie instellen
-    </button>
 
     <button
         class="primair"
@@ -272,14 +255,37 @@
 
         <div id="bezoekenLijst"></div>
     
-<button
-    class="verwijder-restaurant"
-    onclick="verwijderen()"
->
-    🗑️ Horecazaak verwijderen
-</button>
-
-    </div>
+<!-- HORECAZAAK BEHEREN -->
+ 
+<div class="horecazaak-beheer">
+     <h3> ⚙️ Horecazaak beheren </h3>
+     
+    <button
+        id="favorietKnop"
+        onclick="favorietWisselen()" >
+    </button>
+    
+    <button
+        id="verbergKnop"
+        onclick="verbergenWisselen()" >
+    </button>
+    
+    <button
+        onclick="openGoogleMaps()" >
+            📍 Open in Google Maps
+    </button>
+    
+    <button
+        onclick="locatieInstellen()" >
+            🗺️ Locatie instellen
+    </button>
+    
+    <button
+        class="verwijder-restaurant"
+        onclick="verwijderen()" >
+            🗑️ Horecazaak verwijderen
+    </button>
+</div>
 
 </section>
 

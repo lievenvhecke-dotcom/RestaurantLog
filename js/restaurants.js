@@ -531,7 +531,7 @@ function updateVerbergenKnop(){
 
     let knop =
         document.getElementById(
-            "verbergenKnop"
+            "verborgenKnop"
         );
 
 

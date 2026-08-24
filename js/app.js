@@ -1,4 +1,4 @@
-const APP_VERSIE = "v10";
+const APP_VERSIE = "v12";
 
 document.title = "HorecaLog " + APP_VERSIE;
 

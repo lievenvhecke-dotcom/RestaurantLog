@@ -3,16 +3,6 @@ BEZOEKEN
 ===================================================== */
 
 let uploadBezig = {};
-
-/*
-
-Houdt bij welke foto-ophaalactie momenteel actief is
-per bezoek.
-
-
-Dit voorkomt dat twee gelijktijdige/asynchrone
-oproepen dezelfde foto's dubbel in de interface zetten.
-*/
 let fotoRenderVersie = {};
 
 /* =====================================================
@@ -59,8 +49,6 @@ if(!huidigRestaurant){
 bezoekenOphalen(
     huidigRestaurant.id,
     function(bezoeken){
-
-        // Nieuwste bezoek eerst
 
         bezoeken.sort(
             function(a, b){
@@ -147,8 +135,6 @@ bezoekenOphalen(
 
 `;
 
-                // Foto's laden
-
                 toonBezoekFotos(
                     b.id
                 );
@@ -173,6 +159,7 @@ bezoekBewerkModus =
 huidigBezoek =
     null;
 
+
 document
     .getElementById(
         "nieuwBezoekForm"
@@ -181,6 +168,7 @@ document
     .remove(
         "hidden"
     );
+
 
 document
     .getElementById(
@@ -191,6 +179,7 @@ document
         .toISOString()
         .split("T")[0];
 
+
 document
     .getElementById(
         "bezoekScore"
@@ -198,12 +187,21 @@ document
     .value =
     "0";
 
+
 document
     .getElementById(
         "bezoekOpmerking"
     )
     .value =
     "";
+
+
+/*
+ * Bij een nieuw bezoek tonen we
+ * opnieuw alle bezoeken.
+ */
+
+toonBezoeken();
 
 }
 
@@ -218,10 +216,12 @@ let datum =
         "bezoekDatum"
     ).value;
 
+
 let score =
     document.getElementById(
         "bezoekScore"
     ).value;
+
 
 let opmerking =
     document.getElementById(
@@ -239,21 +239,27 @@ if(bezoekBewerkModus){
         return;
     }
 
+
     huidigBezoek.datum =
         datum;
+
 
     huidigBezoek.score =
         score;
 
+
     huidigBezoek.opmerking =
         opmerking;
+
 
     bezoekAanpassen(
         huidigBezoek
     );
 
+
     bezoekBewerkModus =
         false;
+
 
     document
         .getElementById(
@@ -264,7 +270,14 @@ if(bezoekBewerkModus){
             "hidden"
         );
 
+
+    /*
+     * Na opslaan terug naar het
+     * normale overzicht.
+     */
+
     toonBezoeken();
+
 
     return;
 
@@ -278,6 +291,7 @@ if(bezoekBewerkModus){
 if(!huidigRestaurant){
     return;
 }
+
 
 let bezoek = {
 
@@ -295,6 +309,7 @@ let bezoek = {
 
 };
 
+
 bezoekOpslaan(
     bezoek,
     function(opgeslagenBezoek){
@@ -302,8 +317,10 @@ bezoekOpslaan(
         huidigBezoek =
             opgeslagenBezoek;
 
+
         bezoekBewerkModus =
             false;
+
 
         document
             .getElementById(
@@ -314,7 +331,9 @@ bezoekOpslaan(
                 "hidden"
             );
 
+
         toonBezoeken();
+
 
         alert(
             "Bezoek toegevoegd ✅"
@@ -335,6 +354,7 @@ if(!huidigRestaurant){
     return;
 }
 
+
 bezoekenOphalen(
     huidigRestaurant.id,
     function(bezoeken){
@@ -349,6 +369,7 @@ bezoekenOphalen(
                 }
             );
 
+
         if(!bezoek){
 
             console.error(
@@ -360,8 +381,10 @@ bezoekenOphalen(
 
         }
 
+
         huidigBezoek =
             bezoek;
+
 
         console.log(
             "Bezoek geopend:",
@@ -397,6 +420,30 @@ bezoekenOphalen(
             true;
 
 
+        /*
+         * Eerst de lijst met alle bezoeken
+         * verbergen.
+         */
+
+        let bezoekenLijst =
+            document.getElementById(
+                "bezoekenLijst"
+            );
+
+
+        if(bezoekenLijst){
+
+            bezoekenLijst.classList.add(
+                "hidden"
+            );
+
+        }
+
+
+        /*
+         * Wijzigformulier tonen.
+         */
+
         document
             .getElementById(
                 "nieuwBezoekForm"
@@ -407,14 +454,18 @@ bezoekenOphalen(
             );
 
 
-        // Fotoknop tonen
+        /*
+         * Fotoknop tonen.
+         */
 
         toonFotoToevoegenKnop(
             huidigBezoek.id
         );
 
 
-        // Foto's van dit bezoek laden
+        /*
+         * Foto's van dit bezoek laden.
+         */
 
         toonBezoekFotos(
             huidigBezoek.id
@@ -435,8 +486,10 @@ if(!huidigBezoek){
     return;
 }
 
+
 bezoekBewerkModus =
     true;
+
 
 document
     .getElementById(
@@ -445,6 +498,7 @@ document
     .value =
     huidigBezoek.datum;
 
+
 document
     .getElementById(
         "bezoekScore"
@@ -452,12 +506,14 @@ document
     .value =
     huidigBezoek.score;
 
+
 document
     .getElementById(
         "bezoekOpmerking"
     )
     .value =
     huidigBezoek.opmerking || "";
+
 
 document
     .getElementById(
@@ -467,6 +523,22 @@ document
     .remove(
         "hidden"
     );
+
+
+let bezoekenLijst =
+    document.getElementById(
+        "bezoekenLijst"
+    );
+
+
+if(bezoekenLijst){
+
+    bezoekenLijst.classList.add(
+        "hidden"
+    );
+
+}
+
 
 toonFotoToevoegenKnop(
     huidigBezoek.id
@@ -479,8 +551,6 @@ FOTO TOEVOEGEN KNOP TONEN
 ===================================================== */
 
 function toonFotoToevoegenKnop(bezoekId){
-
-// Eerst alle bestaande fotoknoppen verwijderen
 
 document
     .querySelectorAll(
@@ -501,8 +571,75 @@ let container =
     );
 
 
+/*
+ * Als de bezoekkaart verborgen is,
+ * bestaat de container niet meer.
+ *
+ * Daarom gebruiken we de container
+ * binnen het formulier als alternatief.
+ */
+
 if(!container){
+
+    let formulier =
+        document.getElementById(
+            "nieuwBezoekForm"
+        );
+
+
+    if(!formulier){
+        return;
+    }
+
+
+    /*
+     * Fotoknop voor het formulier.
+     */
+
+    let bestaande =
+        document.getElementById(
+            "fotoBezoekInput_" + bezoekId
+        );
+
+
+    if(bestaande){
+        return;
+    }
+
+
+    formulier.insertAdjacentHTML(
+        "beforeend",
+        `
+
+        <div
+            id="fotoActieFormulier"
+            class="foto-formulier-actie"
+        >
+
+            <label
+                for="fotoBezoekInput_${bezoekId}"
+                class="foto-toevoegen"
+            >
+                📷 Foto toevoegen
+            </label>
+
+            <input
+                type="file"
+                id="fotoBezoekInput_${bezoekId}"
+                accept="image/*"
+                multiple
+                hidden
+                onchange="bezoekFotoInput(${bezoekId}, event)"
+            >
+
+        </div>
+
+        `
+    );
+
+
     return;
+
 }
 
 
@@ -539,6 +676,7 @@ let bevestiging =
         "Dit bezoek en alle bijhorende foto's verwijderen?"
     );
 
+
 if(!bevestiging){
     return;
 }
@@ -565,8 +703,6 @@ let fotosStore =
         "fotosBezoek"
     );
 
-
-// Eerst alle foto's van dit bezoek zoeken
 
 let index =
     fotosStore.index(
@@ -598,8 +734,6 @@ request.onsuccess =
     };
 
 
-// Bezoek verwijderen
-
 bezoekenStore.delete(
     id
 );
@@ -622,8 +756,6 @@ transaction.oncomplete =
 
         }
 
-
-        // Eventuele oude render ongeldig maken
 
         delete fotoRenderVersie[id];
 
@@ -673,9 +805,6 @@ if(
 }
 
 
-// Voorkomt dubbel starten
-// van dezelfde upload
-
 if(uploadBezig[bezoekId]){
 
     event.target.value = "";
@@ -693,6 +822,16 @@ let container =
     document.getElementById(
         "fotoActie_" + bezoekId
     );
+
+
+if(!container){
+
+    container =
+        document.getElementById(
+            "fotoActieFormulier"
+        );
+
+}
 
 
 if(container){
@@ -716,8 +855,6 @@ let bestandenArray =
     );
 
 
-// Input onmiddellijk leegmaken
-
 event.target.value = "";
 
 
@@ -739,8 +876,6 @@ bestanden,
 positie
 ){
 
-// Alle foto's klaar
-
 if(
     positie >= bestanden.length
 ){
@@ -749,14 +884,10 @@ if(
         false;
 
 
-    // Foto's opnieuw laden
-
     toonBezoekFotos(
         bezoekId
     );
 
-
-    // Knop opnieuw tonen
 
     toonFotoToevoegenKnop(
         bezoekId
@@ -798,9 +929,6 @@ reader.onload =
             foto,
             function(){
 
-                // Pas na succesvolle opslag
-                // de volgende foto verwerken
-
                 bezoekFotosOpslaan(
                     bezoekId,
                     bestanden,
@@ -820,9 +948,6 @@ reader.onerror =
             "Foto kon niet worden gelezen."
         );
 
-
-        // Toch verdergaan
-        // met de volgende foto
 
         bezoekFotosOpslaan(
             bezoekId,
@@ -856,14 +981,6 @@ if(!container){
 }
 
 
-/*
- * Nieuwe render-versie voor dit bezoek.
- *
- * Elke oproep krijgt een eigen nummer.
- * Alleen de meest recente oproep mag
- * de foto's uiteindelijk tonen.
- */
-
 if(
     !fotoRenderVersie[bezoekId]
 ){
@@ -881,21 +998,12 @@ let huidigeRender =
     fotoRenderVersie[bezoekId];
 
 
-// Oude inhoud onmiddellijk verwijderen
-
 container.innerHTML = "";
 
 
 fotosBezoekOphalen(
     bezoekId,
     function(fotos){
-
-        /*
-         * Controle:
-         * als ondertussen een nieuwe
-         * render gestart is, deze oude
-         * resultaten negeren.
-         */
 
         if(
             fotoRenderVersie[bezoekId] !==
@@ -907,14 +1015,8 @@ fotosBezoekOphalen(
         }
 
 
-        // Voor de zekerheid opnieuw leegmaken
-
         container.innerHTML = "";
 
-
-        /*
-         * Foto's één keer toevoegen.
-         */
 
         fotos.forEach(
             function(foto){
@@ -1047,10 +1149,6 @@ store.delete(
 
 transaction.oncomplete =
     function(){
-
-        /*
-         * Nieuwe render afdwingen.
-         */
 
         toonBezoekFotos(
             bezoekId

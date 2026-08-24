@@ -1,3 +1,12 @@
+/* =====================================================
+   IDEEËN
+===================================================== */
+
+
+/* =====================================================
+   NIEUW IDEE
+===================================================== */
+
 function nieuwIdee(){
 
     let veld =
@@ -13,6 +22,10 @@ function nieuwIdee(){
 
 }
 
+
+/* =====================================================
+   IDEE OPSLAAN
+===================================================== */
 
 function ideeOpslaanViaForm(){
 
@@ -57,6 +70,10 @@ function ideeOpslaanViaForm(){
 }
 
 
+/* =====================================================
+   IDEEËN TONEN
+===================================================== */
+
 function toonIdeeen(){
 
     let lijst =
@@ -91,17 +108,25 @@ function toonIdeeen(){
             );
 
 
+            /* =========================================
+               GEEN IDEEËN
+            ========================================= */
+
             if(ideeen.length === 0){
 
                 lijst.innerHTML =
                     "<p class='geen-ideeen'>" +
-                    "Nog geen ideeën genoteerd." +
+                    t("geenIdeeen") +
                     "</p>";
 
                 return;
 
             }
 
+
+            /* =========================================
+               IDEEËN TONEN
+            ========================================= */
 
             ideeen.forEach(
                 function(idee){
@@ -112,9 +137,21 @@ function toonIdeeen(){
                         );
 
 
+                    /*
+                     * Datum in de huidige taal.
+                     */
+
+                    let taalCode =
+                        huidigeTaal === "fr"
+                            ? "fr-BE"
+                            : huidigeTaal === "en"
+                                ? "en-GB"
+                                : "nl-BE";
+
+
                     let datumTekst =
                         datum.toLocaleDateString(
-                            "nl-BE"
+                            taalCode
                         );
 
 
@@ -145,7 +182,7 @@ function toonIdeeen(){
                         <button
                             class="idee-verwijder"
                             onclick="verwijderIdee(${idee.id})"
-                            title="Idee verwijderen"
+                            title="${t("ideeVerwijderen")}"
                         >
                             🗑️
                         </button>
@@ -166,11 +203,15 @@ function toonIdeeen(){
 }
 
 
+/* =====================================================
+   IDEE VERWIJDEREN
+===================================================== */
+
 function verwijderIdee(id){
 
     let bevestiging =
         confirm(
-            "Dit idee verwijderen?"
+            t("ideeVerwijderenBevestiging")
         );
 
 
@@ -181,7 +222,9 @@ function verwijderIdee(id){
     }
 
 
-    ideeVerwijderen(id);
+    ideeVerwijderen(
+        id
+    );
 
 
     toonIdeeen();

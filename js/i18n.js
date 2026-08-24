@@ -978,8 +978,14 @@ bezoekMeervoud: "visites",
 ===================================================== */
 
 let huidigeTaal =
-    localStorage.getItem("horecalogTaal") || "fr";
+    localStorage.getItem("horecalogTaal");
 
+if(
+    !huidigeTaal ||
+    !vertalingen[huidigeTaal]
+){
+    huidigeTaal = "nl";
+}
 
 /* =====================================================
    VERTALING OPHALEN
@@ -1085,18 +1091,13 @@ function vertalingenToepassen(){
 
 function taalInstellen(taal){
 
-    /*
-       Alleen toegestane talen accepteren
-    */
-
     if(!vertalingen[taal]){
         return;
     }
 
 
-    /*
-       Nieuwe taal bewaren
-    */
+    huidigeTaal = taal;
+
 
     localStorage.setItem(
         "horecalogTaal",
@@ -1104,12 +1105,33 @@ function taalInstellen(taal){
     );
 
 
-    /*
-       Volledige pagina opnieuw laden.
-       Hierdoor worden ook alle dynamisch
-       opgebouwde teksten opnieuw vertaald.
-    */
+    console.log(
+        "Taal gewijzigd naar:",
+        taal
+    );
+
 
     window.location.reload();
 
 }
+
+
+/* =====================================================
+   BIJ LADEN PAGINA
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+
+        vertalingenToepassen();
+
+        const taalSelect =
+            document.getElementById("taalSelect");
+
+        if(taalSelect){
+            taalSelect.value = huidigeTaal;
+        }
+
+    }
+);

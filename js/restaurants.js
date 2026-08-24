@@ -647,49 +647,48 @@ function restaurantFotoVerwijderen(id){
 
 function toonGroteFoto(data){
 
-    let venster =
-        window.open(
-            ""
+    let modal =
+        document.getElementById(
+            "fotoModal"
         );
 
 
-    venster.document.write(
-        `
-        <html>
+    let groteFoto =
+        document.getElementById(
+            "groteFoto"
+        );
 
-        <head>
 
-            <title>Foto</title>
+    groteFoto.src =
+        data;
 
-            <style>
 
-                body{
-                    margin:0;
-                    background:black;
-                    display:flex;
-                    justify-content:center;
-                    align-items:center;
-                    height:100vh;
-                }
-
-                img{
-                    max-width:100%;
-                    max-height:100%;
-                    object-fit:contain;
-                }
-
-            </style>
-
-        </head>
-
-        <body>
-
-            <img src="${data}">
-
-        </body>
-
-        </html>
-        `
+    modal.classList.remove(
+        "hidden"
     );
+
+}
+
+
+function sluitGroteFoto(){
+
+    let modal =
+        document.getElementById(
+            "fotoModal"
+        );
+
+
+    let groteFoto =
+        document.getElementById(
+            "groteFoto"
+        );
+
+
+    modal.classList.add(
+        "hidden"
+    );
+
+
+    groteFoto.src = "";
 
 }

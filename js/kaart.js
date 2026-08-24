@@ -21,6 +21,7 @@ function toonKaart() {
 
 
     // Kaart opent standaard rond België
+
     map = L.map("map").setView(
         [50.85, 4.35],
         8
@@ -218,8 +219,13 @@ function toonLocatieResultaten(
 
 
     blok.innerHTML =
-        "<h3>🗺️ Kies de juiste locatie</h3>" +
-        "<p>Kies hieronder de juiste locatie.</p>";
+        "<h3>" +
+        t("kaartKiesLocatie") +
+        "</h3>" +
+
+        "<p>" +
+        t("kaartKiesLocatieUitleg") +
+        "</p>";
 
 
     resultaten.forEach(
@@ -263,7 +269,7 @@ function toonLocatieResultaten(
 
 
     handmatig.innerHTML =
-        "✏️ Straat en huisnummer ingeven";
+        t("straatHuisnummer");
 
 
     handmatig.onclick =
@@ -311,32 +317,32 @@ function toonHandmatigAdres() {
 
     blok.innerHTML = `
 
-        <h3>📍 Locatie ingeven</h3>
+        <h3>${t("locatieIngeven")}</h3>
 
         <p>
-            Geef het adres van het restaurant in.
+            ${t("adresRestaurant")}
         </p>
 
         <label>
-            Straat
+            ${t("straat")}
         </label>
 
         <input
             id="locatieStraat"
-            placeholder="Bijvoorbeeld Zeedijk"
+            placeholder="${t("voorbeeldZeedijk")}"
         >
 
         <label>
-            Huisnummer
+            ${t("huisnummer")}
         </label>
 
         <input
             id="locatieHuisnummer"
-            placeholder="Bijvoorbeeld 123"
+            placeholder="${t("voorbeeldHuisnummer")}"
         >
 
         <label>
-            Gemeente
+            ${t("gemeente")}
         </label>
 
         <input
@@ -347,13 +353,13 @@ function toonHandmatigAdres() {
         <button
             onclick="zoekHandmatigAdres()"
         >
-            📍 Zoek adres
+            ${t("zoekAdres")}
         </button>
 
         <button
             onclick="locatieInstellen()"
         >
-            🔍 Zoek restaurant opnieuw
+            ${t("zoekRestaurantOpnieuw")}
         </button>
 
     `;
@@ -397,7 +403,7 @@ async function zoekHandmatigAdres() {
     ) {
 
         alert(
-            "Vul straat, huisnummer en gemeente in."
+            t("vulAdresIn")
         );
 
         return;
@@ -438,7 +444,7 @@ async function zoekHandmatigAdres() {
         ) {
 
             alert(
-                "Dit adres kon niet gevonden worden."
+                t("adresNietGevonden")
             );
 
             return;
@@ -460,7 +466,7 @@ async function zoekHandmatigAdres() {
 
 
         alert(
-            "Er ging iets mis bij het zoeken van het adres."
+            t("foutZoekenAdres")
         );
 
     }
@@ -494,8 +500,13 @@ function toonAdresResultaten(
 
 
     blok.innerHTML =
-        "<h3>📍 Adres gevonden</h3>" +
-        "<p>Kies het juiste adres.</p>";
+        "<h3>" +
+        t("adresGevonden") +
+        "</h3>" +
+
+        "<p>" +
+        t("kiesJuisteAdres") +
+        "</p>";
 
 
     resultaten.forEach(
@@ -555,7 +566,8 @@ function bevestigLocatie(
     let bevestiging =
         confirm(
 
-            "Deze locatie gebruiken?\n\n" +
+            t("locatieGebruiken") +
+            "\n\n" +
             resultaat.display_name
 
         );
@@ -610,7 +622,7 @@ function bevestigLocatie(
 
 
     alert(
-        "Locatie opgeslagen."
+        t("locatieOpgeslagen")
     );
 
 }

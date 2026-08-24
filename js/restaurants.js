@@ -3,6 +3,10 @@
 ===================================================== */
 
 
+/* =====================================================
+   RESTAURANTLIJST TONEN
+===================================================== */
+
 function toonRestaurants(){
 
     let verborgenKnop =
@@ -12,9 +16,9 @@ function toonRestaurants(){
 
     if(verborgenKnop){
         verborgenKnop.style.display = "";
-
     }
-    
+
+
     let lijst =
         document.getElementById("lijst");
 
@@ -23,6 +27,7 @@ function toonRestaurants(){
 
 
     // Zoekterm ophalen
+
     let zoekveld =
         document.getElementById("zoekRestaurant");
 
@@ -37,6 +42,7 @@ function toonRestaurants(){
 
     // Filteren op naam of gemeente
     // Verborgen horecazaken worden niet getoond
+
     let gefilterdeRestaurants =
         restaurants.filter(
             function(r){
@@ -66,6 +72,7 @@ function toonRestaurants(){
 
 
     // Alfabetisch sorteren
+
     let gesorteerdeRestaurants =
         [...gefilterdeRestaurants].sort(
             (a, b) =>
@@ -76,13 +83,14 @@ function toonRestaurants(){
 
 
     // Geen resultaten
+
     if(
         gesorteerdeRestaurants.length === 0
     ){
 
         lijst.innerHTML =
             "<p class='geen-resultaten'>" +
-            "Geen horecazaken gevonden." +
+            t("geenResultaten") +
             "</p>";
 
         return;
@@ -90,37 +98,190 @@ function toonRestaurants(){
     }
 
 
-    // Restaurants tonen
-    gesorteerdeRestaurants.forEach(
-        function(r){
+    /*
+     * Bezoeken ophalen.
+     *
+     * We hebben deze nodig om op het kaartje
+     * de gemiddelde score en het aantal
+     * bezoeken te kunnen tonen.
+     */
 
-            lijst.innerHTML += `
+    alleBezoekenOphalen(
+        function(bezoeken){
 
-                <div
-                    class="restaurant-card"
-                    onclick="openRestaurant(${r.id})"
-                >
+            gesorteerdeRestaurants.forEach(
+                function(r){
 
-                <h3 class="restaurant-titel">
+let restaurantBezoeken =
+    bezoeken.filter(
+        function(b){
 
-                    <span class="restaurant-naam">
-                     ${r.naam}
+            return Number(
+                b.restaurantId
+            ) === Number(
+                r.id
+            );
 
-                     <span class="gemeente">
-                     ${r.gemeente}
-                    </span>
-                    </span>
+        }
+    );
 
-                    ${r.favoriet
-                        ? '<span class="favoriet-icoon">❤️</span>'
-                     : ''
-                     }
 
-                </h3>
+/*
+ * Alle bezoeken tellen mee voor het aantal bezoeken.
+ */
 
-                </div>
+let aantalBezoeken =
+    restaurantBezoeken.length;
 
-            `;
+
+/*
+ * Voor de gemiddelde score tellen alleen
+ * bezoeken met een echte score mee.
+ *
+ * Score 0 = geen score / lege sterren.
+ */
+
+let bezoekenMetScore =
+    restaurantBezoeken.filter(
+        function(b){
+
+            return Number(b.score) > 0;
+
+        }
+    );
+
+
+let gemiddeldeScore = 0;
+
+
+if(bezoekenMetScore.length > 0){
+
+    let totaal =
+        bezoekenMetScore.reduce(
+            function(som, b){
+
+                return som +
+                    Number(b.score);
+
+            },
+            0
+        );
+
+
+    gemiddeldeScore =
+        totaal /
+        bezoekenMetScore.length;
+
+}
+
+                    /*
+                     * Score tonen als halve/volle
+                     * sterren.
+                     *
+                     * We ronden af naar het
+                     * dichtstbijzijnde geheel.
+                     */
+
+                    let scoreTekst = "";
+
+
+                    if(aantalBezoeken > 0){
+
+                        let afgerondeScore =
+                            Math.round(
+                                gemiddeldeScore
+                            );
+
+
+                        scoreTekst =
+                            "⭐".repeat(
+                                afgerondeScore
+                            ) +
+                            "☆".repeat(
+                                5 - afgerondeScore
+                            );
+
+                    }
+
+
+/* =================================================
+   AANTAL BEZOEKEN VERTALEN
+================================================= */
+
+let bezoekTekst = "";
+
+if(aantalBezoeken === 1){
+
+    bezoekTekst =
+        "1 " +
+        t("bezoekEnkelvoud");
+
+}
+else if(aantalBezoeken > 1){
+
+    bezoekTekst =
+        aantalBezoeken +
+        " " +
+        t("bezoekMeervoud");
+
+}
+
+
+                    /*
+                     * Restaurantkaartje
+                     */
+
+                    lijst.innerHTML += `
+
+                        <div
+                            class="restaurant-card"
+                            onclick="openRestaurant(${r.id})"
+                        >
+
+                            <div class="restaurant-naam">
+
+                                <span>
+                                    ${r.naam}
+
+                                    <span class="gemeente">
+                                        ${r.gemeente}
+                                    </span>
+                                </span>
+
+
+                                ${
+                                    r.favoriet
+                                    ? '<span class="restaurant-favoriet">❤️</span>'
+                                    : ""
+                                }
+
+                            </div>
+
+
+                            ${
+                                aantalBezoeken > 0
+                                ? `
+                                    <div class="restaurant-info">
+
+                                        <span class="restaurant-score">
+                                            ${scoreTekst}
+                                        </span>
+
+                                        <span class="restaurant-bezoeken">
+                                            ${bezoekTekst}
+                                        </span>
+
+                                    </div>
+                                `
+                                : ""
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+            );
 
         }
     );
@@ -271,13 +432,6 @@ function openRestaurant(id){
     huidigRestaurant =
         restaurant;
 
-            // Meer opties altijd standaard dicht
-    let meerOpties =
-        document.querySelector(".meer-opties");
-
-    if(meerOpties){
-        meerOpties.removeAttribute("open");
-    }
 
     huidigBezoek =
         null;
@@ -348,11 +502,17 @@ function openRestaurant(id){
 
     updateVerbergenKnop();
 
-
     toonBezoeken();
 
     toonRestaurantFotos();
 
+    // Meer opties altijd standaard dicht
+    let meerOpties =
+        document.querySelector(".meer-opties");
+
+    if( meerOpties ){
+        meerOpties.removeAttribute("open");
+    }    
 
     toonPagina(
         "detailPage"
@@ -374,9 +534,9 @@ function verwijderen(){
 
     let bevestiging =
         confirm(
-            "Horecazaak verwijderen?\n\n" +
-            "De horecazaak én alle bijhorende bezoeken " +
-            "worden verwijderd."
+            t(
+                "verwijderenBevestiging"
+            )
         );
 
 
@@ -443,9 +603,15 @@ function bewerken(){
         huidigRestaurant.gemeente;
 
 
+    /*
+       LET OP:
+       In index.html heet de keuken-select
+       "keukenSelect".
+    */
+
     document
         .getElementById(
-            "keuken"
+            "keukenSelect"
         )
         .value =
         huidigRestaurant.keuken;
@@ -481,13 +647,13 @@ function updateFavorietKnop(){
     ){
 
         knop.innerHTML =
-            "❤️ Favoriet geselecteerd";
+            t("favoriet");
 
     }
     else{
 
         knop.innerHTML =
-            "♡ Geen favoriet";
+            t("geenFavoriet");
 
     }
 
@@ -532,6 +698,14 @@ function favorietWisselen(){
 
     updateFavorietKnop();
 
+
+    /*
+       Ook de restaurantlijst onmiddellijk
+       bijwerken.
+    */
+
+    toonRestaurants();
+
 }
 
 
@@ -562,17 +736,18 @@ function updateVerbergenKnop(){
     ){
 
         knop.innerHTML =
-            "👁️ Opnieuw tonen in lijst";
+            t("opnieuwTonen");
 
     }
     else{
 
         knop.innerHTML =
-            "👁️ Verbergen uit lijst";
+            t("verbergenUitLijst");
 
     }
 
 }
+
 
 /* =====================================================
    HORECAZAAK VERBERGEN / OPNIEUW TONEN
@@ -618,6 +793,7 @@ function verborgenWisselen(){
 
 }
 
+
 /* =====================================================
    VERBORGEN HORECAZAKEN TONEN
 ===================================================== */
@@ -632,6 +808,7 @@ function toonVerborgenRestaurants(){
     if(verborgenKnop){
         verborgenKnop.style.display = "none";
     }
+
 
     let lijst =
         document.getElementById("lijst");
@@ -658,13 +835,13 @@ function toonVerborgenRestaurants(){
         lijst.innerHTML = `
 
             <p class="geen-resultaten">
-                Geen verborgen horecazaken.
+                ${t("geenVerborgen")}
             </p>
 
             <button
                 onclick="toonRestaurants()"
             >
-                ← Terug naar alle horecazaken
+                ${t("terugNaarAlle")}
             </button>
 
         `;
@@ -680,12 +857,11 @@ function toonVerborgenRestaurants(){
         <div class="verborgen-header">
 
             <h2>
-                👁️ Verborgen horecazaken
+                ${t("verborgenHorecazaken")}
             </h2>
 
             <p>
-                Deze zaken staan niet in je gewone lijst,
-                maar blijven wel beschikbaar op de kaart.
+                ${t("verborgenUitleg")}
             </p>
 
         </div>
@@ -738,12 +914,13 @@ function toonVerborgenRestaurants(){
         <button
             onclick="toonRestaurants()"
         >
-            ← Terug naar alle horecazaken
+            ${t("terugNaarAlle")}
         </button>
 
     `;
 
 }
+
 
 /* =====================================================
    FAVORIETEN TONEN
@@ -771,7 +948,9 @@ function toonFavorieten(){
     if(favorieten.length === 0){
 
         lijst.innerHTML =
-            "<p>Nog geen favoriete horecazaken.</p>";
+            "<p>" +
+            t("geenFavorieten") +
+            "</p>";
 
         return;
 
@@ -1082,7 +1261,9 @@ function restaurantFotoVerwijderen(
 
     let bevestiging =
         confirm(
-            "Deze foto verwijderen?"
+            t(
+                "fotoVerwijderenBevestiging"
+            )
         );
 
 

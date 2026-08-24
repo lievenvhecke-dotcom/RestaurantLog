@@ -4,7 +4,16 @@
 
 
 function toonRestaurants(){
+   
+   let verborgenKnop =
+        document.getElementById(
+            "verborgenRestaurantsKnop"
+        );
 
+    if(verborgenKnop){
+        verborgenKnop.style.display = "";
+    }
+   
     let lijst =
         document.getElementById("lijst");
 

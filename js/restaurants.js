@@ -101,17 +101,22 @@ function toonRestaurants(){
                     onclick="openRestaurant(${r.id})"
                 >
 
-                    <h3>
+                <h3 class="restaurant-titel">
 
-                        ${r.favoriet ? "❤️ " : ""}
+                    <span class="restaurant-naam">
+                     ${r.naam}
 
-                        ${r.naam}
+                     <span class="gemeente">
+                     ${r.gemeente}
+                    </span>
+                    </span>
 
-                        <span class="gemeente">
-                            ${r.gemeente}
-                        </span>
+                    ${r.favoriet
+                        ? '<span class="favoriet-icoon">❤️</span>'
+                     : ''
+                     }
 
-                    </h3>
+                </h3>
 
                 </div>
 

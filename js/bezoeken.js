@@ -1038,11 +1038,19 @@ function bezoekFotoVerwijderen(
    TIJDELIJKE FOTO-DIAGNOSE
    ===================================================== */
 
+/* =====================================================
+   TIJDELIJKE FOTO-DIAGNOSE
+   Dubbele foto's opsporen
+   LET OP: deze functie verwijdert niets
+   ===================================================== */
+
 function diagnoseBezoekFotos(){
 
     if(!huidigRestaurant){
 
-        alert("Geen restaurant geopend.");
+        alert(
+            "Geen restaurant geopend."
+        );
 
         return;
 
@@ -1075,7 +1083,7 @@ function diagnoseBezoekFotos(){
                 huidigBezoek.id +
                 "\n\n" +
 
-                "Aantal foto's gevonden: " +
+                "Aantal foto's: " +
                 fotos.length +
                 "\n\n";
 
@@ -1083,40 +1091,145 @@ function diagnoseBezoekFotos(){
             if(fotos.length === 0){
 
                 tekst +=
-                    "Geen foto's gevonden voor dit bezoek.\n\n";
+                    "Geen foto's gevonden.";
+
+                alert(tekst);
+
+                return;
 
             }
-            else{
 
-                fotos.forEach(
+
+            /*
+               Foto's vergelijken op basis van
+               de daadwerkelijke afbeeldingsdata.
+            */
+
+            let uniekeFotos = [];
+
+            let dubbeleFotos = [];
+
+
+            fotos.forEach(
+                function(foto){
+
+                    let bestaatAl =
+                        uniekeFotos.find(
+                            function(uniekeFoto){
+
+                                return (
+                                    uniekeFoto.data ===
+                                    foto.data
+                                );
+
+                            }
+                        );
+
+
+                    if(bestaatAl){
+
+                        dubbeleFotos.push(
+                            foto
+                        );
+
+                    }
+                    else{
+
+                        uniekeFotos.push(
+                            foto
+                        );
+
+                    }
+
+                }
+            );
+
+
+            tekst +=
+                "Unieke foto's: " +
+                uniekeFotos.length +
+                "\n" +
+
+                "Dubbele foto's: " +
+                dubbeleFotos.length +
+                "\n\n";
+
+
+            tekst +=
+                "--------------------------------\n\n";
+
+
+            tekst +=
+                "UNIEKE FOTO'S\n\n";
+
+
+            uniekeFotos.forEach(
+                function(foto, index){
+
+                    tekst +=
+                        "Foto " +
+                        (index + 1) +
+                        "\n" +
+
+                        "ID: " +
+                        foto.id +
+                        "\n" +
+
+                        "bezoekId: " +
+                        foto.bezoekId +
+                        "\n\n";
+
+                }
+            );
+
+
+            if(dubbeleFotos.length > 0){
+
+                tekst +=
+                    "--------------------------------\n\n" +
+
+                    "DUBBELE FOTO'S\n\n";
+
+
+                dubbeleFotos.forEach(
                     function(foto, index){
 
                         tekst +=
-                            "Foto " +
+                            "Dubbele foto " +
                             (index + 1) +
                             "\n" +
 
-                            "Foto ID: " +
+                            "ID: " +
                             foto.id +
                             "\n" +
 
                             "bezoekId: " +
                             foto.bezoekId +
-                            "\n" +
-
-                            "Datum: " +
-                            foto.datum +
                             "\n\n";
 
                     }
                 );
 
             }
+            else{
+
+                tekst +=
+                    "--------------------------------\n\n" +
+
+                    "Geen dubbele foto's gevonden.";
+
+            }
 
 
             console.log(
-                "FOTO-DIAGNOSE:",
-                fotos
+                "UNIEKE FOTO'S:",
+                uniekeFotos
+            );
+
+
+            console.log(
+                "DUBBELE FOTO'S:",
+                dubbeleFotos
             );
 
 

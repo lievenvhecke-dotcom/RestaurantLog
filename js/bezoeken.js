@@ -239,27 +239,21 @@ if(bezoekBewerkModus){
         return;
     }
 
-
     huidigBezoek.datum =
         datum;
-
 
     huidigBezoek.score =
         score;
 
-
     huidigBezoek.opmerking =
         opmerking;
-
 
     bezoekAanpassen(
         huidigBezoek
     );
 
-
     bezoekBewerkModus =
         false;
-
 
     document
         .getElementById(
@@ -270,14 +264,17 @@ if(bezoekBewerkModus){
             "hidden"
         );
 
-
-    /*
-     * Na opslaan terug naar het
-     * normale overzicht.
-     */
+    /* Andere bezoeken opnieuw tonen */
+    document
+        .getElementById(
+            "bezoekenLijst"
+        )
+        .classList
+        .remove(
+            "hidden"
+        );
 
     toonBezoeken();
-
 
     return;
 
@@ -350,129 +347,71 @@ BEZOEK OPENEN / BEWERKEN
 
 function openBezoek(id){
 
-if(!huidigRestaurant){
-    return;
-}
-
-
-bezoekenOphalen(
-    huidigRestaurant.id,
-    function(bezoeken){
-
-        let bezoek =
-            bezoeken.find(
-                function(b){
-
-                    return Number(b.id) ===
-                           Number(id);
-
-                }
-            );
-
-
-        if(!bezoek){
-
-            console.error(
-                "Bezoek niet gevonden:",
-                id
-            );
-
-            return;
-
-        }
-
-
-        huidigBezoek =
-            bezoek;
-
-
-        console.log(
-            "Bezoek geopend:",
-            huidigBezoek
-        );
-
-
-        document
-            .getElementById(
-                "bezoekDatum"
-            )
-            .value =
-            huidigBezoek.datum || "";
-
-
-        document
-            .getElementById(
-                "bezoekScore"
-            )
-            .value =
-            huidigBezoek.score || "0";
-
-
-        document
-            .getElementById(
-                "bezoekOpmerking"
-            )
-            .value =
-            huidigBezoek.opmerking || "";
-
-
-        bezoekBewerkModus =
-            true;
-
-
-        /*
-         * Eerst de lijst met alle bezoeken
-         * verbergen.
-         */
-
-        let bezoekenLijst =
-            document.getElementById(
-                "bezoekenLijst"
-            );
-
-
-        if(bezoekenLijst){
-
-            bezoekenLijst.classList.add(
-                "hidden"
-            );
-
-        }
-
-
-        /*
-         * Wijzigformulier tonen.
-         */
-
-        document
-            .getElementById(
-                "nieuwBezoekForm"
-            )
-            .classList
-            .remove(
-                "hidden"
-            );
-
-
-        /*
-         * Fotoknop tonen.
-         */
-
-        toonFotoToevoegenKnop(
-            huidigBezoek.id
-        );
-
-
-        /*
-         * Foto's van dit bezoek laden.
-         */
-
-        toonBezoekFotos(
-            huidigBezoek.id
-        );
-
+    if(!huidigRestaurant){
+        return;
     }
-);
+
+    bezoekenOphalen(
+        huidigRestaurant.id,
+        function(bezoeken){
+
+            let bezoek =
+                bezoeken.find(
+                    function(b){
+                        return Number(b.id) === Number(id);
+                    }
+                );
+
+            if(!bezoek){
+                console.error(
+                    "Bezoek niet gevonden:",
+                    id
+                );
+                return;
+            }
+
+            huidigBezoek = bezoek;
+
+            console.log(
+                "Bezoek geopend:",
+                huidigBezoek
+            );
+
+            document.getElementById("bezoekDatum").value =
+                huidigBezoek.datum || "";
+
+            document.getElementById("bezoekScore").value =
+                huidigBezoek.score || "0";
+
+            document.getElementById("bezoekOpmerking").value =
+                huidigBezoek.opmerking || "";
+
+            bezoekBewerkModus = true;
+
+            /* Formulier tonen */
+            document
+                .getElementById("nieuwBezoekForm")
+                .classList
+                .remove("hidden");
+
+            /* Andere bezoeken verbergen */
+            document
+                .getElementById("bezoekenLijst")
+                .classList
+                .add("hidden");
+
+            /* Fotoknop tonen */
+            toonFotoToevoegenKnop(
+                huidigBezoek.id
+            );
+
+            /* Foto's van dit bezoek laden */
+            toonBezoekFotos(
+                huidigBezoek.id
+            );
+
+        }
+    );
 
 }
 

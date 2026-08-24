@@ -52,6 +52,7 @@ function toonBezoeken(){
         function(bezoeken){
 
             // Nieuwste bezoek eerst
+
             bezoeken.sort(
                 function(a, b){
 
@@ -61,7 +62,6 @@ function toonBezoeken(){
 
                 }
             );
-
 
             if(bezoeken.length === 0){
 
@@ -73,7 +73,6 @@ function toonBezoeken(){
                 return;
 
             }
-
 
             bezoeken.forEach(
                 function(b){
@@ -140,8 +139,8 @@ function toonBezoeken(){
 
 `;
 
+                    // Foto's laden
 
-                    // Foto's van dit bezoek laden
                     toonBezoekFotos(
                         b.id
                     );
@@ -167,7 +166,6 @@ function nieuwBezoek(){
     huidigBezoek =
         null;
 
-
     document
         .getElementById(
             "nieuwBezoekForm"
@@ -176,7 +174,6 @@ function nieuwBezoek(){
         .remove(
             "hidden"
         );
-
 
     document
         .getElementById(
@@ -187,14 +184,12 @@ function nieuwBezoek(){
             .toISOString()
             .split("T")[0];
 
-
     document
         .getElementById(
             "bezoekScore"
         )
         .value =
         "0";
-
 
     document
         .getElementById(
@@ -217,12 +212,10 @@ function bezoekOpslaanNieuw(){
             "bezoekDatum"
         ).value;
 
-
     let score =
         document.getElementById(
             "bezoekScore"
         ).value;
-
 
     let opmerking =
         document.getElementById(
@@ -240,27 +233,21 @@ function bezoekOpslaanNieuw(){
             return;
         }
 
-
         huidigBezoek.datum =
             datum;
-
 
         huidigBezoek.score =
             score;
 
-
         huidigBezoek.opmerking =
             opmerking;
-
 
         bezoekAanpassen(
             huidigBezoek
         );
 
-
         bezoekBewerkModus =
             false;
-
 
         document
             .getElementById(
@@ -271,9 +258,7 @@ function bezoekOpslaanNieuw(){
                 "hidden"
             );
 
-
         toonBezoeken();
-
 
         return;
 
@@ -287,7 +272,6 @@ function bezoekOpslaanNieuw(){
     if(!huidigRestaurant){
         return;
     }
-
 
     let bezoek = {
 
@@ -305,7 +289,6 @@ function bezoekOpslaanNieuw(){
 
     };
 
-
     bezoekOpslaan(
         bezoek,
         function(opgeslagenBezoek){
@@ -313,10 +296,8 @@ function bezoekOpslaanNieuw(){
             huidigBezoek =
                 opgeslagenBezoek;
 
-
             bezoekBewerkModus =
                 false;
-
 
             document
                 .getElementById(
@@ -327,9 +308,7 @@ function bezoekOpslaanNieuw(){
                     "hidden"
                 );
 
-
             toonBezoeken();
-
 
             alert(
                 "Bezoek toegevoegd ✅"
@@ -351,7 +330,6 @@ function openBezoek(id){
         return;
     }
 
-
     bezoekenOphalen(
         huidigRestaurant.id,
         function(bezoeken){
@@ -360,27 +338,28 @@ function openBezoek(id){
                 bezoeken.find(
                     function(b){
 
-                        return Number(b.id) === Number(id);
+                        return Number(b.id) ===
+                               Number(id);
 
                     }
                 );
 
-
             if(!bezoek){
-
                 console.error(
                     "Bezoek niet gevonden:",
                     id
                 );
 
                 return;
-
             }
-
 
             huidigBezoek =
                 bezoek;
 
+            console.log(
+                "Bezoek geopend:",
+                huidigBezoek
+            );
 
             document
                 .getElementById(
@@ -389,14 +368,12 @@ function openBezoek(id){
                 .value =
                 huidigBezoek.datum || "";
 
-
             document
                 .getElementById(
                     "bezoekScore"
                 )
                 .value =
                 huidigBezoek.score || "0";
-
 
             document
                 .getElementById(
@@ -405,10 +382,8 @@ function openBezoek(id){
                 .value =
                 huidigBezoek.opmerking || "";
 
-
             bezoekBewerkModus =
                 true;
-
 
             document
                 .getElementById(
@@ -419,14 +394,14 @@ function openBezoek(id){
                     "hidden"
                 );
 
-
             // Fotoknop tonen
+
             toonFotoToevoegenKnop(
                 huidigBezoek.id
             );
 
+            // Foto's van dit bezoek laden
 
-            // Foto's van dit specifieke bezoek laden
             toonBezoekFotos(
                 huidigBezoek.id
             );
@@ -437,20 +412,14 @@ function openBezoek(id){
 }
 
 
-/* =====================================================
-   BEZOEK BEWERKEN
-   ===================================================== */
-
 function bezoekBewerken(){
 
     if(!huidigBezoek){
         return;
     }
 
-
     bezoekBewerkModus =
         true;
-
 
     document
         .getElementById(
@@ -459,7 +428,6 @@ function bezoekBewerken(){
         .value =
         huidigBezoek.datum;
 
-
     document
         .getElementById(
             "bezoekScore"
@@ -467,14 +435,12 @@ function bezoekBewerken(){
         .value =
         huidigBezoek.score;
 
-
     document
         .getElementById(
             "bezoekOpmerking"
         )
         .value =
         huidigBezoek.opmerking || "";
-
 
     document
         .getElementById(
@@ -484,7 +450,6 @@ function bezoekBewerken(){
         .remove(
             "hidden"
         );
-
 
     toonFotoToevoegenKnop(
         huidigBezoek.id
@@ -513,17 +478,14 @@ function toonFotoToevoegenKnop(bezoekId){
             }
         );
 
-
     let container =
         document.getElementById(
             "fotoActie_" + bezoekId
         );
 
-
     if(!container){
         return;
     }
-
 
     container.innerHTML = `
 
@@ -559,11 +521,9 @@ function bezoekVerwijderen(id){
             "Dit bezoek en alle bijhorende foto's verwijderen?"
         );
 
-
     if(!bevestiging){
         return;
     }
-
 
     let transaction =
         db.transaction(
@@ -574,39 +534,33 @@ function bezoekVerwijderen(id){
             "readwrite"
         );
 
-
     let bezoekenStore =
         transaction.objectStore(
             "bezoeken"
         );
-
 
     let fotosStore =
         transaction.objectStore(
             "fotosBezoek"
         );
 
-
-    // Alle foto's van dit bezoek zoeken
+    // Eerst alle foto's van dit bezoek zoeken
 
     let index =
         fotosStore.index(
             "bezoekId"
         );
 
-
     let request =
         index.openCursor(
             IDBKeyRange.only(id)
         );
-
 
     request.onsuccess =
         function(event){
 
             let cursor =
                 event.target.result;
-
 
             if(cursor){
 
@@ -618,36 +572,32 @@ function bezoekVerwijderen(id){
 
         };
 
-
     // Bezoek verwijderen
 
     bezoekenStore.delete(
         id
     );
 
-
     transaction.oncomplete =
         function(){
 
             if(
                 huidigBezoek &&
-                Number(huidigBezoek.id) === Number(id)
+                Number(huidigBezoek.id) ===
+                Number(id)
             ){
 
                 huidigBezoek =
                     null;
-
 
                 bezoekBewerkModus =
                     false;
 
             }
 
-
             toonBezoeken();
 
         };
-
 
     transaction.onerror =
         function(event){
@@ -656,7 +606,6 @@ function bezoekVerwijderen(id){
                 "Fout bij verwijderen bezoek:",
                 event.target.error
             );
-
 
             alert(
                 "Het bezoek kon niet worden verwijderd."
@@ -679,7 +628,6 @@ function bezoekFotoInput(
     let bestanden =
         event.target.files;
 
-
     if(
         !bestanden ||
         bestanden.length === 0
@@ -688,7 +636,6 @@ function bezoekFotoInput(
         return;
 
     }
-
 
     // Voorkomt dubbel starten
     // van dezelfde upload
@@ -701,16 +648,13 @@ function bezoekFotoInput(
 
     }
 
-
     uploadBezig[bezoekId] =
         true;
-
 
     let container =
         document.getElementById(
             "fotoActie_" + bezoekId
         );
-
 
     if(container){
 
@@ -726,17 +670,14 @@ function bezoekFotoInput(
 
     }
 
-
     let bestandenArray =
         Array.from(
             bestanden
         );
 
-
     // Input onmiddellijk leegmaken
 
     event.target.value = "";
-
 
     bezoekFotosOpslaan(
         bezoekId,
@@ -766,13 +707,12 @@ function bezoekFotosOpslaan(
         uploadBezig[bezoekId] =
             false;
 
-
         // Foto's opnieuw laden
+        // nadat alles opgeslagen is
 
         toonBezoekFotos(
             bezoekId
         );
-
 
         // Knop opnieuw tonen
 
@@ -780,19 +720,15 @@ function bezoekFotosOpslaan(
             bezoekId
         );
 
-
         return;
 
     }
 
-
     let bestand =
         bestanden[positie];
 
-
     let reader =
         new FileReader();
-
 
     reader.onload =
         function(e){
@@ -811,13 +747,12 @@ function bezoekFotosOpslaan(
 
             };
 
-
             fotoBezoekOpslaan(
                 foto,
                 function(){
 
                     // Pas na succesvolle opslag
-                    // volgende foto verwerken
+                    // de volgende foto verwerken
 
                     bezoekFotosOpslaan(
                         bezoekId,
@@ -830,7 +765,6 @@ function bezoekFotosOpslaan(
 
         };
 
-
     reader.onerror =
         function(){
 
@@ -838,9 +772,8 @@ function bezoekFotosOpslaan(
                 "Foto kon niet worden gelezen."
             );
 
-
             // Toch verdergaan
-            // met volgende foto
+            // met de volgende foto
 
             bezoekFotosOpslaan(
                 bezoekId,
@@ -849,7 +782,6 @@ function bezoekFotosOpslaan(
             );
 
         };
-
 
     reader.readAsDataURL(
         bestand
@@ -869,14 +801,11 @@ function toonBezoekFotos(bezoekId){
             "fotoBezoek_" + bezoekId
         );
 
-
     if(!container){
         return;
     }
 
-
     container.innerHTML = "";
-
 
     fotosBezoekOphalen(
         bezoekId,
@@ -890,24 +819,19 @@ function toonBezoekFotos(bezoekId){
                             "div"
                         );
 
-
                     fotoItem.className =
                         "foto-item";
-
 
                     let afbeelding =
                         document.createElement(
                             "img"
                         );
 
-
                     afbeelding.src =
                         foto.data;
 
-
                     afbeelding.alt =
                         "Foto van bezoek";
-
 
                     afbeelding.onclick =
                         function(){
@@ -918,30 +842,24 @@ function toonBezoekFotos(bezoekId){
 
                         };
 
-
                     let verwijderKnop =
                         document.createElement(
                             "button"
                         );
 
-
                     verwijderKnop.className =
                         "foto-verwijder";
-
 
                     verwijderKnop.innerHTML =
                         "🗑";
 
-
                     verwijderKnop.title =
                         "Foto verwijderen";
-
 
                     verwijderKnop.onclick =
                         function(event){
 
                             event.stopPropagation();
-
 
                             bezoekFotoVerwijderen(
                                 foto.id,
@@ -950,16 +868,13 @@ function toonBezoekFotos(bezoekId){
 
                         };
 
-
                     fotoItem.appendChild(
                         afbeelding
                     );
 
-
                     fotoItem.appendChild(
                         verwijderKnop
                     );
-
 
                     container.appendChild(
                         fotoItem
@@ -988,11 +903,9 @@ function bezoekFotoVerwijderen(
             "Deze foto verwijderen?"
         );
 
-
     if(!bevestiging){
         return;
     }
-
 
     let transaction =
         db.transaction(
@@ -1000,17 +913,14 @@ function bezoekFotoVerwijderen(
             "readwrite"
         );
 
-
     let store =
         transaction.objectStore(
             "fotosBezoek"
         );
 
-
     store.delete(
         fotoId
     );
-
 
     transaction.oncomplete =
         function(){
@@ -1020,7 +930,6 @@ function bezoekFotoVerwijderen(
             );
 
         };
-
 
     transaction.onerror =
         function(){

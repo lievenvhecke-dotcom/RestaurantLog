@@ -1,3 +1,9 @@
+const APP_VERSIE = "v10";
+
+document.title = "HorecaLog " + APP_VERSIE;
+
+console.log("HorecaLog geladen:", APP_VERSIE);
+
 openDatabase();
 
 let restaurants = [];
@@ -22,11 +28,3 @@ wanneerDatabaseKlaar(function(){
     toonIdeeen();
 
 });
-
-setTimeout(function(){
-
-    alert(
-        "HorecaLog " + APP_VERSIE
-    );
-
-}, 1000);

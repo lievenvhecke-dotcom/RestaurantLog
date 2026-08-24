@@ -15,12 +15,148 @@ function datumFormaat(datum){
     let d =
         new Date(datum);
 
+    let taalCode =
+        huidigeTaal === "fr"
+            ? "fr-BE"
+            : huidigeTaal === "en"
+                ? "en-GB"
+                : "nl-BE";
+
     return d.toLocaleDateString(
-        "nl-BE",
+        taalCode,
         {
             day: "2-digit",
             month: "short",
             year: "numeric"
+        }
+    );
+
+}
+
+/* =====================================================
+   SCORE STERREN
+   ===================================================== */
+
+function scoreKiezen(score){
+
+    let veld =
+        document.getElementById(
+            "bezoekScore"
+        );
+
+    if(!veld){
+        return;
+    }
+
+
+    veld.value =
+        score;
+
+
+    scoreSterrenTonen(
+        score
+    );
+
+}
+
+function scoreSterKiezen(event, sterNummer){
+
+    let rect =
+        event.currentTarget.getBoundingClientRect();
+
+
+    let klikX =
+        event.clientX -
+        rect.left;
+
+
+    let helft =
+        rect.width / 2;
+
+
+    let score;
+
+
+    if(klikX < helft){
+
+        score =
+            sterNummer - 0.5;
+
+    }
+    else{
+
+        score =
+            sterNummer;
+
+    }
+
+
+    scoreKiezen(
+        score
+    );
+
+}
+
+
+/* =====================================================
+   SCORE STERREN TONEN
+   ===================================================== */
+
+function scoreSterrenTonen(score){
+
+    let sterren =
+        document.querySelectorAll(
+            ".score-ster"
+        );
+
+
+    sterren.forEach(
+        function(ster){
+
+            let sterScore =
+                Number(
+                    ster.dataset.score
+                );
+
+
+            /*
+             * Volledige ster
+             */
+
+            if(score >= sterScore){
+
+                ster.innerHTML =
+                    "⭐";
+
+            }
+
+
+            /*
+             * Halve ster
+             */
+
+            else if(
+                score >=
+                sterScore - 0.5
+            ){
+
+                ster.innerHTML =
+                    "⭐";
+
+            }
+
+
+            /*
+             * Lege ster
+             */
+
+            else{
+
+                ster.innerHTML =
+                    "☆";
+
+            }
+
         }
     );
 
@@ -71,7 +207,7 @@ function toonBezoeken(){
 
                 lijst.innerHTML =
                     "<p class='geen-resultaten'>" +
-                    "Nog geen bezoeken geregistreerd." +
+                    t("geenBezoeken") +
                     "</p>";
 
                 return;
@@ -112,7 +248,7 @@ function toonBezoeken(){
         <button
             class="verwijder-bezoek"
             onclick="event.stopPropagation(); bezoekVerwijderen(${b.id})"
-            title="Bezoek verwijderen"
+            title="${t("bezoekVerwijderen")}"
         >
             🗑
         </button>
@@ -191,6 +327,8 @@ function nieuwBezoek(){
         )
         .value =
         "0";
+
+        scoreSterrenTonen(0);
 
 
     document
@@ -389,6 +527,7 @@ function bezoekOpslaanNieuw(){
                  */
 
                 toonBezoeken();
+                toonRestaurants();
 
             };
 
@@ -402,9 +541,9 @@ function bezoekOpslaanNieuw(){
                 );
 
 
-                alert(
-                    "Het bezoek kon niet worden aangepast."
-                );
+alert(
+    t("bezoekAanpassenFout")
+);
 
             };
 
@@ -464,10 +603,12 @@ function bezoekOpslaanNieuw(){
 
             toonBezoeken();
 
+            toonRestaurants();
 
-            alert(
-                "Bezoek toegevoegd ✅"
-            );
+
+alert(
+    t("bezoekToegevoegd")
+);
 
         }
     );
@@ -531,13 +672,16 @@ function openBezoek(id){
                 huidigBezoek.datum || "";
 
 
-            document
-                .getElementById(
-                    "bezoekScore"
-                )
-                .value =
-                huidigBezoek.score || "0";
+document
+    .getElementById(
+        "bezoekScore"
+    )
+    .value =
+    huidigBezoek.score || "0";
 
+scoreSterrenTonen(
+    Number(huidigBezoek.score) || 0
+);
 
             document
                 .getElementById(
@@ -629,12 +773,16 @@ function bezoekBewerken(){
         huidigBezoek.datum || "";
 
 
-    document
-        .getElementById(
-            "bezoekScore"
-        )
-        .value =
-        huidigBezoek.score || "0";
+document
+    .getElementById(
+        "bezoekScore"
+    )
+    .value =
+    huidigBezoek.score || "0";
+
+scoreSterrenTonen(
+    Number(huidigBezoek.score) || 0
+);
 
 
     document
@@ -736,12 +884,13 @@ function toonFotoToevoegenKnop(bezoekId){
             class="foto-formulier-actie"
         >
 
-            <label
-                for="fotoBezoekInput_${bezoekId}"
-                class="foto-toevoegen"
-            >
-                📷 Foto toevoegen
-            </label>
+           <label
+    for="fotoBezoekInput_${bezoekId}"
+    class="foto-toevoegen"
+>
+    ${t("fotoToevoegen")}
+</label>
+
 
             <input
                 type="file"
@@ -812,8 +961,8 @@ function toonFotoFormulier(bezoekId){
                         foto.data;
 
 
-                    afbeelding.alt =
-                        "Foto van bezoek";
+afbeelding.alt =
+    t("fotoVanBezoek");
 
 
                     afbeelding.onclick =
@@ -840,8 +989,8 @@ function toonFotoFormulier(bezoekId){
                         "🗑";
 
 
-                    verwijderKnop.title =
-                        "Foto verwijderen";
+verwijderKnop.title =
+    t("fotoVerwijderen");
 
 
                     verwijderKnop.onclick =
@@ -887,10 +1036,10 @@ function toonFotoFormulier(bezoekId){
 
 function bezoekVerwijderen(id){
 
-    let bevestiging =
-        confirm(
-            "Dit bezoek en alle bijhorende foto's verwijderen?"
-        );
+let bevestiging =
+    confirm(
+        t("bezoekVerwijderenBevestiging")
+    );
 
 
     if(!bevestiging){
@@ -974,6 +1123,7 @@ function bezoekVerwijderen(id){
 
 
             toonBezoeken();
+            toonRestaurants();
 
         };
 
@@ -987,9 +1137,9 @@ function bezoekVerwijderen(id){
             );
 
 
-            alert(
-                "Het bezoek kon niet worden verwijderd."
-            );
+alert(
+    t("bezoekVerwijderenFout")
+);
 
         };
 
@@ -1041,9 +1191,9 @@ function bezoekFotoInput(
         container.insertAdjacentHTML(
             "afterbegin",
             `
-            <div class="foto-laden">
-                📷 Foto wordt toegevoegd...
-            </div>
+<div class="foto-laden">
+    ${t("fotoWordtToegevoegd")}
+</div>
             `
         );
 
@@ -1345,9 +1495,9 @@ function bezoekFotoVerwijderen(
     transaction.onerror =
         function(){
 
-            alert(
-                "De foto kon niet worden verwijderd."
-            );
+alert(
+    t("fotoVerwijderenFout")
+);
 
         };
 

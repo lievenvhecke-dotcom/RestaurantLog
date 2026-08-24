@@ -1,353 +1,604 @@
 <!DOCTYPE html>
 <html lang="nl">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>HoReCaLog v10</title>
-    <link rel="stylesheet" href="style.css?v=10">
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icons/icon-180.png">
+
+    <link
+        rel="stylesheet"
+        href="style.css?v=11"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+    <link
+        rel="manifest"
+        href="manifest.json"
+    >
+
+    <link
+        rel="apple-touch-icon"
+        href="icons/icon-180.png"
+    >
+
 </head>
+
 
 <body>
 
 <div class="app">
 
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
     <header>
+
         <h1>
-    <span class="app-logo">🍽</span>
-    HorecaLog
+
+            <span class="app-logo">
+                🍽
+            </span>
+
+            HorecaLog
+
         </h1>
+
     </header>
 
 
-    <!-- RESTAURANTS -->
+
+    <!-- =====================================================
+         RESTAURANTS
+         ===================================================== -->
+
     <section id="restaurantsPage">
 
+
         <button
-    class="primair"
-    onclick="nieuwRestaurant()"
->
-    ➕ Nieuwe horecazaak
-</button>
+            class="primair"
+            onclick="nieuwRestaurant()"
+        >
+            ➕ Nieuwe horecazaak
+        </button>
 
 
-<div id="nieuwRestaurantForm"
-     class="card hidden">
+        <div
+            id="nieuwRestaurantForm"
+            class="card hidden"
+        >
 
-    <h2>Nieuwe horecazaak</h2>
-
-    <input id="naam" placeholder="Naam horecazaak">
-
-    <input id="gemeente" placeholder="Gemeente">
-
-    <label>
-    Type keuken
-</label>
-
-<select id="keukenSelect"
-        onchange="keukenGewijzigd()">
-
-    <option value="">
-        Kies keuken...
-    </option>
-
-    <option value="Belgisch">
-        Belgisch
-    </option>
-
-    <option value="Café">
-        Café
-    </option>
-
-    <option value="Italiaans">
-        Italiaans
-    </option>
-
-    <option value="Grieks">
-        Grieks
-    </option>
-
-    <option value="Spaans">
-        Spaans
-    </option>
-
-    <option value="Aziatisch">
-        Aziatisch
-    </option>
-
-    <option value="Japans">
-        Japans
-    </option>
-
-    <option value="Chinees">
-        Chinees
-    </option>
-
-    <option value="Thais">
-        Thais
-    </option>
-
-    <option value="Andere">
-        Andere...
-    </option>
-
-</select>
+            <h2>
+                Nieuwe horecazaak
+            </h2>
 
 
-<input id="andereKeuken"
-       placeholder="Andere keuken"
-       class="hidden">
+            <input
+                id="naam"
+                placeholder="Naam horecazaak"
+            >
 
 
-<button
-    class="primair"
-    onclick="opslaan()"
->
-    💾 Opslaan
-</button>
-
-</div>
+            <input
+                id="gemeente"
+                placeholder="Gemeente"
+            >
 
 
-     <h2>Mijn horecazaken</h2>
+            <label>
+                Type keuken
+            </label>
 
-<input
-    type="search"
-    id="zoekRestaurant"
-    placeholder="🔍 Zoek horecazaak of gemeente..."
-    oninput="toonRestaurants()"
->
 
-<div id="lijst"></div>
+            <select
+                id="keukenSelect"
+                onchange="keukenGewijzigd()"
+            >
 
-<button
-    id="verborgenRestaurantsKnop"
-    onclick="toonVerborgenRestaurants()"
-    class="verborgen-knop" >
-        👁️ Verborgen horecazaken
-</button>
+                <option value="">
+                    Kies keuken...
+                </option>
+
+                <option value="Belgisch">
+                    Belgisch
+                </option>
+
+                <option value="Café">
+                    Café
+                </option>
+
+                <option value="Italiaans">
+                    Italiaans
+                </option>
+
+                <option value="Grieks">
+                    Grieks
+                </option>
+
+                <option value="Spaans">
+                    Spaans
+                </option>
+
+                <option value="Aziatisch">
+                    Aziatisch
+                </option>
+
+                <option value="Japans">
+                    Japans
+                </option>
+
+                <option value="Chinees">
+                    Chinees
+                </option>
+
+                <option value="Thais">
+                    Thais
+                </option>
+
+                <option value="Andere">
+                    Andere...
+                </option>
+
+            </select>
+
+
+            <input
+                id="andereKeuken"
+                placeholder="Andere keuken"
+                class="hidden"
+            >
+
+
+            <button
+                class="primair"
+                onclick="opslaan()"
+            >
+                💾 Opslaan
+            </button>
+
+        </div>
+
+
+
+        <h2>
+            Mijn horecazaken
+        </h2>
+
+
+        <input
+            type="search"
+            id="zoekRestaurant"
+            placeholder="🔍 Zoek horecazaak of gemeente..."
+            oninput="toonRestaurants()"
+        >
+
+
+        <div id="lijst"></div>
+
+
+        <!-- Verborgen horecazaken -->
+
+        <button
+            class="verborgen-lijst-knop"
+            onclick="toonVerborgenRestaurants()"
+        >
+            👁️ Verborgen horecazaken
+        </button>
+
 
     </section>
 
-<!-- DETAIL RESTAURANT -->
-
-<section id="detailPage" class="hidden">
-
-    <button onclick="terugNaarLijst()">
-        ← Terug
-    </button>
 
 
-    <div class="detail-card">
+    <!-- =====================================================
+         DETAIL RESTAURANT
+         ===================================================== -->
 
-
-        <h1 id="detailNaam"></h1>
-
-        <p id="detailGemeente"></p>
-
-        <p id="detailKeuken"
-   class="detail-keuken"></p>
-
-<h3>📷 Foto's van de zaak</h3>
-
-<label for="restaurantFotoInput" class="foto-toevoegen">
-    📷 Foto toevoegen
-</label>
-
-<input
-    type="file"
-    id="restaurantFotoInput"
-    accept="image/*"
-    multiple
-    onchange="restaurantFotosToevoegen(event)"
-    hidden
->
-
-<div id="restaurantFotos"
-     class="foto-grid">
-</div>
-
-    <button
-        class="primair"
-        onclick="nieuwBezoek()">
-            ➕ Nieuw bezoek
-    </button>
-
-<div id="nieuwBezoekForm"
-     class="hidden">
-
-     
-
-    <h3>
-        ➕ Nieuw bezoek
-    </h3>
-
-
-    <label>
-        Datum
-    </label>
-
-    <input 
-        type="date"
-        id="bezoekDatum"
+    <section
+        id="detailPage"
+        class="hidden"
     >
 
-    <label>
-        Score
-    </label>
 
-    <select id="bezoekScore">
-
-    <option value="0">☆</option>
-    <option value="1">⭐</option>
-    <option value="2">⭐⭐</option>
-    <option value="3">⭐⭐⭐</option>
-    <option value="4">⭐⭐⭐⭐</option>
-    <option value="5">⭐⭐⭐⭐⭐</option>
-
-</select>
-
-
-<label>
-    Opmerking
-</label>
-
-<textarea
-    id="bezoekOpmerking"
-    rows="5">
-</textarea>
-
-
-<div id="bezoekFotoKnop"
-     class="hidden">
-
-    <label
-        for="fotoBezoekInput"
-        class="foto-toevoegen"
-    >
-        📷 Foto toevoegen
-    </label>
-
-    <input
-        type="file"
-        id="fotoBezoekInput"
-        accept="image/*"
-        multiple
-        onchange="bezoekFotosToevoegen(event)"
-        hidden
-    >
-
-</div>
-
-
-<button onclick="bezoekOpslaanNieuw()">
-    💾 Opslaan
-</button>
-
-</div>
-
-<hr>
-
-        <div id="bezoekenLijst"></div>
-    
-<!-- HORECAZAAK BEHEREN -->
- 
-<div class="horecazaak-beheer">
-     <h3> ⚙️ Horecazaak beheren </h3>
-     
-    <button
-        id="favorietKnop"
-        onclick="favorietWisselen()" >
-    </button>
-    
-    <button
-        id="verbergKnop"
-        onclick="verbergenWisselen()" >
-    </button>
-    
-    <button
-        onclick="openGoogleMaps()" >
-            📍 Open in Google Maps
-    </button>
-    
-    <button
-        onclick="locatieInstellen()" >
-            🗺️ Locatie instellen
-    </button>
-    
-    <button
-        class="verwijder-restaurant"
-        onclick="verwijderen()" >
-            🗑️ Horecazaak verwijderen
-    </button>
-</div>
-
-</section>
-
-    <!-- FAVORIETEN -->
-<section id="favorietenPage" class="hidden">
-
-    <h2>❤️ Favorieten</h2>
-
-    <div id="favorietenLijst"></div>
-
-</section>
-
-<section id="kaartPage" class="hidden">
-
-    <div id="map"></div>
-
-</section>
-
-<section id="ideeenPage" class="hidden">
-
-    <div class="ideeen-header">
-
-        <h2>💡 Ideeën</h2>
-
-        <p>
-            Noteer hier snel iets dat je later
-            aan HorecaLog wilt verbeteren.
-        </p>
-
-    </div>
-
-
-    <div class="idee-nieuw">
-
-        <textarea
-            id="ideeTekst"
-            rows="3"
-            placeholder="Wat wil je aanpassen of toevoegen?"
-        ></textarea>
-
-
-        <button onclick="ideeOpslaanViaForm()">
-            💾 Idee opslaan
+        <button onclick="terugNaarLijst()">
+            ← Terug
         </button>
 
-    </div>
 
 
-    <h3>
-        Mijn ideeën
-    </h3>
+        <div class="detail-card">
 
 
-    <div id="ideeenLijst"></div>
+            <!-- NAAM -->
 
-</section>
+            <h1 id="detailNaam"></h1>
 
 
-    <!-- INSTELLINGEN -->
-    <section id="instellingenPage" class="hidden">
+            <!-- GEMEENTE -->
 
-        <h2>⚙ Instellingen</h2>
+            <p id="detailGemeente"></p>
+
+
+            <!-- KEUKEN -->
+
+            <p
+                id="detailKeuken"
+                class="detail-keuken"
+            ></p>
+
+
+
+            <!-- =================================================
+                 FOTO'S RESTAURANT
+                 ================================================= -->
+
+            <h3>
+                📷 Foto's van de zaak
+            </h3>
+
+
+            <label
+                for="restaurantFotoInput"
+                class="foto-toevoegen"
+            >
+                📷 Foto toevoegen
+            </label>
+
+
+            <input
+                type="file"
+                id="restaurantFotoInput"
+                accept="image/*"
+                multiple
+                onchange="restaurantFotosToevoegen(event)"
+                hidden
+            >
+
+
+            <div
+                id="restaurantFotos"
+                class="foto-grid"
+            ></div>
+
+
+
+            <!-- =================================================
+                 BEZOEK TOEVOEGEN
+                 ================================================= -->
+
+            <button
+                class="primair"
+                onclick="nieuwBezoek()"
+            >
+                ➕ Nieuw bezoek
+            </button>
+
+
+
+            <!-- =================================================
+                 FORMULIER BEZOEK
+                 ================================================= -->
+
+            <div
+                id="nieuwBezoekForm"
+                class="hidden"
+            >
+
+
+                <h3>
+                    ➕ Nieuw bezoek
+                </h3>
+
+
+                <label>
+                    Datum
+                </label>
+
+
+                <input
+                    type="date"
+                    id="bezoekDatum"
+                >
+
+
+
+                <label>
+                    Score
+                </label>
+
+
+                <select id="bezoekScore">
+
+                    <option value="0">
+                        ☆
+                    </option>
+
+                    <option value="1">
+                        ⭐
+                    </option>
+
+                    <option value="2">
+                        ⭐⭐
+                    </option>
+
+                    <option value="3">
+                        ⭐⭐⭐
+                    </option>
+
+                    <option value="4">
+                        ⭐⭐⭐⭐
+                    </option>
+
+                    <option value="5">
+                        ⭐⭐⭐⭐⭐
+                    </option>
+
+                </select>
+
+
+
+                <label>
+                    Opmerking
+                </label>
+
+
+                <textarea
+                    id="bezoekOpmerking"
+                    rows="5"
+                ></textarea>
+
+
+
+                <!-- FOTO KNOP BEZOEK -->
+
+                <div
+                    id="bezoekFotoKnop"
+                    class="hidden"
+                >
+
+                    <label
+                        for="fotoBezoekInput"
+                        class="foto-toevoegen"
+                    >
+                        📷 Foto toevoegen
+                    </label>
+
+
+                    <input
+                        type="file"
+                        id="fotoBezoekInput"
+                        accept="image/*"
+                        multiple
+                        onchange="bezoekFotosToevoegen(event)"
+                        hidden
+                    >
+
+                </div>
+
+
+
+                <button onclick="bezoekOpslaanNieuw()">
+                    💾 Opslaan
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =================================================
+                 BEZOEKEN
+                 ================================================= -->
+
+            <hr>
+
+
+            <div id="bezoekenLijst"></div>
+
+
+
+            <!-- =================================================
+                 EXTRA OPTIES
+                 ================================================= -->
+
+            <details class="meer-opties">
+
+
+                <summary>
+                    ⚙️ Meer opties
+                </summary>
+
+
+                <div class="meer-opties-inhoud">
+
+
+                    <!-- Favoriet -->
+
+                    <button
+                        id="favorietKnop"
+                        onclick="favorietWisselen()"
+                    >
+                    </button>
+
+
+
+                    <!-- Verbergen -->
+
+                    <button
+                        id="verborgenKnop"
+                        onclick="verborgenWisselen()"
+                    >
+                    </button>
+
+
+
+                    <!-- Google Maps -->
+
+                    <button onclick="openGoogleMaps()">
+                        📍 Open in Google Maps
+                    </button>
+
+
+
+                    <!-- Locatie instellen -->
+
+                    <button onclick="locatieInstellen()">
+                        🗺️ Locatie instellen
+                    </button>
+
+
+
+                    <!-- Bewerken -->
+
+                    <button onclick="bewerken()">
+                        ✏️ Horecazaak bewerken
+                    </button>
+
+
+                </div>
+
+
+            </details>
+
+
+
+            <!-- =================================================
+                 VERWIJDEREN
+                 ================================================= -->
+
+            <button
+                class="verwijder-restaurant"
+                onclick="verwijderen()"
+            >
+                🗑️ Horecazaak verwijderen
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FAVORIETEN
+         ===================================================== -->
+
+    <section
+        id="favorietenPage"
+        class="hidden"
+    >
+
+        <h2>
+            ❤️ Favorieten
+        </h2>
+
+
+        <div id="favorietenLijst"></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         KAART
+         ===================================================== -->
+
+    <section
+        id="kaartPage"
+        class="hidden"
+    >
+
+        <div id="map"></div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         IDEEËN
+         ===================================================== -->
+
+    <section
+        id="ideeenPage"
+        class="hidden"
+    >
+
+
+        <div class="ideeen-header">
+
+            <h2>
+                💡 Ideeën
+            </h2>
+
+
+            <p>
+                Noteer hier snel iets dat je later
+                aan HorecaLog wilt verbeteren.
+            </p>
+
+        </div>
+
+
+
+        <div class="idee-nieuw">
+
+
+            <textarea
+                id="ideeTekst"
+                rows="3"
+                placeholder="Wat wil je aanpassen of toevoegen?"
+            ></textarea>
+
+
+            <button onclick="ideeOpslaanViaForm()">
+                💾 Idee opslaan
+            </button>
+
+
+        </div>
+
+
+
+        <h3>
+            Mijn ideeën
+        </h3>
+
+
+        <div id="ideeenLijst"></div>
+
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INSTELLINGEN
+         ===================================================== -->
+
+    <section
+        id="instellingenPage"
+        class="hidden"
+    >
+
+
+        <h2>
+            ⚙ Instellingen
+        </h2>
+
 
 
         <button onclick="backupMaken()">
@@ -355,16 +606,22 @@
         </button>
 
 
-        <input 
-    type="file" 
-    id="backupInput"
-    accept=".json"
-    hidden
->
 
-<button onclick="document.getElementById('backupInput').click()">
-    ⬇ Herstel back-up
-</button>
+        <input
+            type="file"
+            id="backupInput"
+            accept=".json"
+            hidden
+        >
+
+
+
+        <button
+            onclick="document.getElementById('backupInput').click()"
+        >
+            ⬇ Herstel back-up
+        </button>
+
 
 
         <button>
@@ -372,63 +629,28 @@
         </button>
 
 
-<button onclick="allesWissen()">
-    🗑 Alles wissen (test)
-</button>
+
+        <button onclick="allesWissen()">
+            🗑 Alles wissen (test)
+        </button>
+
 
     </section>
+
 
 </div>
 
 
 
-<!-- NAVIGATIE -->
+<!-- =====================================================
+     FOTO MODAL
+     ===================================================== -->
 
-<script src="js/database.js?v=10"></script>
-<script src="js/ui.js?v=10"></script>
-<script src="js/restaurants.js?v=10"></script>
-<script src="js/bezoeken.js?v=10"></script>
-<script src="js/backup.js?v=10"></script>
-<script src="js/ideeen.js?v=10"></script>
+<div
+    id="fotoModal"
+    class="foto-modal hidden"
+>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<script src="js/kaart.js?v=10"></script>
-<script src="js/app.js?v=10"></script>
-
-<nav class="bottom-nav">
-
-    <button onclick="toonPagina('restaurantsPage')">
-        🍽
-        <span>Horeca</span>
-    </button>
-
-
-    <button onclick="toonPagina('favorietenPage')">
-        ❤️
-        <span>Favorieten</span>
-    </button>
-
-
-    <button onclick="toonPagina('kaartPage')">
-        🗺
-        <span>Kaart</span>
-    </button>
-
-
-    <button onclick="toonPagina('ideeenPage')">
-        💡
-        <span>Ideeën</span>
-    </button>
-
-
-    <button onclick="toonPagina('instellingenPage')">
-        ⚙
-        <span>Instellingen</span>
-    </button>
-
-</nav>
-<div id="fotoModal" class="foto-modal hidden">
 
     <button
         class="foto-modal-sluiten"
@@ -438,14 +660,114 @@
         ✕
     </button>
 
+
+
     <img
         id="groteFoto"
         src=""
         alt="Vergrote foto"
     >
 
+
 </div>
 
 
+
+<!-- =====================================================
+     SCRIPTS
+     ===================================================== -->
+
+<script src="js/database.js?v=11"></script>
+
+<script src="js/ui.js?v=11"></script>
+
+<script src="js/restaurants.js?v=11"></script>
+
+<script src="js/bezoeken.js?v=11"></script>
+
+<script src="js/backup.js?v=11"></script>
+
+<script src="js/ideeen.js?v=11"></script>
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+
+<script src="js/kaart.js?v=11"></script>
+
+<script src="js/app.js?v=11"></script>
+
+
+
+<!-- =====================================================
+     ONDERSTE NAVIGATIE
+     ===================================================== -->
+
+<nav class="bottom-nav">
+
+
+    <button onclick="toonPagina('restaurantsPage')">
+
+        🍽
+
+        <span>
+            Horeca
+        </span>
+
+    </button>
+
+
+
+    <button onclick="toonPagina('favorietenPage')">
+
+        ❤️
+
+        <span>
+            Favorieten
+        </span>
+
+    </button>
+
+
+
+    <button onclick="toonPagina('kaartPage')">
+
+        🗺
+
+        <span>
+            Kaart
+        </span>
+
+    </button>
+
+
+
+    <button onclick="toonPagina('ideeenPage')">
+
+        💡
+
+        <span>
+            Ideeën
+        </span>
+
+    </button>
+
+
+
+    <button onclick="toonPagina('instellingenPage')">
+
+        ⚙
+
+        <span>
+            Instellingen
+        </span>
+
+    </button>
+
+
+</nav>
+
+
 </body>
+
 </html>

@@ -10,7 +10,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>HoReCaLog v10</title>
+    <title>HoReCaLog</title>
 
     <link
         rel="stylesheet"
@@ -70,6 +70,7 @@
         <button
             class="primair"
             onclick="nieuwRestaurant()"
+            data-i18n="nieuweHorecazaak"
         >
             ➕ Nieuwe horecazaak
         </button>
@@ -80,7 +81,7 @@
             class="card hidden"
         >
 
-            <h2>
+            <h2 data-i18n="nieuweHorecazaakTitel">
                 Nieuwe horecazaak
             </h2>
 
@@ -88,16 +89,18 @@
             <input
                 id="naam"
                 placeholder="Naam horecazaak"
+                data-i18n-placeholder="naamHorecazaak"
             >
 
 
             <input
                 id="gemeente"
                 placeholder="Gemeente"
+                data-i18n-placeholder="gemeente"
             >
 
 
-            <label>
+            <label data-i18n="typeKeuken">
                 Type keuken
             </label>
 
@@ -107,47 +110,80 @@
                 onchange="keukenGewijzigd()"
             >
 
-                <option value="">
+                <option
+                    value=""
+                    data-i18n="kiesKeuken"
+                >
                     Kies keuken...
                 </option>
 
-                <option value="Belgisch">
+                <option
+                    value="Belgisch"
+                    data-i18n="belgisch"
+                >
                     Belgisch
                 </option>
 
-                <option value="Café">
+                <option
+                    value="Café"
+                    data-i18n="cafe"
+                >
                     Café
                 </option>
 
-                <option value="Italiaans">
+                <option
+                    value="Italiaans"
+                    data-i18n="italiaans"
+                >
                     Italiaans
                 </option>
 
-                <option value="Grieks">
+                <option
+                    value="Grieks"
+                    data-i18n="grieks"
+                >
                     Grieks
                 </option>
 
-                <option value="Spaans">
+                <option
+                    value="Spaans"
+                    data-i18n="spaans"
+                >
                     Spaans
                 </option>
 
-                <option value="Aziatisch">
+                <option
+                    value="Aziatisch"
+                    data-i18n="aziatisch"
+                >
                     Aziatisch
                 </option>
 
-                <option value="Japans">
+                <option
+                    value="Japans"
+                    data-i18n="japans"
+                >
                     Japans
                 </option>
 
-                <option value="Chinees">
+                <option
+                    value="Chinees"
+                    data-i18n="chinees"
+                >
                     Chinees
                 </option>
 
-                <option value="Thais">
+                <option
+                    value="Thais"
+                    data-i18n="thais"
+                >
                     Thais
                 </option>
 
-                <option value="Andere">
+                <option
+                    value="Andere"
+                    data-i18n="andere"
+                >
                     Andere...
                 </option>
 
@@ -157,6 +193,7 @@
             <input
                 id="andereKeuken"
                 placeholder="Andere keuken"
+                data-i18n-placeholder="andereKeuken"
                 class="hidden"
             >
 
@@ -164,6 +201,7 @@
             <button
                 class="primair"
                 onclick="opslaan()"
+                data-i18n="opslaan"
             >
                 💾 Opslaan
             </button>
@@ -172,7 +210,7 @@
 
 
 
-        <h2>
+        <h2 data-i18n="mijnHorecazaken">
             Mijn horecazaken
         </h2>
 
@@ -181,6 +219,7 @@
             type="search"
             id="zoekRestaurant"
             placeholder="🔍 Zoek horecazaak of gemeente..."
+            data-i18n-placeholder="zoekHorecazaak"
             oninput="toonRestaurants()"
         >
 
@@ -190,13 +229,15 @@
 
         <!-- Verborgen horecazaken -->
 
-        <button
-            id="verborgenRestaurantsKnop"
-            class="verborgen-lijst-knop"
-            onclick="toonVerborgenRestaurants()"
-        >
-            👁️ Verborgen horecazaken
-        </button>
+<button
+    id="verborgenRestaurantsKnop"
+    class="verborgen-lijst-knop"
+    onclick="toonVerborgenRestaurants()"
+>
+    👁️ <span data-i18n="verborgenHorecazaken">
+        Verborgen horecazaken
+    </span>
+</button>
 
 
     </section>
@@ -213,7 +254,10 @@
     >
 
 
-        <button onclick="terugNaarLijst()">
+        <button
+            onclick="terugNaarLijst()"
+            data-i18n="terug"
+        >
             ← Terug
         </button>
 
@@ -245,7 +289,7 @@
                  FOTO'S RESTAURANT
                  ================================================= -->
 
-            <h3>
+            <h3 data-i18n="fotosVanDeZaak">
                 📷 Foto's van de zaak
             </h3>
 
@@ -253,6 +297,7 @@
             <label
                 for="restaurantFotoInput"
                 class="foto-toevoegen"
+                data-i18n="fotoToevoegen"
             >
                 📷 Foto toevoegen
             </label>
@@ -282,6 +327,7 @@
             <button
                 class="primair"
                 onclick="nieuwBezoek()"
+                data-i18n="nieuwBezoek"
             >
                 ➕ Nieuw bezoek
             </button>
@@ -298,12 +344,12 @@
             >
 
 
-                <h3>
+                <h3 data-i18n="nieuwBezoek">
                     ➕ Nieuw bezoek
                 </h3>
 
 
-                <label>
+                <label data-i18n="datum">
                     Datum
                 </label>
 
@@ -315,42 +361,61 @@
 
 
 
-                <label>
-                    Score
-                </label>
+<label data-i18n="score">
+    Score
+</label>
+
+<div
+    id="scoreSterren"
+    class="score-sterren"
+>
+
+    <button
+        type="button"
+        class="score-ster"
+        data-score="1"
+        onclick="scoreSterKiezen(event, 1)"
+    >☆</button>
+
+    <button
+        type="button"
+        class="score-ster"
+        data-score="2"
+        onclick="scoreSterKiezen(event, 2)"
+    >☆</button>
+
+    <button
+        type="button"
+        class="score-ster"
+        data-score="3"
+        onclick="scoreSterKiezen(event, 3)"
+    >☆</button>
+
+    <button
+        type="button"
+        class="score-ster"
+        data-score="4"
+        onclick="scoreSterKiezen(event, 4)"
+    >☆</button>
+
+    <button
+        type="button"
+        class="score-ster"
+        data-score="5"
+        onclick="scoreSterKiezen(event, 5)"
+    >☆</button>
+
+</div>
+
+<input
+    type="hidden"
+    id="bezoekScore"
+    value="0"
+>
 
 
-                <select id="bezoekScore">
 
-                    <option value="0">
-                        ☆
-                    </option>
-
-                    <option value="1">
-                        ⭐
-                    </option>
-
-                    <option value="2">
-                        ⭐⭐
-                    </option>
-
-                    <option value="3">
-                        ⭐⭐⭐
-                    </option>
-
-                    <option value="4">
-                        ⭐⭐⭐⭐
-                    </option>
-
-                    <option value="5">
-                        ⭐⭐⭐⭐⭐
-                    </option>
-
-                </select>
-
-
-
-                <label>
+                <label data-i18n="opmerking">
                     Opmerking
                 </label>
 
@@ -372,6 +437,7 @@
                     <label
                         for="fotoBezoekInput"
                         class="foto-toevoegen"
+                        data-i18n="fotoToevoegen"
                     >
                         📷 Foto toevoegen
                     </label>
@@ -390,7 +456,10 @@
 
 
 
-                <button onclick="bezoekOpslaanNieuw()">
+                <button
+                    onclick="bezoekOpslaanNieuw()"
+                    data-i18n="opslaan"
+                >
                     💾 Opslaan
                 </button>
 
@@ -414,71 +483,83 @@
                  EXTRA OPTIES
                  ================================================= -->
 
-            <details class="meer-opties">
+<details class="meer-opties">
+
+    <summary data-i18n="meerOpties">
+        ⚙️ Meer opties
+    </summary>
+
+    <div class="meer-opties-inhoud">
 
 
-                <summary>
-                    ⚙️ Meer opties
-                </summary>
+        <!-- Favoriet -->
+
+        <button
+            id="favorietKnop"
+            onclick="favorietWisselen()"
+        >
+        </button>
 
 
-                <div class="meer-opties-inhoud">
+        <!-- Verbergen -->
+
+        <button
+            id="verborgenKnop"
+            onclick="verborgenWisselen()"
+        >
+        </button>
 
 
-                    <!-- Favoriet -->
+        <!-- Google Maps -->
 
-                    <button
-                        id="favorietKnop"
-                        onclick="favorietWisselen()"
-                    >
-                    </button>
+        <button onclick="openGoogleMaps()">
 
+            <span data-i18n="googleMaps">
+                📍 Open in Google Maps
+            </span>
 
-
-                    <!-- Verbergen -->
-
-                    <button
-                        id="verborgenKnop"
-                        onclick="verborgenWisselen()"
-                    >
-                    </button>
+        </button>
 
 
+        <!-- Locatie instellen -->
 
-                    <!-- Google Maps -->
+        <button onclick="locatieInstellen()">
 
-                    <button onclick="openGoogleMaps()">
-                        📍 Open in Google Maps
-                    </button>
+            <span data-i18n="locatieInstellen">
+                🗺️ Locatie instellen
+            </span>
 
-
-
-                    <!-- Locatie instellen -->
-
-                    <button onclick="locatieInstellen()">
-                        🗺️ Locatie instellen
-                    </button>
+        </button>
 
 
+        <!-- Bewerken -->
 
-                    <!-- Bewerken -->
+        <button onclick="bewerken()">
 
-                    <button onclick="bewerken()">
-                        ✏️ Horecazaak bewerken
-                    </button>
+            <span data-i18n="horecazaakBewerken">
+                ✏️ Horecazaak bewerken
+            </span>
 
-                    <!-- Verwijderen -->
-
-                    <button
-                        class="verwijder-restaurant"
-                        onclick="verwijderen()">
-                            🗑️ Horecazaak verwijderen
-                    </button>
-
-                </div>
+        </button>
 
 
-            </details>
+        <!-- Verwijderen -->
+
+        <button
+            class="verwijder-restaurant"
+            onclick="verwijderen()"
+        >
+
+            <span data-i18n="horecazaakVerwijderen">
+                🗑️ Horecazaak verwijderen
+            </span>
+
+        </button>
+
+
+    </div>
+
+</details>
 
         </div>
 
@@ -496,7 +577,7 @@
         class="hidden"
     >
 
-        <h2>
+        <h2 data-i18n="favorieten">
             ❤️ Favorieten
         </h2>
 
@@ -522,114 +603,150 @@
 
 
 
-    <!-- =====================================================
-         IDEEËN
-         ===================================================== -->
+   <!-- =====================================================
+     IDEEËN
+     ===================================================== -->
 
-    <section
-        id="ideeenPage"
-        class="hidden"
-    >
-
-
-        <div class="ideeen-header">
-
-            <h2>
-                💡 Ideeën
-            </h2>
+<section
+    id="ideeenPage"
+    class="hidden"
+>
 
 
-            <p>
-                Noteer hier snel iets dat je later
-                aan HorecaLog wilt verbeteren.
-            </p>
+    <div class="ideeen-header">
 
-        </div>
-
-
-
-        <div class="idee-nieuw">
-
-
-            <textarea
-                id="ideeTekst"
-                rows="3"
-                placeholder="Wat wil je aanpassen of toevoegen?"
-            ></textarea>
-
-
-            <button onclick="ideeOpslaanViaForm()">
-                💾 Idee opslaan
-            </button>
-
-
-        </div>
-
-
-
-        <h3>
-            Mijn ideeën
-        </h3>
-
-
-        <div id="ideeenLijst"></div>
-
-
-    </section>
-
-
-
-    <!-- =====================================================
-         INSTELLINGEN
-         ===================================================== -->
-
-    <section
-        id="instellingenPage"
-        class="hidden"
-    >
-
-
-        <h2>
-            ⚙ Instellingen
+        <h2 data-i18n="ideeen">
+            💡 Ideeën
         </h2>
 
 
+        <p data-i18n="ideeUitleg">
+            Noteer hier snel iets dat je later
+            aan HorecaLog wilt verbeteren.
+        </p>
 
-        <button onclick="backupMaken()">
-            ☁ Maak back-up
-        </button>
+    </div>
 
 
 
-        <input
-            type="file"
-            id="backupInput"
-            accept=".json"
-            hidden
-        >
+    <div class="idee-nieuw">
 
+
+        <textarea
+            id="ideeTekst"
+            rows="3"
+            data-i18n-placeholder="ideePlaceholder"
+            placeholder="Wat wil je aanpassen of toevoegen?"
+        ></textarea>
 
 
         <button
-            onclick="document.getElementById('backupInput').click()"
+            onclick="ideeOpslaanViaForm()"
+            data-i18n="ideeOpslaan"
         >
-            ⬇ Herstel back-up
+            💾 Idee opslaan
         </button>
 
 
-
-        <button>
-            📤 Exporteer gegevens
-        </button>
+    </div>
 
 
 
-        <button onclick="allesWissen()">
-            🗑 Alles wissen (test)
-        </button>
+    <h3 data-i18n="mijnIdeeen">
+        Mijn ideeën
+    </h3>
 
 
-    </section>
+    <div id="ideeenLijst"></div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     INSTELLINGEN
+     ===================================================== -->
+
+<section
+    id="instellingenPage"
+    class="hidden"
+>
+
+    <h2 data-i18n="instellingen">
+        ⚙ Instellingen
+    </h2>
+
+
+    <!-- TAAL -->
+
+    <h3 data-i18n="taal">
+        🌐 Taal
+    </h3>
+
+
+    <select
+        id="taalSelect"
+        onchange="taalInstellen(this.value)"
+    >
+
+        <option value="nl">
+            Nederlands
+        </option>
+
+        <option value="en">
+            English
+        </option>
+
+        <option value="fr">
+            Français
+        </option>
+
+    </select>
+
+
+    <!-- BACKUP -->
+
+    <button
+        onclick="backupMaken()"
+        data-i18n="maakBackup"
+    >
+        ☁ Maak back-up
+    </button>
+
+
+    <input
+        type="file"
+        id="backupInput"
+        accept=".json"
+        hidden
+    >
+
+
+    <button
+        onclick="document.getElementById('backupInput').click()"
+        data-i18n="herstelBackup"
+    >
+        ⬇ Herstel back-up
+    </button>
+
+
+    <button
+        data-i18n="exporteerGegevens"
+    >
+        📤 Exporteer gegevens
+    </button>
+
+
+    <button
+        onclick="allesWissen()"
+        data-i18n="allesWissen"
+    >
+        🗑 Alles wissen (test)
+    </button>
+
+
+</section>
 
 
 </div>
@@ -673,6 +790,8 @@
 
 <script src="js/database.js?v=11"></script>
 
+<script src="js/i18n.js?v=11"></script>
+
 <script src="js/ui.js?v=11"></script>
 
 <script src="js/restaurants.js?v=11"></script>
@@ -704,7 +823,7 @@
 
         🍽
 
-        <span>
+        <span data-i18n="horeca">
             Horeca
         </span>
 
@@ -716,7 +835,7 @@
 
         ❤️
 
-        <span>
+        <span data-i18n="favorieten">
             Favorieten
         </span>
 
@@ -728,7 +847,7 @@
 
         🗺
 
-        <span>
+        <span data-i18n="kaart">
             Kaart
         </span>
 
@@ -740,7 +859,7 @@
 
         💡
 
-        <span>
+        <span data-i18n="ideeen">
             Ideeën
         </span>
 
@@ -752,7 +871,7 @@
 
         ⚙
 
-        <span>
+        <span data-i18n="instellingen">
             Instellingen
         </span>
 
@@ -760,6 +879,22 @@
 
 
 </nav>
+
+
+<script>
+    /*
+       Vertalingen toepassen zodra de pagina geladen is.
+    */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function(){
+
+            vertalingenToepassen();
+
+        }
+    );
+</script>
 
 
 </body>

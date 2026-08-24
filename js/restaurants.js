@@ -552,7 +552,6 @@ function updateVerbergenKnop(){
 
 }
 
-
 /* =====================================================
    HORECAZAAK VERBERGEN / OPNIEUW TONEN
 ===================================================== */
@@ -591,8 +590,11 @@ function verborgenWisselen(){
 
     updateVerbergenKnop();
 
-}
 
+    // Normale lijst onmiddellijk verversen
+    toonRestaurants();
+
+}
 
 /* =====================================================
    FAVORIETEN TONEN

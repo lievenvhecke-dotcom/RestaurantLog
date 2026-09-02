@@ -187,19 +187,33 @@ if(bezoekenMetScore.length > 0){
 
                     if(aantalBezoeken > 0){
 
-                        let afgerondeScore =
-                            Math.round(
-                                gemiddeldeScore
-                            );
+ let afgerondeScore =
+    Math.round(
+        gemiddeldeScore * 2
+    ) / 2;
 
 
-                        scoreTekst =
-                            "⭐".repeat(
-                                afgerondeScore
-                            ) +
-                            "☆".repeat(
-                                5 - afgerondeScore
-                            );
+let volleSterren =
+    Math.floor(
+        afgerondeScore
+    );
+
+
+let halveSterren =
+    afgerondeScore % 1 !== 0
+        ? 1
+        : 0;
+
+
+scoreTekst =
+    "⭐".repeat(
+        volleSterren
+    ) +
+    (
+        halveSterren
+            ? "⯨"
+            : ""
+    );
 
                     }
 

@@ -31,6 +31,13 @@ function toonPagina(pagina){
 
     }
 
+    // Horeca opnieuw laden
+
+if(pagina === "restaurantsPage"){
+
+    toonRestaurants();
+
+}
 
     // Favorieten laden
 

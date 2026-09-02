@@ -37,6 +37,7 @@ function datumFormaat(datum){
    SCORE STERREN
    ===================================================== */
 
+
 function scoreKiezen(score){
 
     let veld =
@@ -59,44 +60,74 @@ function scoreKiezen(score){
 
 }
 
-function scoreSterKiezen(event, sterNummer){
+function scoreSterKiezen(sterNummer){
 
-    let rect =
-        event.currentTarget.getBoundingClientRect();
+    scoreKiezen(
+        sterNummer
+    );
 
+}
 
-    let klikX =
-        event.clientX -
-        rect.left;
+function halveSterToevoegen(){
 
-
-    let helft =
-        rect.width / 2;
-
-
-    let score;
+    let veld =
+        document.getElementById(
+            "bezoekScore"
+        );
 
 
-    if(klikX < helft){
+    if(!veld){
+        return;
+    }
 
-        score =
-            sterNummer - 0.5;
+
+    let huidigeScore =
+        Number(veld.value) || 0;
+
+
+    /*
+     * Halve ster toevoegen
+     */
+
+    if(
+        huidigeScore === 0
+    ){
+
+        huidigeScore = 0.5;
+
+    }
+    else if(
+        Number.isInteger(
+            huidigeScore
+        )
+    ){
+
+        huidigeScore += 0.5;
 
     }
     else{
 
-        score =
-            sterNummer;
+        huidigeScore -= 0.5;
+
+    }
+
+
+    /*
+     * Maximum 5
+     */
+
+    if(huidigeScore > 5){
+
+        huidigeScore = 5;
 
     }
 
 
     scoreKiezen(
-        score
+        huidigeScore
     );
 
 }
-
 
 /* =====================================================
    SCORE STERREN TONEN
@@ -108,6 +139,9 @@ function scoreSterrenTonen(score){
         document.querySelectorAll(
             ".score-ster"
         );
+
+    score =
+        Number(score) || 0;
 
 
     sterren.forEach(
@@ -123,7 +157,9 @@ function scoreSterrenTonen(score){
              * Volledige ster
              */
 
-            if(score >= sterScore){
+            if(
+                score >= sterScore
+            ){
 
                 ster.innerHTML =
                     "⭐";
@@ -136,12 +172,11 @@ function scoreSterrenTonen(score){
              */
 
             else if(
-                score >=
-                sterScore - 0.5
+                score === sterScore - 0.5
             ){
 
                 ster.innerHTML =
-                    "⭐";
+                    "⯨";
 
             }
 
@@ -161,7 +196,6 @@ function scoreSterrenTonen(score){
     );
 
 }
-
 
 /* =====================================================
    BEZOEKEN TONEN
@@ -232,17 +266,24 @@ function toonBezoeken(){
         </span>
 
 
-        <span class="bezoek-score">
+<span class="bezoek-score">
 
-            ${
-                Number(b.score) === 0
-                    ? "☆"
-                    : "⭐".repeat(
-                        Number(b.score)
-                    )
-            }
+    ${
+        Number(b.score) === 0
+            ? "☆"
+            : "⭐".repeat(
+                Math.floor(
+                    Number(b.score)
+                )
+            ) +
+            (
+                Number(b.score) % 1 !== 0
+                    ? "⯨"
+                    : ""
+            )
+    }
 
-        </span>
+</span>
 
 
         <button
@@ -256,9 +297,10 @@ function toonBezoeken(){
     </div>
 
 
-    <div class="opmerking-tekst">
-        ${b.opmerking || ""}
-    </div>
+   ${b.opmerking
+    ? `<div class="opmerking-tekst">${b.opmerking}</div>`
+    : ""
+}
 
 
     <div
@@ -326,7 +368,7 @@ function nieuwBezoek(){
             "bezoekScore"
         )
         .value =
-        "0";
+        "";
 
         scoreSterrenTonen(0);
 
@@ -391,7 +433,22 @@ function bezoekOpslaanNieuw(){
     let opmerking =
         document.getElementById(
             "bezoekOpmerking"
-        ).value;
+        ).value.trim();
+
+
+    /* =============================================
+       DATUM IS VERPLICHT
+       ============================================= */
+
+    if(!datum){
+
+        alert(
+            "Vul eerst een datum in."
+        );
+
+        return;
+
+    }
 
 
     /* =============================================
@@ -405,148 +462,48 @@ function bezoekOpslaanNieuw(){
         }
 
 
-        /*
-         * BELANGRIJK:
-         * We maken eerst een nieuw object.
-         *
-         * Zo vermijden we dat het object dat
-         * momenteel in de interface zit
-         * onverwacht wordt gewijzigd.
-         */
-
-        let aangepastBezoek = {
-
-            id:
-                huidigBezoek.id,
-
-            restaurantId:
-                huidigBezoek.restaurantId,
-
-            datum:
-                datum,
-
-            score:
-                score,
-
-            opmerking:
-                opmerking
-
-        };
+        huidigBezoek.datum =
+            datum;
 
 
-        /*
-         * Opslaan in IndexedDB.
-         */
+        huidigBezoek.score =
+            score;
 
-        let transaction =
-            db.transaction(
-                ["bezoeken"],
-                "readwrite"
+
+        huidigBezoek.opmerking =
+            opmerking;
+
+
+        bezoekAanpassen(
+            huidigBezoek
+        );
+
+
+        bezoekBewerkModus =
+            false;
+
+
+        document
+            .getElementById(
+                "nieuwBezoekForm"
+            )
+            .classList
+            .add(
+                "hidden"
             );
 
 
-        let store =
-            transaction.objectStore(
-                "bezoeken"
+        document
+            .getElementById(
+                "bezoekenLijst"
+            )
+            .classList
+            .remove(
+                "hidden"
             );
 
 
-        let request =
-            store.put(
-                aangepastBezoek
-            );
-
-
-        request.onsuccess =
-            function(){
-
-                console.log(
-                    "Bezoek aangepast:",
-                    aangepastBezoek
-                );
-
-
-                /*
-                 * Huidig bezoek bijwerken.
-                 */
-
-                huidigBezoek =
-                    aangepastBezoek;
-
-
-                bezoekBewerkModus =
-                    false;
-
-
-                /*
-                 * Formulier sluiten.
-                 */
-
-                document
-                    .getElementById(
-                        "nieuwBezoekForm"
-                    )
-                    .classList
-                    .add(
-                        "hidden"
-                    );
-
-
-                /*
-                 * Andere bezoeken opnieuw tonen.
-                 */
-
-                document
-                    .getElementById(
-                        "bezoekenLijst"
-                    )
-                    .classList
-                    .remove(
-                        "hidden"
-                    );
-
-
-                /*
-                 * Fotoknop uit het formulier verwijderen.
-                 */
-
-                let fotoActie =
-                    document.getElementById(
-                        "fotoActieFormulier"
-                    );
-
-                if(fotoActie){
-                    fotoActie.remove();
-                }
-
-
-                /*
-                 * Lijst opnieuw uit IndexedDB ophalen.
-                 *
-                 * Dit raakt GEEN andere bezoeken aan.
-                 */
-
-                toonBezoeken();
-                toonRestaurants();
-
-            };
-
-
-        request.onerror =
-            function(event){
-
-                console.error(
-                    "Fout bij aanpassen bezoek:",
-                    event.target.error
-                );
-
-
-alert(
-    t("bezoekAanpassenFout")
-);
-
-            };
-
+        toonBezoeken();
 
         return;
 
@@ -571,10 +528,10 @@ alert(
             datum,
 
         score:
-            score,
+            score || "",
 
         opmerking:
-            opmerking
+            opmerking || ""
 
     };
 
@@ -603,12 +560,10 @@ alert(
 
             toonBezoeken();
 
-            toonRestaurants();
 
-
-alert(
-    t("bezoekToegevoegd")
-);
+            alert(
+                "Bezoek toegevoegd ✅"
+            );
 
         }
     );
@@ -677,7 +632,7 @@ document
         "bezoekScore"
     )
     .value =
-    huidigBezoek.score || "0";
+    huidigBezoek.score || "";
 
 scoreSterrenTonen(
     Number(huidigBezoek.score) || 0
@@ -778,7 +733,7 @@ document
         "bezoekScore"
     )
     .value =
-    huidigBezoek.score || "0";
+    huidigBezoek.score || "";
 
 scoreSterrenTonen(
     Number(huidigBezoek.score) || 0
